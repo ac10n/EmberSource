@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace WebServer.Pages;
+namespace Ember.WebServer.Pages;
 
 public class IndexModel : PageModel
 {
