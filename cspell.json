@@ -4,6 +4,7 @@
         "appsettings",
         "aspnet",
         "Haghshenas",
+        "netcoreapp",
         "Npgsql"
     ]
 }
