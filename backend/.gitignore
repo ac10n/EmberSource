@@ -1,4 +1,4 @@
 obj/
 bin/
 appsettings.Development.json
-backend/Ember.WebServer/wwwroot/
+wwwroot/
