@@ -3,8 +3,12 @@
         "Alireza",
         "appsettings",
         "aspnet",
+        "Explorable",
         "Haghshenas",
         "netcoreapp",
-        "Npgsql"
+        "Newtonsoft",
+        "Npgsql",
+        "Purgable",
+        "wwwroot"
     ]
 }
