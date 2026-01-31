@@ -19,7 +19,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
     MatSidenavModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatListModule
+    MatListModule,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'

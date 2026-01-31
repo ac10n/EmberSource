@@ -41,7 +41,7 @@ public class PlatformSection
     public required string Url { get; set; }
 
     public Guid CreatorUserId { get; set; }
-    public required EmberUser CreatorUser { get; set; }
+    public EmberUser? CreatorUser { get; set; }
 
     public bool InheritRoles { get; set; }
 

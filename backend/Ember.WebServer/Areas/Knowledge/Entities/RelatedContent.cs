@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Ember.WebServer.Areas.Knowledge.Entities;
 
 public class RelatedContent
@@ -5,9 +7,11 @@ public class RelatedContent
     public Guid Id { get; set; }
 
     public required Guid ContentId { get; set; }
+    [ForeignKey(nameof(ContentId))]
     public Content? Content { get; set; }
 
     public required Guid RelatedContentId { get; set; }
+    [ForeignKey(nameof(RelatedContentId))]
     public Content? RelatedContentItem { get; set; }
 
     public required RelatedContentTypes RelatedContentTypeId { get; set; }

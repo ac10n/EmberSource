@@ -1,11 +1,12 @@
 ﻿using Ember.WebServer.Areas.Knowledge.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ember.WebServer.Data;
 
 public class EmberDbContext(DbContextOptions<EmberDbContext> options)
-    : IdentityDbContext<EmberUser, EmberRole, Guid>(options)
+    : IdentityDbContext<EmberUser, EmberRole, Guid, IdentityUserClaim<Guid>, EmberUserRole, EmberUserLogin, EmberRoleClaim, EmberUserToken>(options)
 {
     public DbSet<DataOwnership> LogOwnerships { get; set; }
     public DbSet<RequestLog> RequestLogs { get; set; }
@@ -31,8 +32,8 @@ public class EmberDbContext(DbContextOptions<EmberDbContext> options)
     public DbSet<CollectionItem> CollectionItems { get; set; }
     public DbSet<ContentInteraction> ContentInteractions { get; set; }
 
-    public DbSet<FinancialModel> FinancialModels { get; set; }    
-    
+    public DbSet<FinancialModel> FinancialModels { get; set; }
+
     public DbSet<PlatformSection> PlatformSections { get; set; }
 
 
@@ -40,6 +41,16 @@ public class EmberDbContext(DbContextOptions<EmberDbContext> options)
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<EmberUserRole>()
+            .HasOne(ur => ur.User)
+            .WithMany(u => u.UserRoles)
+            .HasForeignKey(ur => ur.UserId);
+
+        builder.Entity<EmberUserRole>()
+            .HasOne(ur => ur.Role)
+            .WithMany(r => r.UserRoles)
+            .HasForeignKey(ur => ur.RoleId);
 
         builder.Entity<DataOwnership>()
             .HasData(Enum.GetValues<DataOwnershipType>()
@@ -50,47 +61,10 @@ public class EmberDbContext(DbContextOptions<EmberDbContext> options)
                 })
             );
 
-        builder.Entity<EmberRole>().HasData(
-            new EmberRole { Id = Guid.NewGuid(), Name = "Root", NormalizedName = "Root" },
-            new EmberRole { Id = Guid.NewGuid(), Name = "Owner", NormalizedName = "OWNER" },
-            new EmberRole { Id = Guid.NewGuid(), Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
-            new EmberRole { Id = Guid.NewGuid(), Name = "Creator", NormalizedName = "CREATOR" },
-            new EmberRole { Id = Guid.NewGuid(), Name = "User", NormalizedName = "USER" }
-        );
-
-        builder.Entity<EmberUser>().HasData(SystemUsers.DefaultSystemUser);
-        builder.Entity<EmberUser>().HasData(SystemUsers.Founder);
-
-        builder.Entity<EmberUserRole>().HasData(
-            new
-            {
-                UserId = SystemUsers.DefaultSystemUser.Id,
-                RoleId = Guid.Parse("Root"),
-                PlatformSectionId = Guid.Empty
-            },
-            new
-            {
-                UserId = SystemUsers.Founder.Id,
-                RoleId = Guid.Parse("Owner"),
-                PlatformSectionId = Guid.Empty
-            }
-        );
-
+        builder.Entity<EmberRole>().HasData(KnownRoles.AllKnownRoles());
+        builder.Entity<EmberUser>().HasData(KnownUsers.AllKnownUsers());
+        builder.Entity<EmberUserRole>().HasData(KnownUserRoles.AllKnownUserRoles());
         builder.Entity<FinancialModel>().HasData(KnownFinancialModels.AllModels);
-
-        builder.Entity<PlatformSection>().HasData(
-            new PlatformSection
-            {
-                Id = Guid.NewGuid(),
-                Name = "Ember Foundation",
-                CreatorUser = SystemUsers.Founder,
-                Description = "The Ember Foundation, the non-profit organization that drives all other Ember projects.",
-                Url = "/",
-                CreatorUserId = SystemUsers.DefaultSystemUser.Id,
-                ParentSectionId = null,
-                InheritRoles = false,
-                FinancialModelId = KnownFinancialModels.NonProfit.Id
-            }
-        );
+        builder.Entity<PlatformSection>().HasData(KnownPlatformSections.AllKnownPlatformSections());
     }
 }

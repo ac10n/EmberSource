@@ -5,6 +5,7 @@ using Ember.WebServer.Helpers;
 namespace Ember.WebServer.Areas.Knowledge.Controllers;
 
 [ApiController]
+[Route("api/v01/[controller]/[action]")]
 public class KnowledgeController(IServiceProvider serviceProvider) : ControllerBase
 {
     private Lazy<IKnowledgeService> KnowledgeService => serviceProvider.Lazy<IKnowledgeService>();
