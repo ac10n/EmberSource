@@ -3,15 +3,18 @@
   "version": "0.1.0",
   "type": "module",
   "private": true,
+  "scripts": {
+    "make": "tsp compile ."
+  },
   "dependencies": {
-    "@typespec/compiler": "latest",
-    "@typespec/http": "latest",
-    "@typespec/rest": "latest",
-    "@typespec/openapi": "latest",
-    "@typespec/openapi3": "latest",
-    "@typespec/http-client-csharp": "latest",
-    "@typespec/http-client-js": "latest",
-    "@typespec/http-server-csharp": "latest"
+    "@typespec/compiler": "^1.8.0",
+    "@typespec/http": "^1.8.0",
+    "@typespec/http-client-csharp": "^1.0.0-alpha.20260130.7",
+    "@typespec/http-client-js": "^0.13.0",
+    "@typespec/http-server-csharp": "^0.58.0-alpha.24",
+    "@typespec/openapi": "^1.8.0",
+    "@typespec/openapi3": "^1.8.0",
+    "@typespec/rest": "^0.78.0"
   },
   "packageManager": "npm@11.6.3+sha512.4085a763162e0e3acd19a4e9d23ad3aa0978e501ccf947dd7233c12a689ae0bb0190763c4ef12366990056b34eec438903ffed38fde4fbd722a17c2a7407ee92"
 }

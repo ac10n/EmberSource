@@ -1,0 +1,41 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: KnowledgeRequestModel.yaml
+type: object
+properties:
+  contentIds:
+    type: array
+    items:
+      $ref: Guid.yaml
+  parentContentIds:
+    type: array
+    items:
+      anyOf:
+        - $ref: Guid.yaml
+        - type: "null"
+  contentTypes:
+    type: array
+    items:
+      $ref: ContentTypes.yaml
+  titleSearchTerm:
+    type: string
+  dataSearchTerm:
+    type: string
+  createdByUserIds:
+    type: array
+    items:
+      $ref: Guid.yaml
+  createdAfter:
+    type: string
+    format: date-time
+  unreadByMe:
+    type: boolean
+  relationshipFilters:
+    type: array
+    items:
+      $ref: RelationshipFilters.yaml
+  collections:
+    type: array
+    items:
+      $ref: Guid.yaml
+allOf:
+  - $ref: ListRequestBase.yaml

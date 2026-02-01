@@ -2,8 +2,8 @@ import "@typespec/openapi";
 import "@typespec/http";
 
 using Http;
-@service(#{ title: "Typescript Workspace Service" })
-namespace TypescriptWorkspaceService;
+@service(#{ title: "Ember Contracts" })
+namespace Ember.WebServer.Models;
 
 @format("uuid")
 scalar Guid extends string;
@@ -86,8 +86,8 @@ model ContentModel
     createdAt: offsetDateTime;
 }
 
-@route("api/v01/knowledge")
-@tag("Workspace")
-interface WorkspaceService {
+@route("/api/v01/Knowledge")
+@tag("Ember")
+interface KnowledgeService {
   @post @route("GetKnowledgeItems") GetKnowledgeItems(@body request: KnowledgeRequestModel): KnowledgeResponseModel;
 }

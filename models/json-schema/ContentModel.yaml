@@ -1,0 +1,24 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: ContentModel.yaml
+type: object
+properties:
+  id:
+    $ref: Guid.yaml
+  parentContentId:
+    $ref: Guid.yaml
+  contentTypeId:
+    $ref: ContentTypes.yaml
+  title:
+    type: string
+  data:
+    type: string
+  createdByUserId:
+    $ref: Guid.yaml
+  createdAt:
+    type: string
+    format: date-time
+required:
+  - id
+  - contentTypeId
+  - createdByUserId
+  - createdAt

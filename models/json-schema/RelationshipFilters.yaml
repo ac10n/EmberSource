@@ -1,0 +1,11 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: RelationshipFilters.yaml
+type: object
+properties:
+  relatedContentTypeId:
+    $ref: RelatedContentTypes.yaml
+  relatedContentId:
+    $ref: Guid.yaml
+required:
+  - relatedContentTypeId
+  - relatedContentId

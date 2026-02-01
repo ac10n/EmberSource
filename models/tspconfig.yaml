@@ -1,8 +1,10 @@
 emit:
-  - "@typespec/http-client-csharp"
-  - "@typespec/http-client-js"
+  - "@typespec/openapi3"
+  - "@typespec/json-schema"
 options:
-  "@typespec/http-client-csharp":
-    emitter-output-dir: "{output-dir}/../Ember.WebServer/Models"
-  "@typespec/http-client-js":
-    emitter-output-dir: "{output-dir}/../frontend/src/app/models"
+  "@typespec/openapi3":
+    emitter-output-dir: "{output-dir}/openapi"
+  "@typespec/json-schema":
+    emitter-output-dir: "{output-dir}/json-schema"
+    emitAllModels: true
+    emitAllRefs: true

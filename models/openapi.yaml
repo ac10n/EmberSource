@@ -1,0 +1,170 @@
+openapi: 3.0.0
+info:
+  title: Ember Contracts
+  version: 0.0.0
+tags:
+  - name: Ember
+paths:
+  /api/v01/Knowledge/GetKnowledgeItems:
+    post:
+      operationId: KnowledgeService_GetKnowledgeItems
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeResponseModel'
+      tags:
+        - Ember
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KnowledgeRequestModel'
+components:
+  schemas:
+    ContentModel:
+      type: object
+      required:
+        - id
+        - contentTypeId
+        - createdByUserId
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        parentContentId:
+          type: string
+          format: uuid
+        contentTypeId:
+          $ref: '#/components/schemas/ContentTypes'
+        title:
+          type: string
+        data:
+          type: string
+        createdByUserId:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+    ContentTypes:
+      type: string
+      enum:
+        - Paragraph
+        - Section
+        - Article
+        - Image
+        - Video
+        - Audio
+        - Link
+        - InteractiveElement
+        - CodeSnippet
+        - ExplorableDataset
+        - Comment
+    Guid:
+      type: string
+      format: uuid
+    KnowledgeRequestModel:
+      type: object
+      properties:
+        contentIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        parentContentIds:
+          type: array
+          items:
+            type: string
+            allOf:
+              - type: string
+              format: uuid
+            nullable: true
+        contentTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentTypes'
+        titleSearchTerm:
+          type: string
+        dataSearchTerm:
+          type: string
+        createdByUserIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        createdAfter:
+          type: string
+          format: date-time
+        unreadByMe:
+          type: boolean
+        relationshipFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelationshipFilters'
+        collections:
+          type: array
+          items:
+            type: string
+            format: uuid
+      allOf:
+        - $ref: '#/components/schemas/ListRequestBase'
+    KnowledgeResponseModel:
+      type: object
+      properties:
+        contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentModel'
+      allOf:
+        - $ref: '#/components/schemas/ListResponseBase'
+    ListRequestBase:
+      type: object
+      required:
+        - maxCount
+      properties:
+        maxCount:
+          type: integer
+          format: int32
+          default: 100
+        continuationToken:
+          type: string
+        sorting:
+          type: array
+          items:
+            type: string
+    ListResponseBase:
+      type: object
+      properties:
+        continuationToken:
+          type: string
+    RelatedContentTypes:
+      type: string
+      enum:
+        - Reference
+        - SupplementaryMaterial
+        - Citation
+        - FurtherReading
+        - RelatedTopic
+        - Alternative
+        - Contradicting
+        - Exception
+        - InstanceOf
+        - PartOf
+        - Supersedes
+    RelationshipFilters:
+      type: object
+      required:
+        - relatedContentTypeId
+        - relatedContentId
+      properties:
+        relatedContentTypeId:
+          $ref: '#/components/schemas/RelatedContentTypes'
+        relatedContentId:
+          type: string
+          format: uuid

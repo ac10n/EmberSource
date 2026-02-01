@@ -1,0 +1,15 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: RelatedContentTypes.yaml
+type: string
+enum:
+  - Reference
+  - SupplementaryMaterial
+  - Citation
+  - FurtherReading
+  - RelatedTopic
+  - Alternative
+  - Contradicting
+  - Exception
+  - InstanceOf
+  - PartOf
+  - Supersedes
