@@ -28,7 +28,7 @@ namespace Ember.WebServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("CreatedByUserId")
@@ -53,7 +53,7 @@ namespace Ember.WebServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("AddedAt")
+                    b.Property<DateTimeOffset>("AddedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("CollectionId")
@@ -80,13 +80,16 @@ namespace Ember.WebServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<int>("ContentFormatId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("ContentTypeId")
                         .HasColumnType("integer");
 
                     b.Property<int>("ContentVisibilityId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("CreatedByUserId")
@@ -95,19 +98,30 @@ namespace Ember.WebServer.Migrations
                     b.Property<string>("Data")
                         .HasColumnType("text");
 
+                    b.Property<int>("FormatVersion")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("Identifier")
+                        .HasColumnType("uuid");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<Guid?>("ParentContentId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("RemovedTime")
+                    b.Property<DateTimeOffset?>("RemovedTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Title")
                         .HasColumnType("text");
 
+                    b.Property<int>("Version")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ContentFormatId");
 
                     b.HasIndex("ContentTypeId");
 
@@ -118,6 +132,44 @@ namespace Ember.WebServer.Migrations
                     b.HasIndex("ParentContentId");
 
                     b.ToTable("Contents");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3173c43b-b415-4d45-a002-7c7d7253bf1b"),
+                            ContentFormatId = 1,
+                            ContentTypeId = 1,
+                            ContentVisibilityId = 1,
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 31, 14, 44, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -8, 0, 0, 0)),
+                            CreatedByUserId = new Guid("2f673ad9-6913-46d0-9b44-d517c5611c8c"),
+                            Data = "# Welcome to Ember!\n\nEmber is an attempt to give users ownership of their online activities.\nAn online service that does not seek profit, would give users tools they need to find the data they want,\ninteract with the platform in ways that make sense to their use cases,\nkeep the user in control, not at the mercy of intentionally limited UX and engagement-maximizing algorithms.\n\nTransparency builds dependable trust, amongst users, and between users and the platform.\nWith time, we can create tools that provide users with a measure of trustworthiness of content and its creators.\nThese measures should reflect each user's values and priorities, not those imposed by a centralized authority.\n\nThe premise is that a confused user is more likely to make decisions that are not in their best interest.\n\nWe'll start with the simplest tools: a place you can write and share pieces of content.\nWith that, conversations around Ember development can be hosted on the platform itself.\n\nEmber is an attempt to bring back how trust shaped human interactions in small communities,\nbut we lost that when we moved to the global village, and platforms that seek profit at the expense societal good.\n\nMuch more details to be shared as we build more features.\n",
+                            FormatVersion = 1,
+                            Identifier = new Guid("3fee5a19-69e4-4c65-81fe-8d9de9c11539"),
+                            IsActive = true,
+                            Title = "Welcome to Ember",
+                            Version = 1
+                        });
+                });
+
+            modelBuilder.Entity("Ember.WebServer.Areas.Knowledge.Entities.ContentFormat", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContentFormat");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Markdown"
+                        });
                 });
 
             modelBuilder.Entity("Ember.WebServer.Areas.Knowledge.Entities.ContentInteraction", b =>
@@ -141,7 +193,7 @@ namespace Ember.WebServer.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("ReadAt")
+                    b.Property<DateTimeOffset?>("ReadAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("Recommend")
@@ -189,11 +241,69 @@ namespace Ember.WebServer.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.ToTable("ContentTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Paragraph"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Section"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Article"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Image"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Video"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Audio"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Link"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "InteractiveElement"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "CodeSnippet"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "ExplorableDataset"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Comment"
+                        });
                 });
 
             modelBuilder.Entity("Ember.WebServer.Areas.Knowledge.Entities.ContentVisibility", b =>
@@ -207,6 +317,33 @@ namespace Ember.WebServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ContentVisibilities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Public"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Private"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "VisibleToSpecificPeople"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "VisibleByCriteria"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "ScheduledRollout"
+                        });
                 });
 
             modelBuilder.Entity("Ember.WebServer.Areas.Knowledge.Entities.RelatedContent", b =>
@@ -284,13 +421,13 @@ namespace Ember.WebServer.Migrations
                     b.Property<int>("Owner")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("PurgingTime")
+                    b.Property<DateTimeOffset?>("PurgingTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("RequestId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("Timestamp")
+                    b.Property<DateTimeOffset>("Timestamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("UserId")
@@ -684,14 +821,14 @@ namespace Ember.WebServer.Migrations
                     b.Property<int>("Owner")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("PurgingTime")
+                    b.Property<DateTimeOffset?>("PurgingTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("RelativeUrl")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("Timestamp")
+                    b.Property<DateTimeOffset>("Timestamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("UserId")
@@ -776,13 +913,13 @@ namespace Ember.WebServer.Migrations
                     b.Property<string>("Parameters")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("PurgingTime")
+                    b.Property<DateTimeOffset?>("PurgingTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("RequestId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("StartTime")
+                    b.Property<DateTimeOffset>("StartTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -816,7 +953,7 @@ namespace Ember.WebServer.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("Timestamp")
+                    b.Property<DateTimeOffset>("Timestamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<long>("TotalRequestSize")
@@ -841,7 +978,7 @@ namespace Ember.WebServer.Migrations
                     b.Property<TimeSpan>("ProcessingTime")
                         .HasColumnType("interval");
 
-                    b.Property<DateTime?>("PurgingTime")
+                    b.Property<DateTimeOffset?>("PurgingTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("RequestLogId")
@@ -878,7 +1015,7 @@ namespace Ember.WebServer.Migrations
                     b.Property<Guid>("ForUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("FromTime")
+                    b.Property<DateTimeOffset>("FromTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Message")
@@ -887,7 +1024,7 @@ namespace Ember.WebServer.Migrations
                     b.Property<decimal?>("NumericBadgeValue")
                         .HasColumnType("numeric");
 
-                    b.Property<DateTime?>("ToTime")
+                    b.Property<DateTimeOffset?>("ToTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -910,13 +1047,13 @@ namespace Ember.WebServer.Migrations
                     b.Property<Guid>("BadgeDefinitionId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("FromTime")
+                    b.Property<DateTimeOffset>("FromTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("ToTime")
+                    b.Property<DateTimeOffset?>("ToTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserId")
@@ -990,6 +1127,12 @@ namespace Ember.WebServer.Migrations
 
             modelBuilder.Entity("Ember.WebServer.Areas.Knowledge.Entities.Content", b =>
                 {
+                    b.HasOne("Ember.WebServer.Areas.Knowledge.Entities.ContentFormat", "ContentFormat")
+                        .WithMany()
+                        .HasForeignKey("ContentFormatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Ember.WebServer.Areas.Knowledge.Entities.ContentType", "ContentType")
                         .WithMany()
                         .HasForeignKey("ContentTypeId")
@@ -1011,6 +1154,8 @@ namespace Ember.WebServer.Migrations
                     b.HasOne("Ember.WebServer.Areas.Knowledge.Entities.Content", "ParentContent")
                         .WithMany("ChildContents")
                         .HasForeignKey("ParentContentId");
+
+                    b.Navigation("ContentFormat");
 
                     b.Navigation("ContentType");
 

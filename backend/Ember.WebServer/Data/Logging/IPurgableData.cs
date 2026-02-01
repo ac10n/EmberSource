@@ -3,5 +3,5 @@ namespace Ember.WebServer.Data;
 public interface IPurgableData
 {
     // If PurgingTime is set, the data is expected to be purged after this time
-    public DateTime? PurgingTime { get; set; }
+    public DateTimeOffset? PurgingTime { get; set; }
 }

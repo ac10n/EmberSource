@@ -13,9 +13,9 @@ public class ProcessLog: IScopedLogRecord
     public required string CodePath { get; set; }
     public required string? Parameters { get; set; }
 
-    public DateTime StartTime { get; set; }
+    public DateTimeOffset StartTime { get; set; }
     public TimeSpan Duration { get; set; }
-    public DateTime? PurgingTime { get; set; }
+    public DateTimeOffset? PurgingTime { get; set; }
 }
 
 public record struct ProcessLogArgs(string CodePath, object? Parameters) : ILogRecordCreator<ProcessLog>

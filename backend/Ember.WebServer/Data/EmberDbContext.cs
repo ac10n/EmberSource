@@ -66,5 +66,27 @@ public class EmberDbContext(DbContextOptions<EmberDbContext> options)
         builder.Entity<EmberUserRole>().HasData(KnownUserRoles.AllKnownUserRoles());
         builder.Entity<FinancialModel>().HasData(KnownFinancialModels.AllModels);
         builder.Entity<PlatformSection>().HasData(KnownPlatformSections.AllKnownPlatformSections());
+        builder.Entity<ContentType>().HasData(Enum.GetValues<ContentTypes>()
+            .Select(ct => new ContentType
+            {
+                Id = ct,
+                Name = ct.ToString()
+            })
+        );
+        builder.Entity<ContentFormat>().HasData(Enum.GetValues<ContentFormats>()
+            .Select(cf => new ContentFormat
+            {
+                Id = cf,
+                Name = cf.ToString()
+            })
+        );
+        builder.Entity<ContentVisibility>().HasData(Enum.GetValues<ContentVisibilities>()
+            .Select(cv => new ContentVisibility
+            {
+                Id = cv,
+                Name = cv.ToString()
+            })
+        );
+        builder.Entity<Content>().HasData(KnownContent.AllKnownContents());
     }
 }

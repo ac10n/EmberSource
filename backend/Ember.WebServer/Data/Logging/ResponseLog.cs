@@ -10,5 +10,5 @@ public class ResponseLog
     public required int ResponseStatusCode { get; set; }
     public TimeSpan ProcessingTime { get; set; }
     public long TotalResponseSize { get; set; }
-    public DateTime? PurgingTime { get; set; }
+    public DateTimeOffset? PurgingTime { get; set; }
 }

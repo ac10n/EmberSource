@@ -16,7 +16,7 @@ public interface ICreate<TRecord, TArgs>
 public interface IScopedLogRecord
 {
     Guid? RequestId { get; set; }
-    DateTime StartTime { get; set; }
+    DateTimeOffset StartTime { get; set; }
     TimeSpan Duration { get; set; }
 }
 

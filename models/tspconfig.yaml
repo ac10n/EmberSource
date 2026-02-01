@@ -1,0 +1,8 @@
+emit:
+  - "@typespec/http-client-csharp"
+  - "@typespec/http-client-js"
+options:
+  "@typespec/http-client-csharp":
+    emitter-output-dir: "{output-dir}/../Ember.WebServer/Models"
+  "@typespec/http-client-js":
+    emitter-output-dir: "{output-dir}/../frontend/src/app/models"

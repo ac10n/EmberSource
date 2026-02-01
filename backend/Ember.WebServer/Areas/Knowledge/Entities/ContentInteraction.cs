@@ -13,7 +13,7 @@ public class ContentInteraction
     public EmberUser? User { get; set; }
 
     public bool IsRead { get; set; }
-    public DateTime? ReadAt { get; set; }
+    public DateTimeOffset? ReadAt { get; set; }
 
     public bool IsLiked { get; set; }
     public bool IsDisliked { get; set; }

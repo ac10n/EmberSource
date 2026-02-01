@@ -12,7 +12,7 @@ public class Collection
     public Guid CreatedByUserId { get; set; }
     public EmberUser? CreatedByUser { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
 }
 
 public class CollectionItem
@@ -27,5 +27,5 @@ public class CollectionItem
 
     public int OrderIndex { get; set; }
 
-    public DateTime AddedAt { get; set; }
+    public DateTimeOffset AddedAt { get; set; }
 }

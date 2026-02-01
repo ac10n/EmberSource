@@ -18,6 +18,6 @@ public class Testimonial
 
     public string? Message { get; set; }
 
-    public DateTime FromTime { get; set; }
-    public DateTime? ToTime { get; set; }
+    public DateTimeOffset FromTime { get; set; }
+    public DateTimeOffset? ToTime { get; set; }
 }

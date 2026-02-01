@@ -11,7 +11,7 @@ public class KnowledgeRequestModel: ListRequestBase
     public string? TitleSearchTerm { get; set; }
     public string? DataSearchTerm { get; set; }
     public IEnumerable<Guid>? CreatedByUserIds { get; set; }
-    public DateTime? CreatedAfter { get; set; }
+    public DateTimeOffset? CreatedAfter { get; set; }
     public bool? UnreadByMe { get; set; }
     public IEnumerable<RelationshipFilters>? RelationshipFilters { get; set; }
     public IEnumerable<Guid>? Collections { get; set; }
@@ -41,6 +41,6 @@ public class ContentModel
 
     public Guid CreatedByUserId { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
 }
 

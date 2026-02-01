@@ -1,3 +1,5 @@
+using Ember.WebServer.Areas.Knowledge.Entities;
+
 namespace Ember.WebServer.Data;
 
 public static class KnownUsers
@@ -92,5 +94,51 @@ public static class KnownPlatformSections
     public static IEnumerable<PlatformSection> AllKnownPlatformSections()
     {
         yield return EmberFoundation;
+    }
+}
+
+public static class KnownContent
+{
+    public static readonly Content WelcomeArticle = new()
+    {
+        Id = Guid.Parse("3173c43b-b415-4d45-a002-7c7d7253bf1b"),
+        Identifier = Guid.Parse("3fee5a19-69e4-4c65-81fe-8d9de9c11539"),
+        Version = 1,
+        ParentContentId = null,
+        ContentTypeId = ContentTypes.Paragraph,
+        ContentFormatId = ContentFormats.Markdown,
+        FormatVersion = 1,
+        Title = "Welcome to Ember",
+        Data =
+@"# Welcome to Ember!
+
+Ember is an attempt to give users ownership of their online activities.
+An online service that does not seek profit, would give users tools they need to find the data they want,
+interact with the platform in ways that make sense to their use cases,
+keep the user in control, not at the mercy of intentionally limited UX and engagement-maximizing algorithms.
+
+Transparency builds dependable trust, amongst users, and between users and the platform.
+With time, we can create tools that provide users with a measure of trustworthiness of content and its creators.
+These measures should reflect each user's values and priorities, not those imposed by a centralized authority.
+
+The premise is that a confused user is more likely to make decisions that are not in their best interest.
+
+We'll start with the simplest tools: a place you can write and share pieces of content.
+With that, conversations around Ember development can be hosted on the platform itself.
+
+Ember is an attempt to bring back how trust shaped human interactions in small communities,
+but we lost that when we moved to the global village, and platforms that seek profit at the expense societal good.
+
+Much more details to be shared as we build more features.
+",
+        CreatedByUserId = KnownUsers.Founder.Id,
+        CreatedAt = DateTimeOffset.Parse("2026-01-31T14:44:00"),
+        IsActive = true,
+        ContentVisibilityId = ContentVisibilities.Public
+    };
+
+    public static IEnumerable<Content> AllKnownContents()
+    {
+        yield return WelcomeArticle;
     }
 }

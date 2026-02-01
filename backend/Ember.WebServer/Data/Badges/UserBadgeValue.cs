@@ -12,7 +12,7 @@ public class UserBadgeValue
 
     public decimal? Value { get; set; }
 
-    public DateTime FromTime { get; set; }
+    public DateTimeOffset FromTime { get; set; }
     public bool IsActive { get; set; }
-    public DateTime? ToTime { get; set; }
+    public DateTimeOffset? ToTime { get; set; }
 }
