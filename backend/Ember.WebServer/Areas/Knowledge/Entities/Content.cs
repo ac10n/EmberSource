@@ -43,6 +43,21 @@ public class ContentType
     public required string Name { get; set; }
 }
 
+public enum ContentTypes
+{
+    Paragraph = 1,
+    Section,
+    Article,
+    Image,
+    Video,
+    Audio,
+    Link,
+    InteractiveElement,
+    CodeSnippet,
+    ExplorableDataset,
+    Comment,
+}
+
 public class ContentFormat
 {
     public ContentFormats Id { get; set; }
