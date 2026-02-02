@@ -8,7 +8,7 @@
             "name": "C#: WebServer Debug",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}/backend/Ember.WebServer/Ember.WebServer.csproj"
+            "projectPath": "${workspaceFolder}/backend/Ember.WebServer/Ember.WebServer.csproj",
         },
         {
             "name": "Generate TypeScript Models",

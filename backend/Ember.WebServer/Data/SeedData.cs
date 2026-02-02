@@ -108,7 +108,7 @@ public static class KnownContent
         ContentTypeId = ContentTypes.Paragraph,
         ContentFormatId = ContentFormats.Markdown,
         FormatVersion = 1,
-        Title = "Welcome to Ember",
+        Title = "Introducing Ember",
         Data =
 @"# Welcome to Ember!
 
