@@ -10,7 +10,7 @@ public class KnowledgeController(IServiceProvider serviceProvider) : ControllerB
 {
     private Lazy<IKnowledgeService> KnowledgeService => serviceProvider.Lazy<IKnowledgeService>();
 
-    [HttpGet]
+    [HttpPost]
     public async Task<KnowledgeResponseModel> GetKnowledgeItems(KnowledgeRequestModel request)
     {
         return await KnowledgeService.Value.GetKnowledgeItems(request);

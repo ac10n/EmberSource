@@ -1,1 +1,5 @@
-<p>content-explorer works!</p>
+<ul>
+@for (item of knowledgeItems()?.contents; track item.id) {
+    <li>{{ item.title }}</li>
+}
+</ul>

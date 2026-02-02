@@ -3,6 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Ember.WebServer.Data;
 using Microsoft.AspNetCore.HttpOverrides;
 using Ember.WebServer;
+using Ember.WebServer.Areas.Knowledge.Services;
+
+if (args.Length > 0 && args[0] == "generate-ts-models")
+{
+    new TypeScriptModelGenerator().GenerateTypeScriptModels();
+    return;
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +17,9 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<EmberUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<EmberDbContext>();
+
+builder.Services.AddScoped<IKnowledgeService, KnowledgeService>();
+
 builder.Services.AddRazorPages();
 
 ServiceExtensions.AddEmberExtensions(builder);
@@ -39,5 +49,7 @@ app.UseMiddleware<RequestLoggingMiddleware>();
 app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
+
+app.MapControllers();
 
 app.Run();

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
+import { KnowledgeRequestModel, KnowledgeResponseModel } from '../models/contract-models';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,7 @@ import { Observable } from 'rxjs/internal/Observable';
 export class ContentService {
   constructor(private http: HttpClient) {}
 
-  getTodos(): Observable<TodoItem[]> {
-    return this.http.get<TodoItem[]>(this.baseUrl);
+  getKnowledge(request: KnowledgeRequestModel): Observable<KnowledgeResponseModel> {
+    return this.http.post<KnowledgeResponseModel>('/api/v01/knowledge/GetKnowledgeItems', request);
   }
 }

@@ -6,6 +6,7 @@
         "Explorable",
         "Haghshenas",
         "netcoreapp",
+        "netstandard",
         "Newtonsoft",
         "Npgsql",
         "Purgable",

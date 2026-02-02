@@ -9,7 +9,15 @@
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}/backend/Ember.WebServer/Ember.WebServer.csproj"
+        },
+        {
+            "name": "Generate TypeScript Models",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/Ember.WebServer/bin/Debug/net10.0/Ember.WebServer.dll",
+            "args": ["generate-ts-models"],
+            "cwd": "${workspaceFolder}/backend/Ember.WebServer",
+            "preLaunchTask": "dotnet: build /home/ali/work/forks/EmberSource/backend/Ember.WebServer/Ember.WebServer.csproj"
         }
-
     ]
 }
