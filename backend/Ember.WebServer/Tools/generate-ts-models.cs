@@ -148,8 +148,8 @@ public class TypeScriptModelGenerator
             foreach (var le in ex.LoaderExceptions)
             {
                 Console.WriteLine("---- Loader exception ----");
-                Console.WriteLine(le.GetType().FullName);
-                Console.WriteLine(le.Message);
+                Console.WriteLine(le?.GetType().FullName);
+                Console.WriteLine(le?.Message);
 
                 // If it's a FileNotFoundException, the FusionLog can be useful on some runtimes
                 if (le is FileNotFoundException fnf)

@@ -1,4 +1,5 @@
-﻿using Ember.WebServer.Areas.Knowledge.Entities;
+﻿using Ember.WebServer.Areas.Identity.Data;
+using Ember.WebServer.Areas.Knowledge.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,8 @@ namespace Ember.WebServer.Data;
 public class EmberDbContext(DbContextOptions<EmberDbContext> options)
     : IdentityDbContext<EmberUser, EmberRole, Guid, IdentityUserClaim<Guid>, EmberUserRole, EmberUserLogin, EmberRoleClaim, EmberUserToken>(options)
 {
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+
     public DbSet<DataOwnership> LogOwnerships { get; set; }
     public DbSet<RequestLog> RequestLogs { get; set; }
     public DbSet<ResponseLog> ResponseLogs { get; set; }
@@ -41,6 +44,13 @@ public class EmberDbContext(DbContextOptions<EmberDbContext> options)
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<RefreshToken>()
+            .HasIndex(x => x.UserId);
+
+        builder.Entity<RefreshToken>()
+            .HasIndex(x => x.TokenHash)
+            .IsUnique();
 
         builder.Entity<EmberUserRole>()
             .HasOne(ur => ur.User)
