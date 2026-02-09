@@ -21,9 +21,17 @@ export class AuthService {
 
   private accessToken$ = new BehaviorSubject<string | null>(this.getAccessToken());
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
+
+  private storage: Storage = localStorage;
+
+  private setStorage(rememberMe: boolean) {
+    this.storage = rememberMe ? localStorage : sessionStorage;
+  }
 
   login(req: LoginRequest): Observable<TokenResponse> {
+    this.setStorage(req.rememberMe);
+
     return this.http.post<TokenResponse>(`${environment.apiBaseUrl}/auth/login`, req, {
       // if refresh token is HttpOnly cookie, you likely need this:
       withCredentials: true,
@@ -59,27 +67,26 @@ export class AuthService {
       .pipe(tap(() => this.clearTokens()));
   }
 
-  // --- token storage ---
   getAccessToken(): string | null {
-    return localStorage.getItem(this.accessTokenKey);
+    return sessionStorage.getItem(this.accessTokenKey) ?? localStorage.getItem(this.accessTokenKey);
   }
 
   private setAccessToken(token: string) {
-    localStorage.setItem(this.accessTokenKey, token);
+    this.storage.setItem(this.accessTokenKey, token);
     this.accessToken$.next(token);
   }
 
   private getRefreshToken(): string | null {
-    return localStorage.getItem(this.refreshTokenKey);
+    return this.storage.getItem(this.refreshTokenKey);
   }
 
   private setRefreshToken(token: string) {
-    localStorage.setItem(this.refreshTokenKey, token);
+    this.storage.setItem(this.refreshTokenKey, token);
   }
 
   clearTokens() {
-    localStorage.removeItem(this.accessTokenKey);
-    localStorage.removeItem(this.refreshTokenKey);
+    this.storage.removeItem(this.accessTokenKey);
+    this.storage.removeItem(this.refreshTokenKey);
     this.accessToken$.next(null);
   }
 

@@ -15,7 +15,7 @@ if (args.Length > 0 && args[0] == "generate-ts-models")
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddDefaultIdentity<EmberUser>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddIdentity<EmberUser, EmberRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<EmberDbContext>();
 
 builder.ConfigureAuth();
@@ -27,6 +27,12 @@ builder.Services.AddRazorPages();
 ServiceExtensions.AddEmberExtensions(builder);
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+    await IdentitySeeder.SeedAsync(scope.ServiceProvider);
+}
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {

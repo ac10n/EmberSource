@@ -13,7 +13,6 @@ public static class KnownUsers
         Jurisdiction = "Canada",
         EmailConfirmed = true,
         PhoneNumberConfirmed = true,
-        ConcurrencyStamp = "a5405995-3314-4821-be2f-17ddabd54fbf",
     };
 
     public static readonly EmberUser Founder = new()
@@ -25,7 +24,6 @@ public static class KnownUsers
         Jurisdiction = "Canada",
         EmailConfirmed = true,
         PhoneNumberConfirmed = true,
-        ConcurrencyStamp = "2aaf7da4-ce97-4efb-a069-55ff3c131465",
     };
 
     public static IEnumerable<EmberUser> AllKnownUsers()
@@ -37,16 +35,41 @@ public static class KnownUsers
 
 public static class KnownRoles
 {
-    public static EmberRole Root = new() { Id = Guid.Parse("f883569f-2494-4328-95a9-e76a2b6ff143"), Name = "Root", NormalizedName = "Root" };
-    public static EmberRole Owner = new() { Id = Guid.Parse("5e4b79a1-afe1-4e79-a4e1-ee1b86e4ce33"), Name = "Owner", NormalizedName = "OWNER" };
-    public static EmberRole Administrator = new() { Id = Guid.Parse("5e848956-8a01-4816-be8d-d6a6b7091cf3"), Name = "Administrator", NormalizedName = "ADMINISTRATOR" };
-    public static EmberRole Creator = new() { Id = Guid.Parse("b373f8c6-b1b9-4097-98e1-46a881e5484d"), Name = "Creator", NormalizedName = "CREATOR" };
-    public static EmberRole User = new() { Id = Guid.Parse("a03c7114-423e-47e1-a280-6ba824c25828"), Name = "User", NormalizedName = "USER" };
+    public static EmberRole Root = new()
+    {
+        Id = Guid.Parse("f883569f-2494-4328-95a9-e76a2b6ff143"),
+        Name = "Root",
+        NormalizedName = "Root",
+    };
+    public static EmberRole Steward = new()
+    {
+        Id = Guid.Parse("5e4b79a1-afe1-4e79-a4e1-ee1b86e4ce33"),
+        Name = "Steward",
+        NormalizedName = "STEWARD",
+    };
+    public static EmberRole Administrator = new()
+    {
+        Id = Guid.Parse("5e848956-8a01-4816-be8d-d6a6b7091cf3"),
+        Name = "Administrator",
+        NormalizedName = "ADMINISTRATOR",
+    };
+    public static EmberRole Creator = new()
+    {
+        Id = Guid.Parse("b373f8c6-b1b9-4097-98e1-46a881e5484d"),
+        Name = "Creator",
+        NormalizedName = "CREATOR",
+    };
+    public static EmberRole User = new()
+    {
+        Id = Guid.Parse("a03c7114-423e-47e1-a280-6ba824c25828"),
+        Name = "User",
+        NormalizedName = "USER",
+    };
 
     public static IEnumerable<EmberRole> AllKnownRoles()
     {
         yield return Root;
-        yield return Owner;
+        yield return Steward;
         yield return Administrator;
         yield return Creator;
         yield return User;
@@ -62,18 +85,18 @@ public static class KnownUserRoles
         RoleId = KnownRoles.Root.Id,
         PlatformSectionId = null,
     };
-    public static EmberUserRole FounderOwner = new()
+    public static EmberUserRole Founder = new()
     {
         Id = Guid.Parse("072c2bb6-f216-4c07-8e4c-f6b3abb05770"),
         UserId = KnownUsers.Founder.Id,
-        RoleId = KnownRoles.Owner.Id,
+        RoleId = KnownRoles.Steward.Id,
         PlatformSectionId = null,
     };
 
     public static IEnumerable<EmberUserRole> AllKnownUserRoles()
     {
         yield return SystemRoot;
-        yield return FounderOwner;
+        yield return Founder;
     }
 }
 
@@ -132,7 +155,7 @@ but we lost that when we moved to the global village, and platforms that seek pr
 Much more details to be shared as we build more features.
 ",
         CreatedByUserId = KnownUsers.Founder.Id,
-        CreatedAt = DateTimeOffset.Parse("2026-01-31T14:44:00"),
+        CreatedAt = DateTimeOffset.Parse("2026-02-09T03:48:53.006Z"),
         IsActive = true,
         ContentVisibilityId = ContentVisibilities.Public
     };

@@ -11,7 +11,7 @@ public class EmberDbContext(DbContextOptions<EmberDbContext> options)
 {
     public DbSet<RefreshToken> RefreshTokens { get; set; }
 
-    public DbSet<DataOwnership> LogOwnerships { get; set; }
+    public DbSet<DataOwnership> DataOwnerships { get; set; }
     public DbSet<RequestLog> RequestLogs { get; set; }
     public DbSet<ResponseLog> ResponseLogs { get; set; }
     public DbSet<InteractionLog> InteractionLogs { get; set; }
@@ -25,6 +25,7 @@ public class EmberDbContext(DbContextOptions<EmberDbContext> options)
 
 
     public DbSet<Content> Contents { get; set; }
+    public DbSet<ContentFormat> ContentFormats { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<ContentTag> ContentTags { get; set; }
     public DbSet<ContentType> ContentTypes { get; set; }
@@ -61,42 +62,5 @@ public class EmberDbContext(DbContextOptions<EmberDbContext> options)
             .HasOne(ur => ur.Role)
             .WithMany(r => r.UserRoles)
             .HasForeignKey(ur => ur.RoleId);
-
-        builder.Entity<DataOwnership>()
-            .HasData(Enum.GetValues<DataOwnershipType>()
-                .Select(ownershipType => new DataOwnership
-                {
-                    Id = ownershipType,
-                    Name = ownershipType.ToString()
-                })
-            );
-
-        builder.Entity<EmberRole>().HasData(KnownRoles.AllKnownRoles());
-        builder.Entity<EmberUser>().HasData(KnownUsers.AllKnownUsers());
-        builder.Entity<EmberUserRole>().HasData(KnownUserRoles.AllKnownUserRoles());
-        builder.Entity<FinancialModel>().HasData(KnownFinancialModels.AllModels);
-        builder.Entity<PlatformSection>().HasData(KnownPlatformSections.AllKnownPlatformSections());
-        builder.Entity<ContentType>().HasData(Enum.GetValues<ContentTypes>()
-            .Select(ct => new ContentType
-            {
-                Id = ct,
-                Name = ct.ToString()
-            })
-        );
-        builder.Entity<ContentFormat>().HasData(Enum.GetValues<ContentFormats>()
-            .Select(cf => new ContentFormat
-            {
-                Id = cf,
-                Name = cf.ToString()
-            })
-        );
-        builder.Entity<ContentVisibility>().HasData(Enum.GetValues<ContentVisibilities>()
-            .Select(cv => new ContentVisibility
-            {
-                Id = cv,
-                Name = cv.ToString()
-            })
-        );
-        builder.Entity<Content>().HasData(KnownContent.AllKnownContents());
     }
 }

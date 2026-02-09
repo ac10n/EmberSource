@@ -11,6 +11,6 @@ export class ContentService {
   constructor(private http: HttpClient) {}
 
   getKnowledge(request: KnowledgeRequestModel): Observable<KnowledgeResponseModel> {
-    return this.http.post<KnowledgeResponseModel>(`${environment.apiBaseUrl}/knowledge/GetKnowledgeItems`, request);
+    return this.http.post<KnowledgeResponseModel>(`${environment.apiBaseUrl}/v01/knowledge/GetKnowledgeItems`, request);
   }
 }

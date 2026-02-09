@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ember.WebServer.Migrations
 {
     [DbContext(typeof(EmberDbContext))]
-    [Migration("20260201040243_InitiateDatabase")]
+    [Migration("20260209032242_InitiateDatabase")]
     partial class InitiateDatabase
     {
         /// <inheritdoc />
@@ -20,10 +20,51 @@ namespace Ember.WebServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("ProductVersion", "10.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Ember.WebServer.Areas.Identity.Data.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedByIp")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DeviceId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ReplacedByTokenId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset?>("RevokedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
 
             modelBuilder.Entity("Ember.WebServer.Areas.Knowledge.Entities.Collection", b =>
                 {
@@ -135,23 +176,6 @@ namespace Ember.WebServer.Migrations
                     b.HasIndex("ParentContentId");
 
                     b.ToTable("Contents");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("3173c43b-b415-4d45-a002-7c7d7253bf1b"),
-                            ContentFormatId = 1,
-                            ContentTypeId = 1,
-                            ContentVisibilityId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 31, 14, 44, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -8, 0, 0, 0)),
-                            CreatedByUserId = new Guid("2f673ad9-6913-46d0-9b44-d517c5611c8c"),
-                            Data = "# Welcome to Ember!\n\nEmber is an attempt to give users ownership of their online activities.\nAn online service that does not seek profit, would give users tools they need to find the data they want,\ninteract with the platform in ways that make sense to their use cases,\nkeep the user in control, not at the mercy of intentionally limited UX and engagement-maximizing algorithms.\n\nTransparency builds dependable trust, amongst users, and between users and the platform.\nWith time, we can create tools that provide users with a measure of trustworthiness of content and its creators.\nThese measures should reflect each user's values and priorities, not those imposed by a centralized authority.\n\nThe premise is that a confused user is more likely to make decisions that are not in their best interest.\n\nWe'll start with the simplest tools: a place you can write and share pieces of content.\nWith that, conversations around Ember development can be hosted on the platform itself.\n\nEmber is an attempt to bring back how trust shaped human interactions in small communities,\nbut we lost that when we moved to the global village, and platforms that seek profit at the expense societal good.\n\nMuch more details to be shared as we build more features.\n",
-                            FormatVersion = 1,
-                            Identifier = new Guid("3fee5a19-69e4-4c65-81fe-8d9de9c11539"),
-                            IsActive = true,
-                            Title = "Welcome to Ember",
-                            Version = 1
-                        });
                 });
 
             modelBuilder.Entity("Ember.WebServer.Areas.Knowledge.Entities.ContentFormat", b =>
@@ -165,14 +189,7 @@ namespace Ember.WebServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ContentFormat");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Markdown"
-                        });
+                    b.ToTable("ContentFormats");
                 });
 
             modelBuilder.Entity("Ember.WebServer.Areas.Knowledge.Entities.ContentInteraction", b =>
@@ -250,63 +267,6 @@ namespace Ember.WebServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ContentTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Paragraph"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Section"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Article"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Image"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Video"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Audio"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Link"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "InteractiveElement"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "CodeSnippet"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "ExplorableDataset"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Comment"
-                        });
                 });
 
             modelBuilder.Entity("Ember.WebServer.Areas.Knowledge.Entities.ContentVisibility", b =>
@@ -320,33 +280,6 @@ namespace Ember.WebServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ContentVisibilities");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Public"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Private"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "VisibleToSpecificPeople"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "VisibleByCriteria"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "ScheduledRollout"
-                        });
                 });
 
             modelBuilder.Entity("Ember.WebServer.Areas.Knowledge.Entities.RelatedContent", b =>
@@ -486,19 +419,7 @@ namespace Ember.WebServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LogOwnerships");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "System"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "User"
-                        });
+                    b.ToTable("DataOwnerships");
                 });
 
             modelBuilder.Entity("Ember.WebServer.Data.EmberRole", b =>
@@ -526,38 +447,6 @@ namespace Ember.WebServer.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("f883569f-2494-4328-95a9-e76a2b6ff143"),
-                            Name = "Root",
-                            NormalizedName = "Root"
-                        },
-                        new
-                        {
-                            Id = new Guid("5e4b79a1-afe1-4e79-a4e1-ee1b86e4ce33"),
-                            Name = "Owner",
-                            NormalizedName = "OWNER"
-                        },
-                        new
-                        {
-                            Id = new Guid("5e848956-8a01-4816-be8d-d6a6b7091cf3"),
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = new Guid("b373f8c6-b1b9-4097-98e1-46a881e5484d"),
-                            Name = "Creator",
-                            NormalizedName = "CREATOR"
-                        },
-                        new
-                        {
-                            Id = new Guid("a03c7114-423e-47e1-a280-6ba824c25828"),
-                            Name = "User",
-                            NormalizedName = "USER"
-                        });
                 });
 
             modelBuilder.Entity("Ember.WebServer.Data.EmberRoleClaim", b =>
@@ -658,49 +547,15 @@ namespace Ember.WebServer.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("6c0a35b2-23c4-44a3-8e13-161285b0f9db"),
-                            AccessFailedCount = 0,
-                            BirthYear = 0,
-                            ConcurrencyStamp = "a5405995-3314-4821-be2f-17ddabd54fbf",
-                            EmailConfirmed = true,
-                            FullName = "System User",
-                            Jurisdiction = "Canada",
-                            LockoutEnabled = false,
-                            NormalizedUserName = "SYSTEM",
-                            PhoneNumberConfirmed = true,
-                            TwoFactorEnabled = false,
-                            UserName = "System"
-                        },
-                        new
-                        {
-                            Id = new Guid("2f673ad9-6913-46d0-9b44-d517c5611c8c"),
-                            AccessFailedCount = 0,
-                            BirthYear = 0,
-                            ConcurrencyStamp = "2aaf7da4-ce97-4efb-a069-55ff3c131465",
-                            EmailConfirmed = true,
-                            FullName = "Alireza Haghshenas",
-                            Jurisdiction = "Canada",
-                            LockoutEnabled = false,
-                            NormalizedUserName = "ALI",
-                            PhoneNumberConfirmed = true,
-                            TwoFactorEnabled = false,
-                            UserName = "ali"
-                        });
                 });
 
             modelBuilder.Entity("Ember.WebServer.Data.EmberUserLogin", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
@@ -736,20 +591,6 @@ namespace Ember.WebServer.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = new Guid("6c0a35b2-23c4-44a3-8e13-161285b0f9db"),
-                            RoleId = new Guid("f883569f-2494-4328-95a9-e76a2b6ff143"),
-                            Id = new Guid("43510e33-41e3-45bb-96c3-be52af6b9c3b")
-                        },
-                        new
-                        {
-                            UserId = new Guid("2f673ad9-6913-46d0-9b44-d517c5611c8c"),
-                            RoleId = new Guid("5e4b79a1-afe1-4e79-a4e1-ee1b86e4ce33"),
-                            Id = new Guid("072c2bb6-f216-4c07-8e4c-f6b3abb05770")
-                        });
                 });
 
             modelBuilder.Entity("Ember.WebServer.Data.EmberUserToken", b =>
@@ -758,12 +599,10 @@ namespace Ember.WebServer.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Value")
                         .HasColumnType("text");
@@ -792,20 +631,6 @@ namespace Ember.WebServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("FinancialModels");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "A financial model where the organization does not distribute profits to owners or shareholders.",
-                            Name = "Non-Profit"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "A financial model where the organization aims to generate profit for its owners or shareholders.",
-                            Name = "For-Profit"
-                        });
                 });
 
             modelBuilder.Entity("Ember.WebServer.Data.InteractionLog", b =>
@@ -886,18 +711,6 @@ namespace Ember.WebServer.Migrations
                     b.HasIndex("ParentPlatformSectionId");
 
                     b.ToTable("PlatformSections");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("d04c1e89-a4c8-450b-8608-84f35415fd39"),
-                            CreatorUserId = new Guid("2f673ad9-6913-46d0-9b44-d517c5611c8c"),
-                            Description = "The Ember Foundation, the non-profit organization that drives all other Ember projects.",
-                            FinancialModelId = 1,
-                            InheritRoles = false,
-                            Name = "Ember Foundation",
-                            Url = "/"
-                        });
                 });
 
             modelBuilder.Entity("Ember.WebServer.Data.ProcessLog", b =>
