@@ -1,3 +1,4 @@
+using Ember.WebServer.Areas.Knowledge.Services;
 using Ember.WebServer.Data;
 using Ember.WebServer.Helpers;
 
@@ -10,6 +11,7 @@ public static class ServiceExtensions
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
         builder.Services.AddDbContext<EmberDbContext>(options => options.UseNpgsql(connectionString));
 
+        builder.Services.AddScoped<IKnowledgeService, KnowledgeService>();
         builder.Services.AddScoped<IRequestLogContext, RequestLogContext>();
         builder.Services.AddScoped<ILogHelper, LogHelper>();
 

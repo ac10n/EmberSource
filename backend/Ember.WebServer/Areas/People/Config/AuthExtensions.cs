@@ -15,10 +15,15 @@ public static class AuthExtensions
         var keyBytes = Encoding.UTF8.GetBytes(jwt.SigningKey);
 
         builder.Services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(o =>
+            .AddAuthentication(options =>
             {
-                o.TokenValidationParameters = new TokenValidationParameters
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidIssuer = jwt.Issuer,
@@ -32,9 +37,20 @@ public static class AuthExtensions
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.FromSeconds(30),
 
-                    NameClaimType = "name",
+                    NameClaimType = "sub",
                     RoleClaimType = "role"
                 };
+
+                // options.Events = new JwtBearerEvents
+                // {
+                //     OnAuthenticationFailed = ctx =>
+                //     {
+                //         ctx.NoResult();
+                //         ctx.Response.Headers["auth-error"] = ctx.Exception.GetType().Name;
+                //         ctx.Response.Headers["auth-error-desc"] = ctx.Exception.Message;
+                //         return Task.CompletedTask;
+                //     }
+                // };
             });
 
         builder.Services.AddAuthorization();

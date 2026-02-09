@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'ember-login',
   templateUrl: './login.html',
-  styleUrl: './login.scss',
+  styleUrls: ['../../forms.scss', './login.scss'],
   imports: [FormsModule],
 })
 export class LoginComponent {

@@ -9,33 +9,34 @@ export type ListResponseBase =  {
 }
 
 export type TokenResponse =  {
-  accessToken?: string;
+  accessToken: string;
   accessTokenExpiresAt: string;
-  refreshToken?: string;
+  refreshToken: string;
   refreshTokenExpiresAt: string;
 }
 
 export type LoginRequest =  {
-  userName?: string;
-  password?: string;
+  userName: string;
+  password: string;
   rememberMe: boolean;
 }
 
 export type RefreshRequest =  {
-  refreshToken?: string;
+  refreshToken: string;
 }
 
-export type ProfileResponseModel =  {
-  username?: string;
-  fullName?: string;
+export type ProfileResponse =  {
+  username: string;
+  fullName: string;
   birthYear: number;
-  jurisdiction?: string;
+  jurisdiction: string;
 }
 
-export type UpdateProfileRequestModel =  {
-  fullName?: string;
+export type UpdateProfileRequest =  {
+  fullName: string;
   birthYear: number;
-  jurisdiction?: string;
+  jurisdiction: string;
+  oldPassword?: string;
   newPassword?: string;
 }
 

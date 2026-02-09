@@ -19,16 +19,22 @@ public sealed class AuthController(
     public async Task<ActionResult<TokenResponse>> Login(LoginRequest req)
     {
         var user = await userManager.FindByNameAsync(req.UserName);
-        if (user is null) return Unauthorized();
+        if (user is null)
+        {
+            return Unauthorized();
+        }
 
         var result = await signInManager.CheckPasswordSignInAsync(user, req.Password, lockoutOnFailure: true);
-        if (!result.Succeeded) return Unauthorized();
+        if (!result.Succeeded)
+        {
+            return Unauthorized();
+        }
 
         var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
         var deviceId = Request.Headers.UserAgent.ToString(); // or your own device id header
 
         var tokens = await tokenService.IssueTokensAsync(user, deviceId, ip);
-        return Ok(tokens);
+        return tokens;
     }
 
     [HttpPost]
@@ -37,8 +43,11 @@ public sealed class AuthController(
     {
         var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
         var tokens = await tokenService.RefreshAsync(req.RefreshToken, ip);
-        if (tokens is null) return Unauthorized();
-        return Ok(tokens);
+        if (tokens is null)
+        {
+            return Unauthorized();
+        }
+        return tokens;
     }
 
     [HttpPost]

@@ -1,9 +1,6 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Ember.WebServer.Data;
 using Microsoft.AspNetCore.HttpOverrides;
 using Ember.WebServer;
-using Ember.WebServer.Areas.Knowledge.Services;
 using Ember.WebServer.Areas.People.Config;
 
 if (args.Length > 0 && args[0] == "generate-ts-models")
@@ -24,8 +21,6 @@ builder.Services.AddIdentity<EmberUser, EmberRole>(options =>
 
 builder.ConfigureAuth();
 
-builder.Services.AddScoped<IKnowledgeService, KnowledgeService>();
-
 builder.Services.AddRazorPages();
 
 ServiceExtensions.AddEmberExtensions(builder);
@@ -43,11 +38,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseMigrationsEndPoint();
-}
-else
+if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
 }
@@ -58,10 +49,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<RequestLoggingMiddleware>();
-
-app.MapStaticAssets();
-app.MapRazorPages()
-   .WithStaticAssets();
 
 app.MapControllers();
 

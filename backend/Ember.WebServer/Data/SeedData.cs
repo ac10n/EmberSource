@@ -21,6 +21,7 @@ public static class KnownUsers
         UserName = "ali",
         NormalizedUserName = "ALI",
         FullName = "Alireza Haghshenas",
+        BirthYear = 1981,
         Jurisdiction = "Canada",
         EmailConfirmed = true,
         PhoneNumberConfirmed = true,

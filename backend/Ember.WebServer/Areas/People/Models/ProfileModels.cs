@@ -1,6 +1,6 @@
 namespace Ember.WebServer.Areas.People.Models;
 
-public class ProfileResponseModel
+public class ProfileResponse
 {
     public required string Username { get; set; }
     public required string FullName { get; set; }
@@ -8,10 +8,11 @@ public class ProfileResponseModel
     public required string Jurisdiction { get; set; }
 }
 
-public class UpdateProfileRequestModel
+public class UpdateProfileRequest
 {
     public required string FullName { get; set; }
     public required int BirthYear { get; set; }
     public required string Jurisdiction { get; set; }
+    public string? OldPassword { get; set; }
     public string? NewPassword { get; set; }
 }

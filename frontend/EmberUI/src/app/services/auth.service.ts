@@ -2,17 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-export interface LoginRequest {
-  userName: string;
-  password: string;
-  rememberMe: boolean;
-}
-
-export interface TokenResponse {
-  accessToken: string;
-  refreshToken?: string; // if your backend returns it in body; omit if using HttpOnly cookie
-}
+import { LoginRequest, TokenResponse } from '../models/contract-models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

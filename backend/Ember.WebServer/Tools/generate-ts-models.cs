@@ -3,6 +3,7 @@ using System.Text;
 
 public class TypeScriptModelGenerator
 {
+    private readonly NullabilityInfoContext NullabilityInfoContext = new();
     public void GenerateTypeScriptModels()
     {
         string[] inputTypeNamespaces = [
@@ -55,9 +56,9 @@ public class TypeScriptModelGenerator
             sb.AppendLine($"export type {type.Name} = {baseType} {{");
             foreach (var prop in type.GetProperties())
             {
-                var propType = GetTypeScriptType(prop.PropertyType, generatedModels);
-                var optionalMark = IsNullable(prop) ? "?" : "";
-                sb.AppendLine($"  {ToCamelCase(prop.Name)}{optionalMark}: {propType};");
+                var (isNullable, underlyingType) = IsNullable(prop);
+                var propType = GetTypeScriptType(underlyingType, generatedModels);
+                sb.AppendLine($"  {ToCamelCase(prop.Name)}{(isNullable ? "?" : "")}: {propType};");
             }
             sb.AppendLine("}");
             sb.AppendLine();
@@ -73,17 +74,19 @@ public class TypeScriptModelGenerator
         return char.ToLower(name[0]) + name.Substring(1);
     }
 
-    bool IsNullable(PropertyInfo prop)
+    (bool isNullable, Type underlyingType) IsNullable(PropertyInfo prop)
     {
-        if (!prop.PropertyType.IsValueType)
+        var nullability = NullabilityInfoContext.Create(prop);
+        if (nullability.ReadState == NullabilityState.Nullable)
         {
-            return true;
+            return (true, prop.PropertyType);
         }
-        if (Nullable.GetUnderlyingType(prop.PropertyType) != null)
+        var underlyingType = Nullable.GetUnderlyingType(prop.PropertyType);
+        if (underlyingType != null)
         {
-            return true;
+            return (true, underlyingType);
         }
-        return false;
+        return (false, prop.PropertyType);
     }
 
     string GetTypeScriptType(Type type, Dictionary<Type, StringBuilder> generatedModels)
