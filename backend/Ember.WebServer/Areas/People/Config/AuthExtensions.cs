@@ -1,9 +1,9 @@
 using System.Text;
-using Ember.WebServer.Areas.Identity.Services;
+using Ember.WebServer.Areas.People.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Ember.WebServer.Areas.Identity.Config;
+namespace Ember.WebServer.Areas.People.Config;
 
 public static class AuthExtensions
 {

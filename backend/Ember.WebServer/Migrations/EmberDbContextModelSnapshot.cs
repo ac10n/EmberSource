@@ -22,7 +22,7 @@ namespace Ember.WebServer.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Ember.WebServer.Areas.Identity.Data.RefreshToken", b =>
+            modelBuilder.Entity("Ember.WebServer.Areas.People.Data.RefreshToken", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

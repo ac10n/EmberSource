@@ -1,11 +1,11 @@
-using Ember.WebServer.Areas.Identity.Models;
-using Ember.WebServer.Areas.Identity.Services;
+using Ember.WebServer.Areas.People.Models;
+using Ember.WebServer.Areas.People.Services;
 using Ember.WebServer.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Ember.WebServer.Areas.Identity.Controllers;
+namespace Ember.WebServer.Areas.People.Controllers;
 
 [ApiController]
 [Route("api/v01/[controller]/[action]")]

@@ -4,7 +4,7 @@ using Ember.WebServer.Data;
 using Microsoft.AspNetCore.HttpOverrides;
 using Ember.WebServer;
 using Ember.WebServer.Areas.Knowledge.Services;
-using Ember.WebServer.Areas.Identity.Config;
+using Ember.WebServer.Areas.People.Config;
 
 if (args.Length > 0 && args[0] == "generate-ts-models")
 {

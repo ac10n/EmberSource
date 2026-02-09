@@ -1,4 +1,4 @@
-namespace Ember.WebServer.Areas.Identity.Models;
+namespace Ember.WebServer.Areas.People.Models;
 
 public sealed record TokenResponse(
     string AccessToken,

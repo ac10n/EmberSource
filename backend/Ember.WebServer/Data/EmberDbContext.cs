@@ -1,4 +1,4 @@
-﻿using Ember.WebServer.Areas.Identity.Data;
+﻿using Ember.WebServer.Areas.People.Data;
 using Ember.WebServer.Areas.Knowledge.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

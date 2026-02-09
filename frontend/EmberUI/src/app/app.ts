@@ -9,7 +9,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
+  selector: 'ember-root',
   imports: [
     RouterOutlet,
     RouterLink,

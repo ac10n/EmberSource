@@ -21,7 +21,10 @@ export class AuthService {
 
   private accessToken$ = new BehaviorSubject<string | null>(this.getAccessToken());
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private readonly http: HttpClient
+  ) {
+  }
 
   private storage: Storage = localStorage;
 

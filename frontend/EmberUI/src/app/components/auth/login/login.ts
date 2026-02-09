@@ -5,7 +5,7 @@ import { AuthService } from '../../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-login',
+  selector: 'ember-login',
   templateUrl: './login.html',
   styleUrl: './login.scss',
   imports: [FormsModule],

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 
 @Component({
-  selector: 'app-create-account',
+  selector: 'ember-create-account',
   imports: [
     MatFormField,
     MatLabel,

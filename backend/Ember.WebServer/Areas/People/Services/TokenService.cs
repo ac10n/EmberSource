@@ -2,16 +2,16 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Ember.WebServer.Areas.Identity.Config;
-using Ember.WebServer.Areas.Identity.Data;
-using Ember.WebServer.Areas.Identity.Models;
+using Ember.WebServer.Areas.People.Config;
+using Ember.WebServer.Areas.People.Data;
+using Ember.WebServer.Areas.People.Models;
 using Ember.WebServer.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Ember.WebServer.Areas.Identity.Services;
+namespace Ember.WebServer.Areas.People.Services;
 
 public sealed class TokenService(
         EmberDbContext dbContext,

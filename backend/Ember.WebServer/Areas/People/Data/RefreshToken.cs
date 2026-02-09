@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Ember.WebServer.Areas.Identity.Data;
+namespace Ember.WebServer.Areas.People.Data;
 
 public sealed class RefreshToken
 {

@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
-namespace Ember.WebServer.Areas.Identity.Pages.Account
+namespace Ember.WebServer.Areas.People.Pages.Account
 {
     public class RegisterModel : PageModel
     {

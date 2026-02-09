@@ -8,6 +8,37 @@ export type ListResponseBase =  {
   continuationToken?: string;
 }
 
+export type TokenResponse =  {
+  accessToken?: string;
+  accessTokenExpiresAt: string;
+  refreshToken?: string;
+  refreshTokenExpiresAt: string;
+}
+
+export type LoginRequest =  {
+  userName?: string;
+  password?: string;
+  rememberMe: boolean;
+}
+
+export type RefreshRequest =  {
+  refreshToken?: string;
+}
+
+export type ProfileResponseModel =  {
+  username?: string;
+  fullName?: string;
+  birthYear: number;
+  jurisdiction?: string;
+}
+
+export type UpdateProfileRequestModel =  {
+  fullName?: string;
+  birthYear: number;
+  jurisdiction?: string;
+  newPassword?: string;
+}
+
 export type KnowledgeRequestModel =  ListRequestBase & {
   contentIds?: string[];
   parentContentIds?: (string | null | undefined)[];

@@ -6,9 +6,10 @@ public class TypeScriptModelGenerator
     public void GenerateTypeScriptModels()
     {
         string[] inputTypeNamespaces = [
-          "Ember.WebServer.Models",
-    "Ember.WebServer.Areas.Knowledge.Models",
-    ];
+            "Ember.WebServer.Models",
+            "Ember.WebServer.Areas.Knowledge.Models",
+            "Ember.WebServer.Areas.People.Models",
+        ];
 
         List<Type> types = LoadTypes(inputTypeNamespaces, typeof(TypeScriptModelGenerator).Assembly);
 
