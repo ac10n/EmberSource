@@ -15,7 +15,11 @@ if (args.Length > 0 && args[0] == "generate-ts-models")
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddIdentity<EmberUser, EmberRole>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddIdentity<EmberUser, EmberRole>(options =>
+        {
+            options.SignIn.RequireConfirmedAccount = false;
+            options.Password.RequireNonAlphanumeric = false;
+        })
     .AddEntityFrameworkStores<EmberDbContext>();
 
 builder.ConfigureAuth();

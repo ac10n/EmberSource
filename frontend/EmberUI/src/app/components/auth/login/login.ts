@@ -35,7 +35,7 @@ export class LoginComponent {
 
     this.auth
       .login({
-        email: this.username,
+        userName: this.username,
         password: this.password,
         rememberMe: this.rememberMe,
       })

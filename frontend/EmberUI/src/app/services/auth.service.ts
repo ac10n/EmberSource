@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export interface LoginRequest {
-  email: string;
+  userName: string;
   password: string;
   rememberMe: boolean;
 }
@@ -32,7 +32,7 @@ export class AuthService {
   login(req: LoginRequest): Observable<TokenResponse> {
     this.setStorage(req.rememberMe);
 
-    return this.http.post<TokenResponse>(`${environment.apiBaseUrl}/auth/login`, req, {
+    return this.http.post<TokenResponse>(`${environment.apiBaseUrl}/v01/auth/login`, req, {
       // if refresh token is HttpOnly cookie, you likely need this:
       withCredentials: true,
     }).pipe(
@@ -63,7 +63,7 @@ export class AuthService {
 
   logout(): Observable<void> {
     // optionally call backend to invalidate refresh token
-    return this.http.post<void>(`${environment.apiBaseUrl}/auth/logout`, {}, { withCredentials: true })
+    return this.http.post<void>(`${environment.apiBaseUrl}/v01/auth/logout`, {}, { withCredentials: true })
       .pipe(tap(() => this.clearTokens()));
   }
 

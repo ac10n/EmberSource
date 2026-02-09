@@ -56,7 +56,15 @@ public static class IdentitySeeder
                 continue;
             }
             await userManager.CreateAsync(user);
-            await userManager.AddPasswordAsync(user, services.GetRequiredService<IConfiguration>()["Secrets:FounderPassword"]);
+            if (user.UserName == "ali")
+            {
+                var password = services.GetRequiredService<IConfiguration>()["Secrets:FounderPassword"];
+                var result = await userManager.AddPasswordAsync(user, password);
+                if (!result.Succeeded)
+                {
+                    throw new Exception($"Failed to set password for user {user.UserName}: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                }
+            }
         }
     }
 

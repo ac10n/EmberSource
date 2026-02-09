@@ -8,15 +8,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace Ember.WebServer.Areas.Identity.Controllers;
 
 [ApiController]
-[Route("auth")]
+[Route("api/v01/[controller]/[action]")]
 public sealed class AuthController(
     SignInManager<EmberUser> signInManager,
     UserManager<EmberUser> userManager,
     TokenService tokenService) : ControllerBase
 {
-    [HttpPost("login")]
+    [HttpPost]
     [AllowAnonymous]
-    public async Task<ActionResult<TokenResponse>> Login([FromBody] LoginRequest req)
+    public async Task<ActionResult<TokenResponse>> Login(LoginRequest req)
     {
         var user = await userManager.FindByNameAsync(req.UserName);
         if (user is null) return Unauthorized();
@@ -31,9 +31,9 @@ public sealed class AuthController(
         return Ok(tokens);
     }
 
-    [HttpPost("refresh")]
+    [HttpPost]
     [AllowAnonymous]
-    public async Task<ActionResult<TokenResponse>> Refresh([FromBody] RefreshRequest req)
+    public async Task<ActionResult<TokenResponse>> Refresh(RefreshRequest req)
     {
         var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
         var tokens = await tokenService.RefreshAsync(req.RefreshToken, ip);
@@ -41,7 +41,7 @@ public sealed class AuthController(
         return Ok(tokens);
     }
 
-    [HttpPost("logout")]
+    [HttpPost]
     [Authorize]
     public async Task<IActionResult> Logout()
     {
