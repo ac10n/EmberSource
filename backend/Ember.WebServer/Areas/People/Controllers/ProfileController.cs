@@ -16,14 +16,14 @@ public sealed class ProfileController(
     ) : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult<ProfileResponse>> GetMyProfile()
+    public async Task<ActionResult<ProfileResponse>> GetProfile(ProfileRequest request)
     {
-        var userId = User.GetUserId();
+        var userId = User.GetUserId()?.ToString();
         if (userId is null)
         {
-            return Unauthorized();
+            return Unauthorized(); // TODO: If a profile's visibility allows anonymous access, we should change this
         }
-        var user = await userManager.FindByIdAsync(userId.ToString());
+        var user = await userManager.FindByIdAsync(request.ProfileId ?? userId);
         if (user is null)
         {
             return Unauthorized();
@@ -41,7 +41,7 @@ public sealed class ProfileController(
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateMyProfile(UpdateProfileRequest req)
+    public async Task<IActionResult> UpdateMyProfile(UpdateProfileRequest request)
     {
         var userId = User.GetUserId();
         if (userId is null)
@@ -55,9 +55,9 @@ public sealed class ProfileController(
             return Unauthorized();
         }
 
-        user.FullName = req.FullName;
-        user.BirthYear = req.BirthYear;
-        user.Jurisdiction = req.Jurisdiction;
+        user.FullName = request.FullName;
+        user.BirthYear = request.BirthYear;
+        user.Jurisdiction = request.Jurisdiction;
 
         var result = await userManager.UpdateAsync(user);
         if (!result.Succeeded)
@@ -65,13 +65,13 @@ public sealed class ProfileController(
             return BadRequest(result.Errors);
         }
 
-        if (!string.IsNullOrEmpty(req.NewPassword))
+        if (!string.IsNullOrEmpty(request.NewPassword))
         {
-            if (string.IsNullOrEmpty(req.OldPassword))
+            if (string.IsNullOrEmpty(request.OldPassword))
             {
                 return BadRequest("Current password is required to set a new password.");
             }
-            var passwordResult = await userManager.ChangePasswordAsync(user, req.OldPassword, req.NewPassword);
+            var passwordResult = await userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
             if (!passwordResult.Succeeded)
             {
                 return BadRequest(passwordResult.Errors);

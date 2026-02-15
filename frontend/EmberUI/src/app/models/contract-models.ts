@@ -32,6 +32,10 @@ export type ProfileResponse =  {
   jurisdiction: string;
 }
 
+export type ProfileRequest =  {
+  profileId?: string;
+}
+
 export type UpdateProfileRequest =  {
   fullName: string;
   birthYear: number;

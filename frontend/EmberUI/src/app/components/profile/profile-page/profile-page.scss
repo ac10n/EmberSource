@@ -1,0 +1,34 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.top-section {
+    display: flex;
+    flex: 1;
+    gap: 16px;
+}
+
+.top-left {
+    flex-shrink: 0;
+    /* Adjust width as needed */
+}
+
+.top-right {
+    flex: 1;
+}
+
+.bottom {
+    flex-shrink: 0;
+    /* Adjust height as needed */
+}
+
+@media (max-width: 768px) {
+    .top-section {
+        flex-direction: column;
+    }
+
+    .top-left {
+        width: 100%;
+    }
+}

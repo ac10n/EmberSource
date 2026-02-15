@@ -33,7 +33,7 @@ export class EditMyProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading.set(true);
-    this.profileService.getMyProfile()
+    this.profileService.getProfile()
       .subscribe({
         next: (profile) => {
           this.fullName.set(profile.fullName);

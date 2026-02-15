@@ -8,6 +8,11 @@ public class ProfileResponse
     public required string Jurisdiction { get; set; }
 }
 
+public class ProfileRequest
+{
+    public string? ProfileId { get; set; }
+}
+
 public class UpdateProfileRequest
 {
     public required string FullName { get; set; }
