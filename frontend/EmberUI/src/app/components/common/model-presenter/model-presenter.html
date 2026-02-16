@@ -1,9 +1,7 @@
 <div class="hover-actions-host" tabindex="0">
     <ng-content></ng-content>
 
-    {{ child()?.manager?.state?.state()?.state }}
-
-    @if (child()?.manager?.state?.state()?.state == 'loading') {
+    @if (child()?.manager?.state()?.state == 'loading') {
         <div class="overlay" aria-busy="true" aria-live="polite">
             <div class="spinner" aria-hidden="true"></div>
         </div>

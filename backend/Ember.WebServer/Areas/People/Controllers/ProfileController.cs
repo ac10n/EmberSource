@@ -1,7 +1,7 @@
 using Ember.WebServer.Areas.People.Models;
 using Ember.WebServer.Data;
 using Ember.WebServer.Helpers;
-using Microsoft.AspNetCore.Authentication;
+using Ember.WebServer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -11,8 +11,7 @@ namespace Ember.WebServer.Areas.People.Controllers;
 [Authorize]
 [Route("api/v01/[controller]/[action]")]
 public sealed class ProfileController(
-    UserManager<EmberUser> userManager,
-    EmberDbContext dbContext
+    UserManager<EmberUser> userManager
     ) : ControllerBase
 {
     [HttpPost]
@@ -41,7 +40,7 @@ public sealed class ProfileController(
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateMyProfile(UpdateProfileRequest request)
+    public async Task<ActionResult<UpdateResult<ProfileResponse>>> UpdateMyProfile(UpdateProfileRequest request)
     {
         var userId = User.GetUserId();
         if (userId is null)
@@ -65,19 +64,27 @@ public sealed class ProfileController(
             return BadRequest(result.Errors);
         }
 
+        return new UpdateResult<ProfileResponse>
+        {
+            Result = UpdateResultKind.Success,
+        };
+    }
+
+    private async Task<(bool flowControl, ActionResult<UpdateResult<ProfileResponse>> value)> NewMethod(ChangePasswordRequest request, EmberUser user)
+    {
         if (!string.IsNullOrEmpty(request.NewPassword))
         {
             if (string.IsNullOrEmpty(request.OldPassword))
             {
-                return BadRequest("Current password is required to set a new password.");
+                return (flowControl: false, value: BadRequest("Current password is required to set a new password."));
             }
             var passwordResult = await userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
             if (!passwordResult.Succeeded)
             {
-                return BadRequest(passwordResult.Errors);
+                return (flowControl: false, value: BadRequest(passwordResult.Errors));
             }
         }
 
-        return NoContent();
+        return (flowControl: true, value: null);
     }
 }

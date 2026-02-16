@@ -18,6 +18,11 @@ public class UpdateProfileRequest
     public required string FullName { get; set; }
     public required int BirthYear { get; set; }
     public required string Jurisdiction { get; set; }
+}
+
+public class ChangePasswordRequest
+{
     public string? OldPassword { get; set; }
     public string? NewPassword { get; set; }
+
 }

@@ -1,25 +1,27 @@
-<div class="profile-container">
-    <div class="profile-card">
-        <h2>Profile</h2>
+<mat-card>
+    <div class="profile-container">
+        <div class="profile-card">
+            <h2>Profile</h2>
 
-        <div class="profile-field">
-            <label>Username:</label> &nbsp;
-            <span>{{ profile()?.username }}</span>
-        </div>
+            <div class="profile-field">
+                <label>Username:</label> &nbsp;
+                <span>{{ profile()?.username }}</span>
+            </div>
 
-        <div class="profile-field">
-            <label>Full Name:</label> &nbsp;
-            <span>{{ profile()?.fullName }}</span>
-        </div>
+            <div class="profile-field">
+                <label>Full Name:</label> &nbsp;
+                <span>{{ profile()?.fullName }}</span>
+            </div>
 
-        <div class="profile-field">
-            <label>Birth Year:</label> &nbsp;
-            <span>{{ profile()?.birthYear }}</span>
-        </div>
+            <div class="profile-field">
+                <label>Birth Year:</label> &nbsp;
+                <span>{{ profile()?.birthYear }}</span>
+            </div>
 
-        <div class="profile-field">
-            <label>Jurisdiction:</label> &nbsp;
-            <span>{{ profile()?.jurisdiction }}</span>
+            <div class="profile-field">
+                <label>Jurisdiction:</label> &nbsp;
+                <span>{{ profile()?.jurisdiction }}</span>
+            </div>
         </div>
     </div>
-</div>
+</mat-card>

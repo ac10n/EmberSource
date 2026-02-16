@@ -31,9 +31,17 @@ public class TypeScriptModelGenerator
 
     void GenerateType(Type type, Dictionary<Type, StringBuilder> generatedModels)
     {
+        if (type.IsGenericTypeParameter)
+        {
+            return;
+        }
         if (generatedModels.ContainsKey(type))
         {
             return;
+        }
+        if (type.IsGenericType)
+        {
+            type = type.GetGenericTypeDefinition();
         }
 
         var sb = new StringBuilder();
@@ -41,19 +49,15 @@ public class TypeScriptModelGenerator
 
         if (type.IsEnum)
         {
-            sb.AppendLine($"export enum {type.Name} {{");
-            foreach (var name in Enum.GetNames(type))
-            {
-                var value = Convert.ToInt32(Enum.Parse(type, name));
-                sb.AppendLine($"  {name} = {value},");
-            }
-            sb.AppendLine("}");
+            var values = Enum.GetNames(type).OrderBy(x => x).Select(x => $"'{ToCamelCase(x)}'");
+            sb.AppendLine($"export type {type.Name} = {string.Join(" | ", values)};");
             sb.AppendLine();
         }
         else if (type.IsClass)
         {
             var baseType = (type.BaseType != null && type.BaseType != typeof(object)) ? $" {type.BaseType.Name} &" : "";
-            sb.AppendLine($"export type {type.Name} = {baseType} {{");
+            var genericTypeArgs = type.ContainsGenericParameters ? $"<{string.Join(", ", type.GetGenericArguments().Select(GetTypeName))}>" : "";
+            sb.AppendLine($"export type {GetTypeName(type)}{genericTypeArgs} = {baseType} {{");
             foreach (var prop in type.GetProperties())
             {
                 var (isNullable, underlyingType) = IsNullable(prop);
@@ -63,6 +67,16 @@ public class TypeScriptModelGenerator
             sb.AppendLine("}");
             sb.AppendLine();
         }
+    }
+
+    private static string GetTypeName(Type type)
+    {
+        var name = type.Name;
+        if (!type.IsGenericTypeDefinition)
+        {
+            return name;
+        }
+        return name[..name.IndexOf('`')];
     }
 
     string ToCamelCase(string name)

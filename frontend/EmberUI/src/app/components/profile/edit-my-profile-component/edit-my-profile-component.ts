@@ -1,9 +1,12 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, Inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProfileService } from '../../../services/profile.service';
-import { UpdateProfileRequest } from '../../../models/contract-models';
+import { ProfileResponse, UpdateProfileRequest } from '../../../models/contract-models';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { invalid, ModelManager, ModelPresenterComponent, SaveResult, valid, ValidateModelForSave } from '../../../models/model-state';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'ember-edit-my-profile-component',
@@ -12,110 +15,60 @@ import { Router } from '@angular/router';
   imports: [FormsModule]
 })
 export class EditMyProfileComponent implements OnInit {
-  fullName = signal<string | null>(null);
-  birthYear = signal<number | null>(null);
-  jurisdiction = signal<string | null>(null);
 
-  oldPassword = signal<string | null>(null);
-  newPassword = signal<string | null>(null);
-  confirmPassword = signal<string | null>(null);
+  private snackBar = inject(MatSnackBar);
+  manager?: ModelManager<ProfileResponse, UpdateProfileRequest>;
 
-  loading = signal<boolean>(false);
-  submitted = signal<boolean>(false);
-  errorText = signal<string>('');
+  get profile() {
+    return this.manager?.edit;
+  }
+
+  get state() {
+    return this.manager?.state;
+  }
 
   constructor(
     private readonly profileService: ProfileService,
     private readonly authService: AuthService,
     private readonly router: Router,
+    private dialogRef: MatDialogRef<EditMyProfileComponent, SaveResult<ProfileResponse | UpdateProfileRequest>>,
+    @Inject(MAT_DIALOG_DATA) public data: ModelPresenterComponent<ProfileResponse, UpdateProfileRequest>,
   ) {
+    this.manager = data?.manager;
+    if (!this.manager) {
+      this.snackBar.open('Message archived');
+      this.dialogRef.close();
+    }
+    this.manager?.prepareForEdit({
+      action: 'edit',
+      mapFetchModelToEdit(fetch) {
+        return {
+          fullName: fetch.fullName,
+          birthYear: fetch.birthYear,
+          jurisdiction: fetch.jurisdiction
+        };
+      },
+    });
   }
 
   ngOnInit(): void {
-    this.loading.set(true);
-    this.profileService.getProfile()
-      .subscribe({
-        next: (profile) => {
-          this.fullName.set(profile.fullName);
-          this.birthYear.set(profile.birthYear);
-          this.jurisdiction.set(profile.jurisdiction);
-          this.loading.set(false);
-        },
-        error: (err: unknown) => {
-          this.loading.set(false);
-          this.errorText.set(
-            (err as any)?.error?.message ?? 'Failed to load profile. Please try again.');
-        },
-      });
+    this.manager?.load('initial');
+  }
+
+  validate: ValidateModelForSave<ProfileResponse, UpdateProfileRequest> = ({ edit }) => {
+    if (!edit.fullName || !edit.birthYear || !edit.jurisdiction) {
+      return invalid('Please fill in all required fields.');
+    }
+    return valid(edit);
   }
 
   onSubmit(formValid: boolean | null) {
-    this.submitted.set(true);
-    this.errorText.set('');
-    if (!formValid) return;
-
-    this.loading.set(true);
-
-    const fullName = this.fullName();
-    const birthYear = this.birthYear();
-    const jurisdiction = this.jurisdiction();
-
-    if (!fullName || !birthYear || !jurisdiction) {
-      this.loading.set(false);
-      this.errorText.set('Please fill in all required fields.');
-      return;
-    }
-
-    const updateData: UpdateProfileRequest = {
-      fullName: fullName,
-      birthYear: birthYear,
-      jurisdiction: jurisdiction
-    };
-
-    var oldPassword = this.oldPassword();
-    const newPassword = this.newPassword();
-    const confirmPassword = this.confirmPassword();
-
-    if (newPassword) {
-      if (newPassword !== confirmPassword) {
-        this.loading.set(false);
-        this.errorText.set('New Password and Confirm Password do not match.');
-        return;
-      }
-
-      if (!oldPassword) {
-        this.loading.set(false);
-        this.errorText.set('Please enter your current password to set a new password.');
-        return;
-      }
-
-
-      updateData.newPassword = newPassword;
-      updateData.oldPassword = oldPassword;
-    }
-
-    this.profileService.updateProfile(updateData)
-      .subscribe({
-        next: () => {
-          this.loading.set(false);
-          // Handle successful profile update, e.g., show a success message
-        },
-        error: (err: unknown) => {
-          this.loading.set(false);
-          this.errorText.set(
-            (err as any)?.error?.message ?? 'Profile update failed. Please try again.');
-        },
-      });
-  }
-
-  logout() {
-    this.authService.logout().subscribe({
-      next: () => {
-        this.router.navigate(['/']);
+    this.manager?.save({
+      validate: this.validate,
+      successCallback: (model) => {
+        this.dialogRef.close({ result: 'success', data: model });
       },
-      error: (err) => {
-        console.error('Logout failed', err);
-      }
+      saveFunction: this.profileService.updateProfile,
     });
   }
 }

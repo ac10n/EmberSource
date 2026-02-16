@@ -4,6 +4,8 @@ import { ProfileService } from '../../../services/profile.service';
 import { ProfileResponse } from '../../../models/contract-models';
 import { ModelPresenter } from "../../common/model-presenter/model-presenter";
 import { ShowProfile } from '../show-profile/show-profile';
+import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ember-profile-page',
@@ -19,6 +21,19 @@ export class ProfileComponent {
 
   constructor(
     private readonly profileService: ProfileService,
+    private readonly authService: AuthService,
+    private readonly router: Router,
   ) {
+  }
+
+  logout() {
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        console.error('Logout failed', err);
+      }
+    });
   }
 }

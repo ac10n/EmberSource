@@ -8,6 +8,16 @@ export type ListResponseBase =  {
   continuationToken?: string;
 }
 
+export type UpdateResultKind = 'failure' | 'success';
+
+export type FailureReason = 'logical' | 'permission' | 'transient' | 'unknown';
+
+export type UpdateResult<TModel> =  {
+  result: UpdateResultKind;
+  data?: TModel;
+  reason?: FailureReason | null | undefined;
+}
+
 export type TokenResponse =  {
   accessToken: string;
   accessTokenExpiresAt: string;
@@ -40,6 +50,9 @@ export type UpdateProfileRequest =  {
   fullName: string;
   birthYear: number;
   jurisdiction: string;
+}
+
+export type ChangePasswordRequest =  {
   oldPassword?: string;
   newPassword?: string;
 }
@@ -60,34 +73,14 @@ export type KnowledgeRequestModel =  ListRequestBase & {
   sorting?: string[];
 }
 
-export enum ContentTypes {
-  Paragraph = 1,
-  Section = 2,
-  Article = 3,
-  Image = 4,
-  Video = 5,
-  Audio = 6,
-  Link = 7,
-  InteractiveElement = 8,
-  CodeSnippet = 9,
-  ExplorableDataset = 10,
-  Comment = 11,
-}
+export type ContentTypes = 'article' | 'audio' | 'codeSnippet' | 'comment' | 'explorableDataset' | 'image' | 'interactiveElement' | 'link' | 'paragraph' | 'section' | 'video';
 
 export type RelationshipFilters =  {
   relatedContentTypeId: RelatedContentTypes;
   relatedContentId: string;
 }
 
-export enum RelatedContentTypes {
-  Reference = 1,
-  SupplementaryMaterial = 2,
-  Citation = 3,
-  FurtherReading = 4,
-  RelatedTopic = 5,
-  Alternative = 6,
-  Contradicting = 7,
-}
+export type RelatedContentTypes = 'alternative' | 'citation' | 'contradicting' | 'furtherReading' | 'reference' | 'relatedTopic' | 'supplementaryMaterial';
 
 export type KnowledgeResponseModel =  ListResponseBase & {
   contents?: ContentModel[];

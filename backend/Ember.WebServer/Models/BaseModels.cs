@@ -11,3 +11,24 @@ public abstract class ListResponseBase
 {
     public string? ContinuationToken { get; set; }
 }
+
+public enum UpdateResultKind
+{
+    Success,
+    Failure
+}
+
+public enum FailureReason
+{
+    Logical,
+    Permission,
+    Transient,
+    Unknown,
+}
+
+public class UpdateResult<TModel>
+{
+    public UpdateResultKind Result { get; set; }
+    public TModel? Data { get; set; }
+    public FailureReason? Reason { get; set; }
+}

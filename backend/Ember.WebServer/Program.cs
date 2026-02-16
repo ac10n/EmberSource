@@ -2,6 +2,8 @@ using Ember.WebServer.Data;
 using Microsoft.AspNetCore.HttpOverrides;
 using Ember.WebServer;
 using Ember.WebServer.Areas.People.Config;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 if (args.Length > 0 && args[0] == "generate-ts-models")
 {
@@ -11,6 +13,11 @@ if (args.Length > 0 && args[0] == "generate-ts-models")
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers().AddJsonOptions(o =>
+{
+    o.JsonSerializerOptions.Converters.Add(
+        new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+});
 
 builder.Services.AddIdentity<EmberUser, EmberRole>(options =>
         {
