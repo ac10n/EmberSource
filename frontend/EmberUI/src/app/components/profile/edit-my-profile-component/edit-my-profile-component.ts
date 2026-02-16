@@ -68,7 +68,7 @@ export class EditMyProfileComponent implements OnInit {
       successCallback: (model) => {
         this.dialogRef.close({ result: 'success', data: model });
       },
-      saveFunction: this.profileService.updateProfile,
+      saveFunction: (p) => this.profileService.updateProfile(p),
     });
   }
 }

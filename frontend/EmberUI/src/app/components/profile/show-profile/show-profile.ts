@@ -42,6 +42,7 @@ export class ShowProfile extends ModelPresenterComponent<ProfileResponse, Update
   }
 
   edit() {
+    console.log('Edit profile clicked');
     const dialogRef = this.dialog.open(EditMyProfileComponent, {
       width: '400px',
       data: { manager: this.manager }

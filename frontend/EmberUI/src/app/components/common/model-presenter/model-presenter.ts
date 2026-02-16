@@ -1,4 +1,4 @@
-import { Component, contentChild, EventEmitter, input, Output } from '@angular/core';
+import { Component, contentChild, input, output } from '@angular/core';
 import { MatIcon } from "@angular/material/icon";
 import { ModelPresenterComponent } from '../../../models/model-state';
 
@@ -11,8 +11,12 @@ import { ModelPresenterComponent } from '../../../models/model-state';
 export class ModelPresenter {
   child = contentChild(ModelPresenterComponent<any>);
 
-  showEdit = input(true);
+  showEdit = input(false);
+  onEdit = output();
+
+  onDelete = output();
   showDelete = input(false);
+  
   showRefresh = input(true);
 
   edit() {

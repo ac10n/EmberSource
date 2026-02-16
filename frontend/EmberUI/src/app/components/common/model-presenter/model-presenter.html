@@ -2,9 +2,9 @@
     <ng-content></ng-content>
 
     @if (child()?.manager?.state()?.state == 'loading') {
-        <div class="overlay" aria-busy="true" aria-live="polite">
-            <div class="spinner" aria-hidden="true"></div>
-        </div>
+    <div class="overlay" aria-busy="true" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+    </div>
     }
 
     <div class="actions-overlay" aria-hidden="false">
@@ -15,14 +15,14 @@
         }
 
         @if (showEdit()) {
-        <button mat-icon-button type="button" aria-label="Edit" (click)="edit(); $event.stopPropagation()">
+        <button mat-icon-button type="button" aria-label="Edit" (click)="onEdit.emit(); $event.stopPropagation()">
             <mat-icon>edit</mat-icon>
         </button>
         }
 
         @if (showDelete()) {
         <button mat-icon-button type="button" color="warn" aria-label="Delete"
-            (click)="delete(); $event.stopPropagation()">
+            (click)="onDelete.emit(); $event.stopPropagation()">
             <mat-icon>delete</mat-icon>
         </button>
         }

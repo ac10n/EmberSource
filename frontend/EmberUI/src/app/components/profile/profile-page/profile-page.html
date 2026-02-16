@@ -1,8 +1,8 @@
 <div class="container">
     <div class="top-section">
         <div class="top-left">
-            <ember-model-presenter>
-                <ember-show-profile></ember-show-profile>
+            <ember-model-presenter (onEdit)="showProfile.edit()" [showEdit]="true">
+                <ember-show-profile #showProfile></ember-show-profile>
             </ember-model-presenter>
         </div>
         <div class="top-right">
