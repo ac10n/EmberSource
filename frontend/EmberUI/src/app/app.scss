@@ -1,0 +1,26 @@
+.hamburger-menu {
+}
+
+.toolbar-title {
+  flex: 1;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.sidenav-container {
+  height: calc(100vh - 64px);
+}
+
+.sidenav {
+  width: 250px;
+}
+
+mat-nav-list {
+  padding: 0;
+}
+
+mat-list-item button {
+  width: 100%;
+  text-align: left;
+  justify-content: flex-start;
+}

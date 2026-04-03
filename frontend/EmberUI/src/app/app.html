@@ -1,0 +1,26 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="toggleSidenav()" class="hamburger-menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span class="toolbar-title">{{ title() }}</span>
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav mode="over" [opened]="false" class="sidenav">
+    <mat-nav-list>
+      <mat-list-item>
+        <a mat-full-width routerLink="/" (click)="toggleSidenav()">Home</a>
+      </mat-list-item>
+      <mat-list-item>
+        <a mat-full-width routerLink="/login" (click)="toggleSidenav()">Login</a>
+      </mat-list-item>
+      <mat-list-item>
+        <a mat-full-width routerLink="/my-profile" (click)="toggleSidenav()">My Profile</a>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>

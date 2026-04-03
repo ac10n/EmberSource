@@ -1,0 +1,9 @@
+<div>
+    @for (item of knowledgeItems()?.contents; track item.id) {
+    <div>
+        <li>{{item.title}}
+            <div [innerHTML]="item.data | markdownit"></div>
+        </li>
+    </div>
+    }
+</div>

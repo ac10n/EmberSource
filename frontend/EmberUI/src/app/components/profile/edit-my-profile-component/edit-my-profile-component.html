@@ -1,0 +1,47 @@
+<div class="page">
+    <div class="card">
+        <h1>Edit My Profile</h1>
+
+        @if (profile && profile(); as p) {
+        <form #f="ngForm" (ngSubmit)="onSubmit(f.valid)" novalidate>
+            <label>
+                <span>Full Name</span>
+                <input type="text" name="fullName" [(ngModel)]="p.fullName" required #fullNameModel="ngModel"
+                    [class.invalid]="manager?.submitted() && fullNameModel.invalid" placeholder="Your Full Name" />
+                @if (manager?.submitted() && fullNameModel.invalid) {
+                <small class="error">
+                    Full Name is required
+                </small>
+                }
+            </label>
+
+            <label>
+                <span>Birth Year</span>
+                <input type="number" name="birthYear" [(ngModel)]="p.birthYear" required #birthYearModel="ngModel"
+                    [class.invalid]="manager?.submitted() && birthYearModel.invalid" placeholder="e.g., 1990" />
+                @if (manager?.submitted() && birthYearModel.invalid) {
+                <small class="error">
+                    Birth Year is required
+                </small>
+                }
+            </label>
+
+            <label>
+                <span>Jurisdiction</span>
+                <input type="text" name="jurisdiction" [(ngModel)]="p.jurisdiction" required
+                    #jurisdictionModel="ngModel" [class.invalid]="manager?.submitted() && jurisdictionModel.invalid"
+                    placeholder="Your Jurisdiction" />
+                @if (manager?.submitted() && jurisdictionModel.invalid) {
+                <small class="error">
+                    Jurisdiction is required
+                </small>
+                }
+            </label>
+
+            <button type="submit" [disabled]="manager && manager.state().state === 'loading'">
+                {{ manager && manager.state().state === 'loading' ? 'Saving…' : 'Save Changes' }}
+            </button>
+        </form>
+        }
+    </div>
+</div>

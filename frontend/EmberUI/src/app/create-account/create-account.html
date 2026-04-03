@@ -1,0 +1,26 @@
+<p class="main-title">create-account works!</p>
+
+We should own our online identities.<br />
+Ember commits to put the users in control of the way they interact with it.<br />
+We know a few things we should avoid, and some ideas we should embrace, but we commit to get better at it together.<br />
+
+<br />
+
+Please choose a username, and a password.<br />
+As you see, we do not ask for an email address or phone number.<br />
+We will confirm our identities through real interactions in real life.<br />
+There will be no benefit in creating multiple accounts, most interactions with Ember would require a confirmed real identity anyway.<br />
+
+Before your identity is confirmed, you will not be able to recover your account if you forget your password.<br />
+
+<form class="create-account-container">
+  <mat-form-field appearance="fill">
+    <mat-label>Username</mat-label>
+    <input matInput placeholder="Choose a username" required>
+  </mat-form-field> <br />
+    <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" placeholder="Choose a password" required>
+    </mat-form-field> <br />
+    <button mat-raised-button color="primary" type="submit">Create Account</button>
+</form>

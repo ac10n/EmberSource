@@ -1,0 +1,63 @@
+.hover-actions-host {
+  position: relative;
+
+  // optional: makes the hover area feel right
+  display: block;
+
+  // allow keyboard users to reveal buttons too
+  &:hover .actions-overlay,
+  &:focus-within .actions-overlay {
+    opacity: 0.6;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+}
+
+.actions-overlay {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+
+  display: flex;
+  gap: 4px;
+
+  // hidden by default
+  opacity: 0;
+  transform: translateY(-2px);
+  pointer-events: none;
+
+  transition: opacity 120ms ease, transform 120ms ease;
+
+  // optional: give it a subtle backing so icons are visible on busy content
+  padding: 2px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  display: grid;
+  place-items: center;
+  z-index: 10;
+
+  /* block clicks while loading */
+  pointer-events: all;
+}
+
+/* simple CSS spinner */
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 4px solid rgba(255, 255, 255, 0.35);
+  border-top-color: rgba(255, 255, 255, 1);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

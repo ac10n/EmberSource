@@ -1,0 +1,30 @@
+<div class="hover-actions-host" tabindex="0">
+    <ng-content></ng-content>
+
+    @if (child()?.manager?.state()?.state == 'loading') {
+    <div class="overlay" aria-busy="true" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+    </div>
+    }
+
+    <div class="actions-overlay" aria-hidden="false">
+        @if (showRefresh()) {
+        <button mat-icon-button type="button" aria-label="Refresh" (click)="refresh(); $event.stopPropagation()">
+            <mat-icon>refresh</mat-icon>
+        </button>
+        }
+
+        @if (showEdit()) {
+        <button mat-icon-button type="button" aria-label="Edit" (click)="onEdit.emit(); $event.stopPropagation()">
+            <mat-icon>edit</mat-icon>
+        </button>
+        }
+
+        @if (showDelete()) {
+        <button mat-icon-button type="button" color="warn" aria-label="Delete"
+            (click)="onDelete.emit(); $event.stopPropagation()">
+            <mat-icon>delete</mat-icon>
+        </button>
+        }
+    </div>
+</div>
