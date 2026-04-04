@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Ember.WebServer.Areas.People.Data;
+namespace Ember.Domain.Areas.People.Data;
 
 public sealed class RefreshToken
 {
@@ -22,3 +22,5 @@ public sealed class RefreshToken
     public string? DeviceId { get; set; }
     public string? CreatedByIp { get; set; }
 }
+
+

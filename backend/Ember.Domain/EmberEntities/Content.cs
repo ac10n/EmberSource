@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using Ember.WebServer.Data;
+using Ember.Domain.Data;
 
-namespace Ember.WebServer.Areas.Knowledge.Entities;
+namespace Ember.Domain.EmberEntities;
 
 public class Content
 {

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
-namespace Ember.WebServer.Data;
+namespace Ember.Domain.Data;
 
 public class EmberUser : IdentityUser<Guid>
 {

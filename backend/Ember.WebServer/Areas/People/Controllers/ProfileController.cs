@@ -1,5 +1,5 @@
 using Ember.WebServer.Areas.People.Models;
-using Ember.WebServer.Data;
+using Ember.Domain.Data;
 using Ember.WebServer.Helpers;
 using Ember.WebServer.Models;
 using Microsoft.AspNetCore.Authorization;

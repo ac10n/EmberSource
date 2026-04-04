@@ -1,7 +1,7 @@
 using Ember.WebServer.Helpers;
 using Newtonsoft.Json;
 
-namespace Ember.WebServer.Data;
+namespace Ember.Domain.Data;
 
 public class ProcessLog: IScopedLogRecord
 {

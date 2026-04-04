@@ -1,7 +1,7 @@
-using Ember.WebServer.Areas.Knowledge.Entities;
+using Ember.Domain.EmberEntities;
 using Microsoft.AspNetCore.Identity;
 
-namespace Ember.WebServer.Data;
+namespace Ember.Domain.Data;
 
 public static class IdentitySeeder
 {

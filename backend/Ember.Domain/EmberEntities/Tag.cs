@@ -1,7 +1,7 @@
-using Ember.WebServer.Data;
+using Ember.Domain.Data;
 using System.ComponentModel.DataAnnotations;
 
-namespace Ember.WebServer.Areas.Knowledge.Entities;
+namespace Ember.Domain.EmberEntities;
 
 
 /// <summary>

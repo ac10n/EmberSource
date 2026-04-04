@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Ember.WebServer.Areas.Knowledge.Entities;
+namespace Ember.Domain.EmberEntities;
 
 /// <summary>
 /// Users can link content to other contents.

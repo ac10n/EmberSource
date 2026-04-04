@@ -1,5 +1,5 @@
 using Ember.WebServer.Areas.Knowledge.Services;
-using Ember.WebServer.Data;
+using Ember.Domain.Data;
 using Ember.WebServer.Helpers;
 
 namespace Ember.WebServer;

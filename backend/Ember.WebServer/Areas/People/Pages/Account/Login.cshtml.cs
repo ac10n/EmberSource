@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Ember.WebServer.Data;
+using Ember.Domain.Data;
 
 namespace Ember.WebServer.Areas.People.Pages.Account
 {

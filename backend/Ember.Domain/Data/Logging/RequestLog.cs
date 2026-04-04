@@ -1,4 +1,4 @@
-namespace Ember.WebServer.Data;
+namespace Ember.Domain.Data;
 
 public class RequestLog
 {

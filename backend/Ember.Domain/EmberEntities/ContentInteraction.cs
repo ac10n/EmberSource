@@ -1,6 +1,6 @@
-using Ember.WebServer.Data;
+using Ember.Domain.Data;
 
-namespace Ember.WebServer.Areas.Knowledge.Entities;
+namespace Ember.Domain.EmberEntities;
 
 /// <summary>
 /// Private interaction data between users and content, such as read status, likes/dislikes, notes, etc. This allows us to track user engagement and preferences without exposing this information publicly.

@@ -1,6 +1,4 @@
-using Ember.WebServer.Data;
-
-namespace Ember.WebServer.Areas.Knowledge.Entities;
+namespace Ember.Domain.EmberEntities;
 
 public class Collection
 {

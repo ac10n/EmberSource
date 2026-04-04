@@ -1,4 +1,4 @@
-using Ember.WebServer.Data;
+using Ember.Domain.Data;
 using Microsoft.AspNetCore.HttpOverrides;
 using Ember.WebServer;
 using Ember.WebServer.Areas.People.Config;

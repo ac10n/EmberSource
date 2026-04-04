@@ -1,10 +1,10 @@
 ﻿using Ember.WebServer.Areas.People.Data;
-using Ember.WebServer.Areas.Knowledge.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Ember.Domain.EmberEntities;
 
-namespace Ember.WebServer.Data;
+namespace Ember.Domain.Data;
 
 public class EmberDbContext(DbContextOptions<EmberDbContext> options)
     : IdentityDbContext<EmberUser, EmberRole, Guid, IdentityUserClaim<Guid>, EmberUserRole, EmberUserLogin, EmberRoleClaim, EmberUserToken>(options)

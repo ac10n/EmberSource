@@ -1,6 +1,6 @@
-using Ember.WebServer.Areas.Knowledge.Entities;
+using Ember.Domain.EmberEntities;
 
-namespace Ember.WebServer.Data;
+namespace Ember.Domain.Data;
 
 public static class KnownUsers
 {
