@@ -47,7 +47,7 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
 
         if (request.CreatedByUserIds is not null && request.CreatedByUserIds.Any())
         {
-            query = query.Where(c => request.CreatedByUserIds.Contains(c.CreatedByUserId));
+            query = query.Where(c => request.CreatedByUserIds.Contains(c.EmberUserId));
         }
 
         if (request.CreatedAfter.HasValue)
@@ -82,7 +82,7 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
             ContentTypeId = c.ContentTypeId,
             Title = c.Title,
             Data = c.Data,
-            CreatedByUserId = c.CreatedByUserId,
+            EmberUserId = c.EmberUserId,
             CreatedAt = c.CreatedAt
         });
 

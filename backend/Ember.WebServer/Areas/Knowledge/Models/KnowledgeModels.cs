@@ -19,7 +19,7 @@ public class KnowledgeRequestModel: ListRequestBase
 
 public class RelationshipFilters
 {
-    public required RelatedContentTypes RelatedContentTypeId { get; set; }
+    public required RelatedContentTypeEnum RelatedContentTypeId { get; set; }
     public required Guid RelatedContentId { get; set; }
 }
 
@@ -39,7 +39,7 @@ public class ContentModel
     public string? Title { get; set; }
     public string? Data { get; set; }
 
-    public Guid CreatedByUserId { get; set; }
+    public Guid EmberUserId { get; set; }
 
     public DateTimeOffset CreatedAt { get; set; }
 }

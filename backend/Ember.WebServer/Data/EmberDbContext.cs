@@ -27,7 +27,7 @@ public class EmberDbContext(DbContextOptions<EmberDbContext> options)
     public DbSet<Content> Contents { get; set; }
     public DbSet<ContentFormat> ContentFormats { get; set; }
     public DbSet<Tag> Tags { get; set; }
-    public DbSet<ContentTag> ContentTags { get; set; }
+    public DbSet<TagItem> ContentTags { get; set; }
     public DbSet<ContentType> ContentTypes { get; set; }
     public DbSet<ContentVisibility> ContentVisibilities { get; set; }
     public DbSet<RelatedContent> RelatedContents { get; set; }

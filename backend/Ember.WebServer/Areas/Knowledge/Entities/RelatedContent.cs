@@ -2,6 +2,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ember.WebServer.Areas.Knowledge.Entities;
 
+/// <summary>
+/// Users can link content to other contents.
+/// </summary>
 public class RelatedContent
 {
     public Guid Id { get; set; }
@@ -14,18 +17,18 @@ public class RelatedContent
     [ForeignKey(nameof(RelatedContentId))]
     public Content? RelatedContentItem { get; set; }
 
-    public required RelatedContentTypes RelatedContentTypeId { get; set; }
+    public required RelatedContentTypeEnum RelatedContentTypeId { get; set; }
     public RelatedContentType? RelatedContentType { get; set; }
 }
 
 public class RelatedContentType
 {
-    public RelatedContentTypes Id { get; set; }
+    public RelatedContentTypeEnum Id { get; set; }
 
     public string? Name { get; set; }
 }
 
-public enum RelatedContentTypes
+public enum RelatedContentTypeEnum
 {
     Reference = 1,
     SupplementaryMaterial,

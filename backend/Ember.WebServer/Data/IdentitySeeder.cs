@@ -97,7 +97,7 @@ public static class IdentitySeeder
         {
             return;
         }
-        await dbContext.ContentVisibilities.AddRangeAsync(Enum.GetValues<ContentVisibilities>()
+        await dbContext.ContentVisibilities.AddRangeAsync(Enum.GetValues<ContentVisibilityEnum>()
                 .Select(cv => new ContentVisibility
                 {
                     Id = cv,
@@ -114,7 +114,7 @@ public static class IdentitySeeder
         {
             return;
         }
-        await dbContext.ContentFormats.AddRangeAsync(Enum.GetValues<ContentFormats>()
+        await dbContext.ContentFormats.AddRangeAsync(Enum.GetValues<ContentFormatEnum>()
             .Select(cf => new ContentFormat
             {
                 Id = cf,

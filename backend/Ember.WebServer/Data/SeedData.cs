@@ -130,7 +130,7 @@ public static class KnownContent
         Version = 1,
         ParentContentId = null,
         ContentTypeId = ContentTypes.Paragraph,
-        ContentFormatId = ContentFormats.Markdown,
+        ContentFormatId = ContentFormatEnum.Markdown,
         FormatVersion = 1,
         Title = "Introducing Ember",
         Data =
@@ -155,10 +155,10 @@ but we lost that when we moved to the global village, and platforms that seek pr
 
 Much more details to be shared as we build more features.
 ",
-        CreatedByUserId = KnownUsers.Founder.Id,
+        EmberUserId = KnownUsers.Founder.Id,
         CreatedAt = DateTimeOffset.Parse("2026-02-09T03:48:53.006Z"),
         IsActive = true,
-        ContentVisibilityId = ContentVisibilities.Public
+        ContentVisibilityId = ContentVisibilityEnum.Public
     };
 
     public static IEnumerable<Content> AllKnownContents()
