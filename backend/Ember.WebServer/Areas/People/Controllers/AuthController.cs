@@ -1,9 +1,9 @@
-using Ember.WebServer.Areas.People.Models;
 using Ember.WebServer.Areas.People.Services;
-using Ember.WebServer.Data;
+using Ember.Domain.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Ember.Service.Models;
 
 namespace Ember.WebServer.Areas.People.Controllers;
 

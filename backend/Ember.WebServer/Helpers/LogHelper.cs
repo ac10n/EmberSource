@@ -1,29 +1,20 @@
-using System.Diagnostics;
-using Ember.WebServer.Data;
+using Ember.Domain.Data;
+using Ember.Domain.LogEntityBases;
+using Ember.Infrastructure;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace Ember.WebServer.Helpers;
 
 
-public interface ICreate<TRecord, TArgs> 
-    where TArgs: ILogRecordCreator<TRecord>
+public interface ICreate<TRecord, TArgs>
+    where TArgs : ILogRecordCreator<TRecord>
     where TRecord : IScopedLogRecord
 {
     static abstract LogImpl<TRecord, TArgs> Create(TArgs args, IServiceProvider serviceProvider);
 }
 
-public interface IScopedLogRecord
-{
-    Guid? RequestId { get; set; }
-    DateTimeOffset StartTime { get; set; }
-    TimeSpan Duration { get; set; }
-}
-
-public interface ILogRecordCreator<TRecord>
-{
-    TRecord CreateLogRecord(Guid? requestId);
-}
 
 public interface ILogHelper
 {
@@ -39,6 +30,7 @@ public interface IScopedLog<TRecord> : IAsyncDisposable
 }
 
 public record struct ActivityInfo(Guid? ActingUserId, Guid? RelatedUserId, int ActivityTypeId);
+
 
 public class LogHelper(IServiceProvider serviceProvider) : ILogHelper
 {
