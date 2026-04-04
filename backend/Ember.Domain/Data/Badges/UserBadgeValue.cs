@@ -1,11 +1,12 @@
 namespace Ember.Domain.Data;
 
+
 public class UserBadgeValue
 {
     public Guid Id { get; set; }
 
-    public required Guid UserId { get; set; }
-    public required EmberUser User { get; set; }
+    public required Guid EmberUserId { get; set; }
+    public required EmberUser EmberUser { get; set; }
 
     public required Guid BadgeDefinitionId { get; set; }
     public required BadgeDefinition BadgeDefinition { get; set; }

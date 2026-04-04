@@ -23,6 +23,7 @@ public class EmberDbContext(DbContextOptions<EmberDbContext> options)
     public DbSet<UserBadgeValue> UserBadgeValues { get; set; }
     public DbSet<BadgeDefinition> BadgeDefinitions { get; set; }
     public DbSet<Testimonial> Testimonials { get; set; }
+    public DbSet<Invitation> Invitations { get; set; }
 
 
     public DbSet<Content> Contents { get; set; }
@@ -52,6 +53,13 @@ public class EmberDbContext(DbContextOptions<EmberDbContext> options)
 
         builder.Entity<RefreshToken>()
             .HasIndex(x => x.TokenHash)
+            .IsUnique();
+
+        builder.Entity<Invitation>()
+            .HasIndex(i => i.InvitedByUserId);
+
+        builder.Entity<Invitation>()
+            .HasIndex(i => i.InviteCode)
             .IsUnique();
 
         builder.Entity<EmberUserRole>()
