@@ -1,4 +1,4 @@
-namespace Ember.WebServer.Areas.People.Config;
+namespace Ember.Service;
 
 public sealed class JwtOptions
 {

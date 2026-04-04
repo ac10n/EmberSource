@@ -1,4 +1,4 @@
-using Ember.WebServer.Helpers;
+using Ember.Domain.LogEntityBases;
 using Newtonsoft.Json;
 
 namespace Ember.Domain.Data;

@@ -1,5 +1,7 @@
-using Ember.WebServer.Areas.Knowledge.Services;
 using Ember.Domain.Data;
+using Ember.Infrastructure;
+using Ember.Service;
+using Ember.WebServer.Areas.Knowledge.Services;
 using Ember.WebServer.Helpers;
 
 namespace Ember.WebServer;
@@ -14,6 +16,7 @@ public static class ServiceExtensions
         builder.Services.AddScoped<IKnowledgeService, KnowledgeService>();
         builder.Services.AddScoped<IRequestLogContext, RequestLogContext>();
         builder.Services.AddScoped<ILogHelper, LogHelper>();
+        builder.Services.AddScoped<IEmberDbContext>(sp => sp.GetRequiredService<EmberDbContext>());
 
         return builder;
     }

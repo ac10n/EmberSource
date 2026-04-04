@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Ember.WebServer.Migrations
+namespace Ember.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class InitiateDatabase : Migration

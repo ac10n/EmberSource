@@ -1,13 +1,14 @@
-﻿using Ember.WebServer.Areas.People.Data;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Ember.Domain.EmberEntities;
+using Ember.Domain.Data;
+using Ember.Service;
 
-namespace Ember.Domain.Data;
+namespace Ember.Infrastructure;
 
 public class EmberDbContext(DbContextOptions<EmberDbContext> options)
-    : IdentityDbContext<EmberUser, EmberRole, Guid, IdentityUserClaim<Guid>, EmberUserRole, EmberUserLogin, EmberRoleClaim, EmberUserToken>(options)
+    : IdentityDbContext<EmberUser, EmberRole, Guid, IdentityUserClaim<Guid>, EmberUserRole, EmberUserLogin, EmberRoleClaim, EmberUserToken>(options), IEmberDbContext
 {
     public DbSet<RefreshToken> RefreshTokens { get; set; }
 

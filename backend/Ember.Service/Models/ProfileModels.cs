@@ -1,4 +1,4 @@
-namespace Ember.WebServer.Areas.People.Models;
+namespace Ember.Service.Models;
 
 public class ProfileResponse
 {

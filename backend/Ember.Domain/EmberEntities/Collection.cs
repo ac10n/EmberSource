@@ -1,3 +1,5 @@
+using Ember.Domain.Data;
+
 namespace Ember.Domain.EmberEntities;
 
 public class Collection

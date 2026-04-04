@@ -3,17 +3,20 @@ using System;
 using Ember.Domain.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Ember.WebServer.Migrations
+namespace Ember.Infrastructure.Migrations
 {
     [DbContext(typeof(EmberDbContext))]
-    partial class EmberDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260209032242_InitiateDatabase")]
+    partial class InitiateDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

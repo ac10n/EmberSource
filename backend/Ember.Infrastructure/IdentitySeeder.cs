@@ -1,5 +1,9 @@
 using Ember.Domain.EmberEntities;
+using Ember.Infrastructure;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Ember.Domain.Data;
 
@@ -58,7 +62,7 @@ public static class IdentitySeeder
             await userManager.CreateAsync(user);
             if (user.UserName == "ali")
             {
-                var password = services.GetRequiredService<IConfiguration>()["Secrets:FounderPassword"];
+                var password = services.GetRequiredService<IConfiguration>()["Secrets:FounderPassword"]!;
                 var result = await userManager.AddPasswordAsync(user, password);
                 if (!result.Succeeded)
                 {
