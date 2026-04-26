@@ -3,6 +3,7 @@ using Ember.Infrastructure;
 using Ember.Service;
 using Ember.WebServer.Areas.Knowledge.Services;
 using Ember.WebServer.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ember.WebServer;
 
@@ -10,8 +11,16 @@ public static class ServiceExtensions
 {
     public static WebApplicationBuilder AddEmberExtensions(this WebApplicationBuilder builder)
     {
-        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-        builder.Services.AddDbContext<EmberDbContext>(options => options.UseNpgsql(connectionString));
+        var useInMemory = Environment.GetEnvironmentVariable("UseInMemoryDb") == "true";
+        if (useInMemory)
+        {
+            builder.Services.AddDbContext<EmberDbContext>(options => options.UseInMemoryDatabase("TestDb"));
+        }
+        else
+        {
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            builder.Services.AddDbContext<EmberDbContext>(options => options.UseNpgsql(connectionString));
+        }
 
         builder.Services.AddScoped<IKnowledgeService, KnowledgeService>();
         builder.Services.AddScoped<IRequestLogContext, RequestLogContext>();

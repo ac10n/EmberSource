@@ -31,6 +31,8 @@ builder.ConfigureAuth();
 
 builder.Services.AddRazorPages();
 
+builder.Services.AddHttpClient();
+
 ServiceExtensions.AddEmberExtensions(builder);
 
 var app = builder.Build();

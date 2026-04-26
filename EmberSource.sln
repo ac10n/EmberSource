@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ember.Infrastructure", "bac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ember.Service", "backend\Ember.Service\Ember.Service.csproj", "{ED09BEE0-4630-42C1-A470-CC9707E3F934}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ember.WebServer.Tests", "backend\Ember.WebServer.Tests\Ember.WebServer.Tests.csproj", "{D4CD50E3-EBF2-2829-CBB0-96F7ECAB3AF7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{ED09BEE0-4630-42C1-A470-CC9707E3F934}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED09BEE0-4630-42C1-A470-CC9707E3F934}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED09BEE0-4630-42C1-A470-CC9707E3F934}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4CD50E3-EBF2-2829-CBB0-96F7ECAB3AF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4CD50E3-EBF2-2829-CBB0-96F7ECAB3AF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4CD50E3-EBF2-2829-CBB0-96F7ECAB3AF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4CD50E3-EBF2-2829-CBB0-96F7ECAB3AF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{1092EEB9-AE2E-5294-67A2-6D1FE463EDB0} = {1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}
 		{8B1160C5-0FB7-FC34-76CD-4A556F09ACE8} = {1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}
 		{ED09BEE0-4630-42C1-A470-CC9707E3F934} = {1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}
+		{D4CD50E3-EBF2-2829-CBB0-96F7ECAB3AF7} = {1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D462825C-AE08-4734-A0EB-FD3400640C6D}
