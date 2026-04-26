@@ -9,6 +9,7 @@ namespace Ember.Service
     public interface IEmberDbContext
     {
         public DbSet<RefreshToken> RefreshTokens { get; }
+        public DbSet<Invitation> Invitations { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
