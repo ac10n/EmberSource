@@ -22,6 +22,19 @@ class JwtUtils {
     return nowSeconds >= exp;
   }
 
+  /// Returns true if the token's payload contains the given claim with value 'true'.
+  static bool hasClaim(String token, String claimType) {
+    final parts = token.split('.');
+    if (parts.length != 3) return false;
+    final payload = _decodeBase64Url(parts[1]);
+    if (payload == null) return false;
+    final Map<String, dynamic> data = jsonDecode(payload);
+    final value = data[claimType];
+    if (value == null) return false;
+    if (value is bool) return value;
+    return value.toString().toLowerCase() == 'true';
+  }
+
   static String? _decodeBase64Url(String input) {
     try {
       final normalized = base64Url.normalize(input);

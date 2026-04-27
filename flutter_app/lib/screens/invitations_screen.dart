@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../models/invitation.dart';
 import '../services/api_service.dart';
+import '../services/auth_token_store.dart';
 import '../services/invitation_service.dart';
+import '../utils/jwt_utils.dart';
 
 class InvitationsScreen extends StatefulWidget {
   const InvitationsScreen({super.key});
@@ -17,13 +19,23 @@ class _InvitationsScreenState extends State<InvitationsScreen> {
   List<Invitation> _invitations = [];
   bool _isLoading = true;
   String? _error;
+  bool _canInvite = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_service == null) {
       _service = InvitationService(context.read<ApiService>());
+      _checkPermission();
       _load();
+    }
+  }
+
+  Future<void> _checkPermission() async {
+    final token = await AuthTokenStore().readToken();
+    if (token != null && !JwtUtils.isExpired(token)) {
+      final canInvite = JwtUtils.hasClaim(token, 'AllowToInviteUser');
+      if (mounted) setState(() => _canInvite = canInvite);
     }
   }
 
@@ -270,11 +282,13 @@ class _InvitationsScreenState extends State<InvitationsScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _openCreateDialog,
-        tooltip: 'New Invitation',
-        child: const Icon(Icons.person_add_outlined),
-      ),
+      floatingActionButton: _canInvite
+          ? FloatingActionButton(
+              onPressed: _openCreateDialog,
+              tooltip: 'New Invitation',
+              child: const Icon(Icons.person_add_outlined),
+            )
+          : null,
       body: _buildBody(),
     );
   }
@@ -362,7 +376,7 @@ class _InvitationTile extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: statusColor.withValues(alpha: 0.12),
+                    color: statusColor.withOpacity(0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(

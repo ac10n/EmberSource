@@ -3,9 +3,12 @@ import 'package:provider/provider.dart';
 import '../models/knowledge_content.dart';
 import '../models/knowledge_tag.dart';
 import '../services/api_service.dart';
+import '../services/auth_token_store.dart';
 import '../services/knowledge_service.dart';
+import '../utils/jwt_utils.dart';
 import '../widgets/knowledge_pickers.dart';
 import 'content_editor_screen.dart';
+import 'register_screen.dart';
 
 class ContentListScreen extends StatefulWidget {
   const ContentListScreen({super.key});
@@ -19,6 +22,7 @@ class _ContentListScreenState extends State<ContentListScreen> {
   List<KnowledgeContent> _contents = [];
   bool _isLoading = true;
   String? _error;
+  bool _canRegisterUser = false;
 
   final Map<String, Set<String>> _contentTagSelections = {};
   final Map<String, Set<String>> _contentCollectionSelections = {};
@@ -28,7 +32,16 @@ class _ContentListScreenState extends State<ContentListScreen> {
     super.didChangeDependencies();
     if (_knowledgeService == null) {
       _knowledgeService = KnowledgeService(context.read<ApiService>());
+      _checkAdminPermission();
       _loadContents();
+    }
+  }
+
+  Future<void> _checkAdminPermission() async {
+    final token = await AuthTokenStore().readToken();
+    if (token != null && !JwtUtils.isExpired(token)) {
+      final can = JwtUtils.hasClaim(token, 'AllowToRegisterUser');
+      if (mounted) setState(() => _canRegisterUser = can);
     }
   }
 
@@ -176,6 +189,28 @@ class _ContentListScreenState extends State<ContentListScreen> {
       appBar: AppBar(
         title: const Text('Knowledge Content'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        actions: [
+          if (_canRegisterUser)
+            PopupMenuButton<String>(
+              onSelected: (value) {
+                if (value == 'register') {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                  );
+                }
+              },
+              itemBuilder: (_) => const [
+                PopupMenuItem(
+                  value: 'register',
+                  child: ListTile(
+                    leading: Icon(Icons.person_add_outlined),
+                    title: Text('Register User'),
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ),
+              ],
+            ),
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _openEditor(),
