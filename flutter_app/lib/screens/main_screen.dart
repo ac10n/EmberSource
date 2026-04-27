@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'collections_screen.dart';
 import 'content_list_screen.dart';
+import 'invitations_screen.dart';
 import 'tags_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class _MainScreenState extends State<MainScreen> {
     ContentListScreen(),
     TagsScreen(),
     CollectionsScreen(),
+    InvitationsScreen(),
   ];
 
   @override
@@ -42,6 +44,10 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.collections_bookmark_outlined),
             label: 'Collections',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_add_outlined),
+            label: 'Invitations',
           ),
         ],
       ),

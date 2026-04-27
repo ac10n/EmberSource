@@ -1,5 +1,5 @@
-name: podcast_app
-description: A mobile-first podcast application with web support
+name: ember_app
+description: A mobile-first ember application with web support
 publish_to: 'none'
 version: 1.0.0+1
 

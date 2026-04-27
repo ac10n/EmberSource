@@ -6,7 +6,7 @@ import 'register_screen.dart';
 class AuthLandingScreen extends StatelessWidget {
   const AuthLandingScreen({super.key});
 
-  static final Uri _websiteUri = Uri.parse('https://mehdipodcast.ca');
+  static final Uri _websiteUri = Uri.parse('https://mehdiember.ca');
 
   void _openLogin(BuildContext context) {
     Navigator.of(context).push(
@@ -56,7 +56,7 @@ class AuthLandingScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const Text(
-                        'Welcome to Podcast App',
+                        'Welcome to Ember App',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
@@ -84,7 +84,7 @@ class AuthLandingScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       TextButton(
                         onPressed: _openWebsite,
-                        child: const Text('Visit mehdipodcast.ca'),
+                        child: const Text('Visit mehdiember.ca'),
                       ),
                       const SizedBox(height: 8),
                       const Text(

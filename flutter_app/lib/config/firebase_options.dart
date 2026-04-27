@@ -53,7 +53,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
     projectId: 'YOUR_PROJECT_ID',
     storageBucket: 'YOUR_STORAGE_BUCKET',
-    iosBundleId: 'com.example.podcastApp',
+    iosBundleId: 'com.example.emberApp',
   );
 
   // TODO: Add your Web Firebase configuration

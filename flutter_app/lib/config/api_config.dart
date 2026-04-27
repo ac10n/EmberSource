@@ -39,4 +39,7 @@ class ApiConfig {
 
   // Knowledge endpoints
   static const String knowledgeBase = '/Knowledge';
+
+  // Invitation endpoints
+  static const String invitationBase = '/Invitation';
 }

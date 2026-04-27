@@ -1,6 +1,6 @@
-# Podcast App - Flutter Frontend
+# Ember App - Flutter Frontend
 
-A mobile-first cross-platform podcast application built with Flutter.
+A mobile-first cross-platform ember application built with Flutter.
 
 ## Features
 
