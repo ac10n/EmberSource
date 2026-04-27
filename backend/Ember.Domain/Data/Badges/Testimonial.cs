@@ -7,12 +7,12 @@ public class Testimonial
     public Guid Id { get; set; }
 
     public required Guid ByEmberUserId { get; set; }
-    public required EmberUser ByEmberUser { get; set; }
+    public EmberUser? ByEmberUser { get; set; }
 
     public required Guid ForEmberUserId { get; set; }
-    public required EmberUser ForEmberUser { get; set; }
+    public EmberUser? ForEmberUser { get; set; }
     public required Guid BadgeDefinitionId { get; set; }
-    public required BadgeDefinition BadgeDefinition { get; set; }
+    public BadgeDefinition? BadgeDefinition { get; set; }
 
     public bool? ApprovesBooleanBadge { get; set; }
     public decimal? NumericBadgeValue { get; set; }

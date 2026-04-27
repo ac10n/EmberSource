@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Ember.WebServer.Areas.People.Controllers;
+namespace Ember.WebServer.Areas.Knowledge.Controllers;
 
 [ApiController]
 [Route("api/v01/[controller]")]

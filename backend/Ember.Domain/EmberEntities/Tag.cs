@@ -36,7 +36,7 @@ public class TagItem
     public Content? Content { get; set; }
 
     public Guid? CollectionId { get; set; }
-    public Collection? Collection { get; set; }
+    public ContentCollection? Collection { get; set; }
 
     public Guid EmberUserId { get; set; }
     public EmberUser EmberUser { get; set; } = null!; 

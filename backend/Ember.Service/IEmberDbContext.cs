@@ -20,11 +20,13 @@ namespace Ember.Service
         public DbSet<ContentVisibility> ContentVisibilities { get; set; }
         public DbSet<RelatedContent> RelatedContents { get; set; }
         public DbSet<RelatedContentType> RelatedContentTypes { get; set; }
-        public DbSet<Collection> Collections { get; set; }
-        public DbSet<CollectionItem> CollectionItems { get; set; }
+        public DbSet<ContentCollection> Collections { get; set; }
+        public DbSet<ContentCollectionItem> CollectionItems { get; set; }
         public DbSet<ContentInteraction> ContentInteractions { get; set; }
 
+        public DbSet<UserBadgeValue> UserBadgeValues { get; set; }
         public DbSet<BadgeDefinition> BadgeDefinitions { get; set; }
+        public DbSet<Testimonial> Testimonials { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
