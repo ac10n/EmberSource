@@ -1,9 +1,11 @@
 using System.Text;
 using Ember.Service;
 using Ember.WebServer.Areas.People.Services;
+using Ember.WebServer.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using ClaimConstants = Ember.Service.ClaimConstants;
 
 namespace Ember.WebServer.Areas.People.Config;
 
@@ -61,7 +63,14 @@ public static class AuthExtensions
                 // };
             });
 
-        builder.Services.AddAuthorization();
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy(PolicyConstants.AllowToInviteUser, policy =>
+                policy.RequireClaim(ClaimConstants.AllowToInviteUser, "true"));
+
+            options.AddPolicy(PolicyConstants.AllowToRegisterUser, policy =>
+                policy.RequireClaim(ClaimConstants.AllowToRegisterUser, "true"));
+        });
 
         builder.Services.AddScoped<TokenService>();
     }

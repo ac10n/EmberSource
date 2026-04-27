@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using System.Text.Encodings.Web;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Ember.Domain.EmberEntities;
 
 namespace Ember.WebServer.Areas.People.Controllers;
 
@@ -119,7 +120,10 @@ public sealed class AuthController(
         }
 
         // Add default role
-        await userManager.AddToRoleAsync(user, "Member"); // assume "Member" role exists
+        await userManager.AddToRoleAsync(user, KnownRoles.RegularMember.Name!);
+
+        // Grant AllowToInviteUser claim — all members can invite
+        await userManager.AddClaimAsync(user, new Claim(ClaimConstants.AllowToInviteUser, "true"));
 
         // Update invitation
         invitation.AcceptedAt = DateTimeOffset.UtcNow;
