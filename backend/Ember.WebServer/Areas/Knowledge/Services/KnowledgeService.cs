@@ -1,6 +1,7 @@
 using Ember.WebServer.Areas.Knowledge.Models;
-using Ember.WebServer.Data;
+using Ember.Domain.Data;
 using Ember.WebServer.Helpers;
+using Ember.Infrastructure;
 
 namespace Ember.WebServer.Areas.Knowledge.Services;
 

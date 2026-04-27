@@ -1,4 +1,4 @@
-using Ember.WebServer.Areas.Knowledge.Entities;
+using Ember.Domain.EmberEntities;
 using Ember.WebServer.Models;
 
 namespace Ember.WebServer.Areas.Knowledge.Models;

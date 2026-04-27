@@ -1,9 +1,10 @@
-using Ember.WebServer.Data;
+using Ember.Domain.Data;
 using Microsoft.AspNetCore.HttpOverrides;
 using Ember.WebServer;
 using Ember.WebServer.Areas.People.Config;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using Ember.Infrastructure;
 
 if (args.Length > 0 && args[0] == "generate-ts-models")
 {
@@ -29,6 +30,8 @@ builder.Services.AddIdentity<EmberUser, EmberRole>(options =>
 builder.ConfigureAuth();
 
 builder.Services.AddRazorPages();
+
+builder.Services.AddHttpClient();
 
 ServiceExtensions.AddEmberExtensions(builder);
 

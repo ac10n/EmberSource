@@ -1,4 +1,5 @@
-using Ember.WebServer.Data;
+using Ember.Domain.Data;
+using Ember.Infrastructure;
 
 public interface IRequestLogContext
 {
