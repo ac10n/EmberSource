@@ -34,8 +34,8 @@ public class EmberDbContext(DbContextOptions<EmberDbContext> options)
     public DbSet<ContentVisibility> ContentVisibilities { get; set; }
     public DbSet<RelatedContent> RelatedContents { get; set; }
     public DbSet<RelatedContentType> RelatedContentTypes { get; set; }
-    public DbSet<Collection> Collections { get; set; }
-    public DbSet<CollectionItem> CollectionItems { get; set; }
+    public DbSet<ContentCollection> Collections { get; set; }
+    public DbSet<ContentCollectionItem> CollectionItems { get; set; }
     public DbSet<ContentInteraction> ContentInteractions { get; set; }
 
     public DbSet<FinancialModel> FinancialModels { get; set; }
