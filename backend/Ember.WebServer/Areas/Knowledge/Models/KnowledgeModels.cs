@@ -31,10 +31,14 @@ public class KnowledgeResponseModel: ListResponseBase
 public class ContentModel
 {
     public Guid Id { get; set; }
+    public Guid Identifier { get; set; }
 
     public Guid? ParentContentId { get; set; }
 
     public ContentTypes ContentTypeId { get; set; }
+    public ContentFormatEnum ContentFormatId { get; set; }
+    public ContentVisibilityEnum ContentVisibilityId { get; set; }
+    public string? VisibilityCriteria { get; set; }
 
     public string? Title { get; set; }
     public string? Data { get; set; }

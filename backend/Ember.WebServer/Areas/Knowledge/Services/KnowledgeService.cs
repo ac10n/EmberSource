@@ -97,8 +97,12 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
         var projectedQuery = query.Select(c => new ContentModel
         {
             Id = c.Id,
+            Identifier = c.Identifier,
             ParentContentId = c.ParentContentId,
             ContentTypeId = c.ContentTypeId,
+            ContentFormatId = c.ContentFormatId,
+            ContentVisibilityId = c.ContentVisibilityId,
+            VisibilityCriteria = c.VisibilityCriteria,
             Title = c.Title,
             Data = c.Data,
             EmberUserId = c.EmberUserId,
@@ -180,8 +184,12 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
         return new ContentModel
         {
             Id = content.Id,
+            Identifier = content.Identifier,
             ParentContentId = content.ParentContentId,
             ContentTypeId = content.ContentTypeId,
+            ContentFormatId = content.ContentFormatId,
+            ContentVisibilityId = content.ContentVisibilityId,
+            VisibilityCriteria = content.VisibilityCriteria,
             Title = content.Title,
             Data = content.Data,
             EmberUserId = content.EmberUserId,
@@ -193,8 +201,8 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
     {
         await using var processLog = LogHelper.Value.BeginLogScope<ProcessLog, ProcessLogArgs>(new ProcessLogArgs($"{nameof(KnowledgeService)}.{nameof(AddModifyContent)}", new { contentId, updateModel }));
 
-        var existing = await DbContext.Value.Contents.FindAsync(contentId);
-        if (existing == null || !existing.IsActive)
+        var existing = await DbContext.Value.Contents.FirstOrDefaultAsync(x => x.Identifier == contentId && x.IsActive);
+        if (existing == null)
         {
             throw new KeyNotFoundException($"Content with ID {contentId} not found or inactive.");
         }
@@ -281,8 +289,12 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
         return new ContentModel
         {
             Id = newVersion.Id,
+            Identifier = newVersion.Identifier,
             ParentContentId = newVersion.ParentContentId,
             ContentTypeId = newVersion.ContentTypeId,
+            ContentFormatId = newVersion.ContentFormatId,
+            ContentVisibilityId = newVersion.ContentVisibilityId,
+            VisibilityCriteria = newVersion.VisibilityCriteria,
             Title = newVersion.Title,
             Data = newVersion.Data,
             EmberUserId = newVersion.EmberUserId,
@@ -554,8 +566,12 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
                 Content = ci.Content != null ? new ContentModel
                 {
                     Id = ci.Content.Id,
+                    Identifier = ci.Content.Identifier,
                     ParentContentId = ci.Content.ParentContentId,
                     ContentTypeId = ci.Content.ContentTypeId,
+                    ContentFormatId = ci.Content.ContentFormatId,
+                    ContentVisibilityId = ci.Content.ContentVisibilityId,
+                    VisibilityCriteria = ci.Content.VisibilityCriteria,
                     Title = ci.Content.Title,
                     Data = ci.Content.Data,
                     EmberUserId = ci.Content.EmberUserId,
