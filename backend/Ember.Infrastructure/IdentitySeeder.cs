@@ -155,7 +155,7 @@ public static class IdentitySeeder
 
     private static async Task SeedContentFormats(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<EmberDbContext>();
+        var dbContext = services.GetRequiredService<IEmberDbContext>();
         if (await dbContext.ContentFormats.AnyAsync())
         {
             return;
@@ -172,7 +172,7 @@ public static class IdentitySeeder
 
     private static async Task SeedContentTypes(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<EmberDbContext>();
+        var dbContext = services.GetRequiredService<IEmberDbContext>();
         if (await dbContext.ContentTypes.AnyAsync())
         {
             return;
@@ -189,7 +189,7 @@ public static class IdentitySeeder
 
     private static async Task SeedPlatformSections(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<EmberDbContext>();
+        var dbContext = services.GetRequiredService<IEmberDbContext>();
         if (await dbContext.PlatformSections.AnyAsync())
         {
             return;
@@ -200,7 +200,7 @@ public static class IdentitySeeder
 
     private static async Task SeedFinancialModels(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<EmberDbContext>();
+        var dbContext = services.GetRequiredService<IEmberDbContext>();
         if (await dbContext.FinancialModels.AnyAsync())
         {
             return;
@@ -211,7 +211,7 @@ public static class IdentitySeeder
 
     private static async Task SeedDataOwnershipTypes(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<EmberDbContext>();
+        var dbContext = services.GetRequiredService<IEmberDbContext>();
         if (await dbContext.DataOwnerships.AnyAsync())
         {
             return;
