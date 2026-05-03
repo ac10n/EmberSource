@@ -5,6 +5,7 @@ using Ember.WebServer.Areas.People.Config;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using Ember.Infrastructure;
+using Scalar.AspNetCore;
 
 if (args.Length > 0 && args[0] == "generate-ts-models")
 {
@@ -13,6 +14,8 @@ if (args.Length > 0 && args[0] == "generate-ts-models")
 }
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddOpenApi();
 
 builder.Services.AddControllers().AddJsonOptions(o =>
 {
@@ -59,6 +62,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<RequestLoggingMiddleware>();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
 
 app.MapControllers();
 
