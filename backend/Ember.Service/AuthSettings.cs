@@ -1,10 +1,12 @@
-namespace Ember.WebServer.Areas.People.Services;
+namespace Ember.Service;
 
 public class AuthSettings
 {
     public required string JwtKey { get; set; }
     public required string JwtIssuer { get; set; }
     public required string JwtAudience { get; set; }
+    public int AccessTokenMinutes { get; set; } = 15;
+    public int RefreshTokenDays { get; set; } = 30;
 
     public SmtpSettings Smtp { get; set; } = new SmtpSettings { Host = "", Username = "", Password = "" };
     public FacebookSettings Facebook { get; set; } = new FacebookSettings { AppId = "", AppSecret = "" };

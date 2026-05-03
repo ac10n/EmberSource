@@ -3,7 +3,6 @@ using Ember.Service;
 using Ember.WebServer.Areas.People.Services;
 using Ember.WebServer.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ClaimConstants = Ember.Service.ClaimConstants;
 
@@ -13,16 +12,19 @@ public static class AuthExtensions
 {
     public static void ConfigureAuth(this WebApplicationBuilder builder)
     {
-        builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
         builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("AuthSettings"));
-        builder.Services.AddSingleton<AuthSettings>(sp => sp.GetRequiredService<IOptions<AuthSettings>>().Value);
 
-        var jwt = builder.Configuration.GetSection("Jwt").Get<JwtOptions>();
-        if (jwt == null || string.IsNullOrEmpty(jwt.SigningKey))
+        var authSettings = builder.Configuration.GetSection("AuthSettings").Get<AuthSettings>();
+        if (authSettings == null || string.IsNullOrEmpty(authSettings.JwtKey))
         {
-            jwt = new JwtOptions { SigningKey = "default-signing-key-for-development", Issuer = "default-issuer", Audience = "default-audience" };
+            authSettings = new AuthSettings
+            {
+                JwtKey = "default-signing-key-for-development",
+                JwtIssuer = "default-issuer",
+                JwtAudience = "default-audience"
+            };
         }
-        var keyBytes = Encoding.UTF8.GetBytes(jwt.SigningKey);
+        var keyBytes = Encoding.UTF8.GetBytes(authSettings.JwtKey);
 
         builder.Services
             .AddAuthentication(options =>
@@ -36,10 +38,10 @@ public static class AuthExtensions
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = jwt.Issuer,
+                    ValidIssuer = authSettings.JwtIssuer,
 
                     ValidateAudience = true,
-                    ValidAudience = jwt.Audience,
+                    ValidAudience = authSettings.JwtAudience,
 
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
