@@ -127,7 +127,7 @@ public static class IdentitySeeder
 
     private static async Task SeedInitialContents(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<EmberDbContext>();
+        var dbContext = services.GetRequiredService<IEmberDbContext>();
         if (await dbContext.Contents.AnyAsync())
         {
             return;
@@ -138,7 +138,7 @@ public static class IdentitySeeder
 
     private static async Task SeedContentVisibilities(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<EmberDbContext>();
+        var dbContext = services.GetRequiredService<IEmberDbContext>();
         if (await dbContext.ContentVisibilities.AnyAsync())
         {
             return;

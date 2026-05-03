@@ -237,3 +237,4 @@ ehthumbs.db
 Thumbs.db
 desktop.ini
 
+/backend/Ember.WebServer/appsettings.json

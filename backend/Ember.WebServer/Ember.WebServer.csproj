@@ -28,6 +28,11 @@
 
 
   <ItemGroup>
+    <None Include="appsettings.json" />
+  </ItemGroup>
+
+
+  <ItemGroup>
     <ProjectReference Include="..\Ember.Infrastructure\Ember.Infrastructure.csproj" />
   </ItemGroup>
 
