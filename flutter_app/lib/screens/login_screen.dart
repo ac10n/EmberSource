@@ -37,8 +37,9 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       final authService = context.read<AuthService>();
       await authService.login(
-        email: _emailController.text.trim(),
+        userName: _emailController.text.trim(),
         password: _passwordController.text,
+        rememberMe: true,
       );
 
       if (!mounted) return;

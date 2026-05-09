@@ -9,21 +9,28 @@ class AuthService {
 
   AuthService(this._apiService, this._tokenStore);
 
-  Future<void> login({required String email, required String password}) async {
+  Future<void> login(
+      {required String userName,
+      required String password,
+      bool rememberMe = true}) async {
     final response = await _apiService.post(
       ApiConfig.login,
       data: {
-        'email': email,
+        'userName': userName,
         'password': password,
+        'rememberMe': rememberMe,
       },
     );
 
-    final token = response.data['token'] as String?;
-    if (token == null || token.isEmpty) {
-      throw Exception('Login failed: missing token');
+    final accessToken = response.data['accessToken'] as String? ??
+        response.data['token'] as String?;
+    final refreshToken = response.data['refreshToken'] as String?;
+
+    if (accessToken == null || accessToken.isEmpty) {
+      throw Exception('Login failed: missing access token');
     }
 
-    await _tokenStore.saveToken(token);
+    await _tokenStore.saveTokens(accessToken, refreshToken);
   }
 
   Future<void> register({
