@@ -11,6 +11,7 @@ namespace Ember.WebServer.Areas.Knowledge.Services;
 public interface IKnowledgeService
 {
     Task<KnowledgeResponseModel> GetKnowledgeItems(KnowledgeRequestModel request);
+    Task<ContentModel?> GetContent(Guid contentId);
     Task<ContentModel> AddModifyContent(ContentCreateModel createModel);
     Task<ContentModel> AddModifyContent(Guid contentId, ContentUpdateModel updateModel);
     Task DeactivateContent(Guid contentId);
@@ -94,10 +95,13 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
             query = query.Where(c => DbContext.Value.CollectionItems.Any(cc => cc.ContentId == c.Id && request.Collections.Contains(cc.CollectionId)));
         }
 
+        query = query.Where(c => c.IsActive);
+
         var projectedQuery = query.Select(c => new ContentModel
         {
             Id = c.Id,
             Identifier = c.Identifier,
+            Version = c.Version,
             ParentContentId = c.ParentContentId,
             ContentTypeId = c.ContentTypeId,
             ContentFormatId = c.ContentFormatId,
@@ -111,10 +115,42 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
 
         var items = await projectedQuery.ToListAsync();
 
+        items = items
+            .GroupBy(c => c.Identifier)
+            .Select(g => g
+                .OrderByDescending(c => c.Version)
+                .ThenByDescending(c => c.CreatedAt)
+                .First())
+            .ToList();
+
         return new KnowledgeResponseModel
         {
             Contents = items,
         };
+    }
+
+    public async Task<ContentModel?> GetContent(Guid contentId)
+    {
+        return await DbContext.Value.Contents
+            .Where(c => c.Identifier == contentId && c.IsActive)
+            .OrderByDescending(c => c.Version)
+            .ThenByDescending(c => c.CreatedAt)
+            .Select(c => new ContentModel
+            {
+                Id = c.Id,
+                Identifier = c.Identifier,
+                Version = c.Version,
+                ParentContentId = c.ParentContentId,
+                ContentTypeId = c.ContentTypeId,
+                ContentFormatId = c.ContentFormatId,
+                ContentVisibilityId = c.ContentVisibilityId,
+                VisibilityCriteria = c.VisibilityCriteria,
+                Title = c.Title,
+                Data = c.Data,
+                EmberUserId = c.EmberUserId,
+                CreatedAt = c.CreatedAt
+            })
+            .FirstOrDefaultAsync();
     }
 
     public async Task<ContentModel> AddModifyContent(ContentCreateModel createModel)
@@ -185,6 +221,7 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
         {
             Id = content.Id,
             Identifier = content.Identifier,
+            Version = content.Version,
             ParentContentId = content.ParentContentId,
             ContentTypeId = content.ContentTypeId,
             ContentFormatId = content.ContentFormatId,
@@ -290,6 +327,7 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
         {
             Id = newVersion.Id,
             Identifier = newVersion.Identifier,
+            Version = newVersion.Version,
             ParentContentId = newVersion.ParentContentId,
             ContentTypeId = newVersion.ContentTypeId,
             ContentFormatId = newVersion.ContentFormatId,
@@ -306,7 +344,8 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
     {
         await using var processLog = LogHelper.Value.BeginLogScope<ProcessLog, ProcessLogArgs>(new ProcessLogArgs($"{nameof(KnowledgeService)}.{nameof(DeactivateContent)}", contentId));
 
-        var content = await DbContext.Value.Contents.FindAsync(contentId);
+        var content = await DbContext.Value.Contents
+            .FirstOrDefaultAsync(c => c.Identifier == contentId && c.IsActive);
         if (content == null || !content.IsActive)
         {
             throw new KeyNotFoundException($"Active content with ID {contentId} not found.");
@@ -327,7 +366,7 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
 
     private async Task<Tag> GetOrCreateTag(TagModel tagModel)
     {
-        Tag tag;
+        Tag? tag;
         if (tagModel.Id != Guid.Empty)
         {
             tag = await DbContext.Value.Tags.FindAsync(tagModel.Id) ?? throw new KeyNotFoundException($"Tag with ID {tagModel.Id} not found.");
@@ -548,11 +587,23 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
         var userId = RequestLogContext.Value.UserId;
         var collection = await DbContext.Value.Collections
             .Include(c => c.EmberUser)
-            .Include(c => c.CollectionItems)
+            .Include(c => c.CollectionItems!)
             .ThenInclude(ci => ci.Content)
             .FirstOrDefaultAsync(c => c.Id == collectionId && c.EmberUserId == userId);
 
         if (collection == null) return null;
+
+        var latestContents = await DbContext.Value.Contents
+            .Where(c => c.IsActive)
+            .ToListAsync();
+        var latestByIdentifier = latestContents
+            .GroupBy(c => c.Identifier)
+            .ToDictionary(
+                g => g.Key,
+                g => g
+                    .OrderByDescending(c => c.Version)
+                    .ThenByDescending(c => c.CreatedAt)
+                    .First());
 
         var items = collection.CollectionItems?
             .OrderBy(ci => ci.OrderIndex)
@@ -563,19 +614,20 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
                 CollectionId = ci.CollectionId,
                 OrderIndex = ci.OrderIndex,
                 AddedAt = ci.AddedAt,
-                Content = ci.Content != null ? new ContentModel
+                Content = ci.Content != null && latestByIdentifier.TryGetValue(ci.Content.Identifier, out var latestContent) ? new ContentModel
                 {
-                    Id = ci.Content.Id,
-                    Identifier = ci.Content.Identifier,
-                    ParentContentId = ci.Content.ParentContentId,
-                    ContentTypeId = ci.Content.ContentTypeId,
-                    ContentFormatId = ci.Content.ContentFormatId,
-                    ContentVisibilityId = ci.Content.ContentVisibilityId,
-                    VisibilityCriteria = ci.Content.VisibilityCriteria,
-                    Title = ci.Content.Title,
-                    Data = ci.Content.Data,
-                    EmberUserId = ci.Content.EmberUserId,
-                    CreatedAt = ci.Content.CreatedAt
+                    Id = latestContent.Id,
+                    Identifier = latestContent.Identifier,
+                    Version = latestContent.Version,
+                    ParentContentId = latestContent.ParentContentId,
+                    ContentTypeId = latestContent.ContentTypeId,
+                    ContentFormatId = latestContent.ContentFormatId,
+                    ContentVisibilityId = latestContent.ContentVisibilityId,
+                    VisibilityCriteria = latestContent.VisibilityCriteria,
+                    Title = latestContent.Title,
+                    Data = latestContent.Data,
+                    EmberUserId = latestContent.EmberUserId,
+                    CreatedAt = latestContent.CreatedAt
                 } : null
             });
 

@@ -18,6 +18,19 @@ public class KnowledgeController(IServiceProvider serviceProvider) : ControllerB
         return await KnowledgeService.Value.GetKnowledgeItems(request);
     }
 
+    [HttpGet("{contentId}")]
+    [Authorize]
+    public async Task<ActionResult<ContentModel>> GetContent(Guid contentId)
+    {
+        var content = await KnowledgeService.Value.GetContent(contentId);
+        if (content == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(content);
+    }
+
     [HttpPost]
     [Authorize]
     public async Task<ActionResult<ContentModel>> AddContent(ContentCreateModel createModel)

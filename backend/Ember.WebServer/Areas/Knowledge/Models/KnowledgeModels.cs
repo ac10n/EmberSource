@@ -32,6 +32,7 @@ public class ContentModel
 {
     public Guid Id { get; set; }
     public Guid Identifier { get; set; }
+    public int Version { get; set; }
 
     public Guid? ParentContentId { get; set; }
 
