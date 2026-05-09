@@ -118,8 +118,7 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
         items = items
             .GroupBy(c => c.Identifier)
             .Select(g => g
-                .OrderByDescending(c => c.Version)
-                .ThenByDescending(c => c.CreatedAt)
+                .OrderByDescending(c => c.CreatedAt)
                 .First())
             .ToList();
 
