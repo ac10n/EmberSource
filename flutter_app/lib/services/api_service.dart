@@ -54,6 +54,9 @@ class ApiService {
         },
         onError: (error, handler) {
           debugPrint('Request error: ${error.type} - ${error.message}');
+          debugPrint('Request: ${error.requestOptions.method} ${error.requestOptions.uri}');
+          debugPrint('Status: ${error.response?.statusCode}');
+          debugPrint('Response: ${error.response?.data}');
           debugPrint('Error details: ${error.error}');
           // Handle errors globally
           _handleError(error);

@@ -151,7 +151,7 @@ class _ContentEditorScreenState extends State<ContentEditorScreen> {
       } else {
         final initial = widget.initialContent!;
         await _knowledgeService!.updateContent(
-          contentId: initial.id,
+          contentId: initial.identifier,
           parentContentId: initial.parentContentId,
           contentType: initial.contentType,
           contentFormat: initial.contentFormat,
@@ -170,6 +170,7 @@ class _ContentEditorScreenState extends State<ContentEditorScreen> {
       }
     } catch (e) {
       if (!mounted) return;
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to save: $e')),
       );
@@ -224,6 +225,8 @@ class _ContentEditorScreenState extends State<ContentEditorScreen> {
         PopupMenuItem(value: 'remove', child: Text('Remove block')),
       ],
     );
+
+    if (!mounted) return;
 
     switch (selected) {
       case 'tags':

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/knowledge_content.dart';
-import '../models/knowledge_tag.dart';
 import '../services/api_service.dart';
 import '../services/auth_token_store.dart';
 import '../services/knowledge_service.dart';
@@ -68,18 +67,21 @@ class _ContentListScreenState extends State<ContentListScreen> {
   }
 
   Future<void> _openEditor({KnowledgeContent? content}) async {
-    await Navigator.of(context).push(
+    final navigator = Navigator.of(context);
+    await navigator.push(
       MaterialPageRoute(
         builder: (_) => ContentEditorScreen(initialContent: content),
       ),
     );
 
+    if (!mounted) return;
     await _loadContents();
   }
 
   Future<void> _editTagsForContent(KnowledgeContent content) async {
     if (_knowledgeService == null) return;
     final tags = await _knowledgeService!.getTags();
+    if (!mounted) return;
     final selected = _contentTagSelections[content.id] ?? <String>{};
 
     final updated = await showTagPickerDialog(
@@ -113,6 +115,7 @@ class _ContentListScreenState extends State<ContentListScreen> {
   Future<void> _editCollectionsForContent(KnowledgeContent content) async {
     if (_knowledgeService == null) return;
     final collections = await _knowledgeService!.getCollections();
+    if (!mounted) return;
     final selected = _contentCollectionSelections[content.id] ?? <String>{};
 
     final updated = await showCollectionPickerDialog(
@@ -144,7 +147,7 @@ class _ContentListScreenState extends State<ContentListScreen> {
 
   Future<void> _deactivateContent(KnowledgeContent content) async {
     if (_knowledgeService == null) return;
-    await _knowledgeService!.deactivateContent(content.id);
+    await _knowledgeService!.deactivateContent(content.identifier);
     await _loadContents();
   }
 

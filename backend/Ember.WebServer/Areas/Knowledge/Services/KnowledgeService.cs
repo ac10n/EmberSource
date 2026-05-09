@@ -32,7 +32,7 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
 {
     private Lazy<EmberDbContext> DbContext => serviceProvider.Lazy<EmberDbContext>();
     private Lazy<ILogHelper> LogHelper => serviceProvider.Lazy<ILogHelper>();
-    private Lazy<RequestLogContext> RequestLogContext => serviceProvider.Lazy<RequestLogContext>();
+    private Lazy<IRequestLogContext> RequestLogContext => serviceProvider.Lazy<IRequestLogContext>();
 
     public async Task<KnowledgeResponseModel> GetKnowledgeItems(KnowledgeRequestModel request)
     {
