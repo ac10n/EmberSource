@@ -1,0 +1,35 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Port=5432;Database=Ember;Username=postgres;Password=missing"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning",
+      "Microsoft.EntityFrameworkCore.Database.Command": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "AuthSettings": {
+    "JwtKey": "missing",
+    "JwtIssuer": "https://ember.ngo",
+    "JwtAudience": "https://ember.ngo",
+    "AccessTokenMinutes": 15,
+    "RefreshTokenDays": 30,
+    "Smtp": {
+      "Host": "missing",
+      "Port": 587,
+      "Username": "missing",
+      "Password": "missing",
+      "EnableSsl": true
+    },
+    "Facebook": {
+      "AppId": "missing",
+      "AppSecret": "missing"
+    },
+    "Google": {
+      "ClientId": "missing",
+      "ClientSecret": "missing"
+    }
+  }
+}

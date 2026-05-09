@@ -18,12 +18,21 @@ public class TestFixture : WebApplicationFactory<Program>
         Environment.SetEnvironmentVariable("UseInMemoryDb", "true");
         builder.ConfigureServices(services =>
         {
-            // Configure JWT options for testing
-            services.Configure<Ember.Service.JwtOptions>(options =>
+            // Configure auth options for testing
+            services.Configure<Ember.Service.AuthSettings>(options =>
             {
-                options.SigningKey = "dummy-jwt-key-for-testing-purposes-only";
-                options.Issuer = "test-issuer";
-                options.Audience = "test-audience";
+                options.JwtKey = "dummy-jwt-key-for-testing-purposes-only";
+                options.JwtIssuer = "test-issuer";
+                options.JwtAudience = "test-audience";
+                options.AccessTokenMinutes = 15;
+                options.RefreshTokenDays = 30;
+                options.Smtp.Host = "localhost";
+                options.Smtp.Username = "test";
+                options.Smtp.Password = "test";
+                options.Facebook.AppId = "test";
+                options.Facebook.AppSecret = "test";
+                options.Google.ClientId = "test";
+                options.Google.ClientSecret = "test";
             });
 
             // Register dummy email sender for tests
@@ -42,9 +51,11 @@ public class TestFixture : WebApplicationFactory<Program>
             config.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["UseInMemoryDb"] = "true",
-                ["Jwt:SigningKey"] = "dummy-jwt-key-for-testing-purposes-only",
-                ["Jwt:Issuer"] = "test-issuer",
-                ["Jwt:Audience"] = "test-audience",
+                ["AuthSettings:JwtKey"] = "dummy-jwt-key-for-testing-purposes-only",
+                ["AuthSettings:JwtIssuer"] = "test-issuer",
+                ["AuthSettings:JwtAudience"] = "test-audience",
+                ["AuthSettings:AccessTokenMinutes"] = "15",
+                ["AuthSettings:RefreshTokenDays"] = "30",
                 ["Secrets:FounderPassword"] = "ValidPassword123!",
                 ["AuthSettings:Smtp:Host"] = "localhost",
                 ["AuthSettings:Smtp:Username"] = "test",

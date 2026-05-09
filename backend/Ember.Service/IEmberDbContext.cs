@@ -27,6 +27,9 @@ namespace Ember.Service
         public DbSet<UserBadgeValue> UserBadgeValues { get; set; }
         public DbSet<BadgeDefinition> BadgeDefinitions { get; set; }
         public DbSet<Testimonial> Testimonials { get; set; }
+        public DbSet<PlatformSection> PlatformSections { get; set; }
+        public DbSet<FinancialModel> FinancialModels { get; set; }
+        public DbSet<DataOwnership> DataOwnerships { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }

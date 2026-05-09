@@ -5,26 +5,26 @@ using System.Text;
 using Ember.Domain.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Ember.Service;
 using Ember.Service.Models;
+using Ember.WebServer.Areas.People.Services;
 
 namespace Ember.WebServer.Areas.People.Services;
 
 public sealed class TokenService(
         IEmberDbContext dbContext,
         UserManager<EmberUser> userManager,
-        IOptions<JwtOptions> opt)
+        AuthSettings authSettings)
 {
     public async Task<TokenResponse> IssueTokensAsync(EmberUser user, string? deviceId = null, string? ip = null)
     {
         var now = DateTimeOffset.UtcNow;
 
-        var accessExpires = now.AddMinutes(opt.Value.AccessTokenMinutes);
+        var accessExpires = now.AddMinutes(authSettings.AccessTokenMinutes);
         var accessToken = await CreateAccessTokenAsync(user, accessExpires);
 
-        var refreshExpires = now.AddDays(opt.Value.RefreshTokenDays);
+        var refreshExpires = now.AddDays(authSettings.RefreshTokenDays);
         var refreshRaw = CreateRefreshTokenRaw();
         var refreshHash = HashToken(refreshRaw);
 
@@ -108,12 +108,12 @@ public sealed class TokenService(
         var extraClaims = await userManager.GetClaimsAsync(user);
         claims.AddRange(extraClaims);
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(opt.Value.SigningKey));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.JwtKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: opt.Value.Issuer,
-            audience: opt.Value.Audience,
+            issuer: authSettings.JwtIssuer,
+            audience: authSettings.JwtAudience,
             claims: claims,
             notBefore: DateTime.UtcNow,
             expires: expiresAt.UtcDateTime,

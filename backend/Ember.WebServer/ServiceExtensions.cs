@@ -2,8 +2,10 @@ using Ember.Domain.Data;
 using Ember.Infrastructure;
 using Ember.Service;
 using Ember.WebServer.Areas.Knowledge.Services;
+using PeopleServices = Ember.WebServer.Areas.People.Services;
 using Ember.WebServer.Helpers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Ember.WebServer;
 
@@ -25,6 +27,8 @@ public static class ServiceExtensions
         builder.Services.AddScoped<IKnowledgeService, KnowledgeService>();
         builder.Services.AddScoped<IRequestLogContext, RequestLogContext>();
         builder.Services.AddScoped<ILogHelper, LogHelper>();
+        builder.Services.AddSingleton<AuthSettings>(sp => sp.GetRequiredService<IOptions<AuthSettings>>().Value);
+        builder.Services.AddScoped<PeopleServices.IEmailSender, PeopleServices.EmailSender>();
         builder.Services.AddScoped<IEmberDbContext>(sp => sp.GetRequiredService<EmberDbContext>());
 
         return builder;

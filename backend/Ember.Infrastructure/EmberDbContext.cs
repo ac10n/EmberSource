@@ -48,28 +48,6 @@ public class EmberDbContext(DbContextOptions<EmberDbContext> options)
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<RefreshToken>()
-            .HasIndex(x => x.UserId);
-
-        builder.Entity<RefreshToken>()
-            .HasIndex(x => x.TokenHash)
-            .IsUnique();
-
-        builder.Entity<Invitation>()
-            .HasIndex(i => i.InvitedByUserId);
-
-        builder.Entity<Invitation>()
-            .HasIndex(i => i.InviteCode)
-            .IsUnique();
-
-        builder.Entity<EmberUserRole>()
-            .HasOne(ur => ur.User)
-            .WithMany(u => u.UserRoles)
-            .HasForeignKey(ur => ur.UserId);
-
-        builder.Entity<EmberUserRole>()
-            .HasOne(ur => ur.Role)
-            .WithMany(r => r.UserRoles)
-            .HasForeignKey(ur => ur.RoleId);
+        builder.ApplyConfigurationsFromAssembly(typeof(EmberDbContext).Assembly);
     }
 }

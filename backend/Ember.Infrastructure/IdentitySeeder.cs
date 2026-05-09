@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using Ember.Domain.EmberEntities;
 using Ember.Infrastructure;
+using Ember.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +17,7 @@ public static class IdentitySeeder
         var userManager = services.GetRequiredService<UserManager<EmberUser>>();
         
         await SeedRoles(roleManager);
+        await SeedRoleClaims(roleManager);
         await SeedUsers(services, userManager);
         await SeedUserRoles(roleManager, userManager);
 
@@ -81,11 +84,50 @@ public static class IdentitySeeder
                 await roleManager.CreateAsync(role);
             }
         }
+        else
+        {
+            // Ensure new roles added after initial seed are also created
+            foreach (var role in KnownRoles.AllKnownRoles())
+            {
+                if (await roleManager.FindByIdAsync(role.Id.ToString()) == null)
+                {
+                    await roleManager.CreateAsync(role);
+                }
+            }
+        }
+    }
+
+    private static async Task SeedRoleClaims(RoleManager<EmberRole> roleManager)
+    {
+        // AllowToInviteUser: RegularMember, PremiumMember, Admin
+        var inviteRoles = new[] { KnownRoles.RegularMember, KnownRoles.PremiumMember, KnownRoles.Admin };
+        foreach (var knownRole in inviteRoles)
+        {
+            var role = await roleManager.FindByIdAsync(knownRole.Id.ToString());
+            if (role == null) continue;
+
+            var claims = await roleManager.GetClaimsAsync(role);
+            if (!claims.Any(c => c.Type == ClaimConstants.AllowToInviteUser))
+            {
+                await roleManager.AddClaimAsync(role, new Claim(ClaimConstants.AllowToInviteUser, "true"));
+            }
+        }
+
+        // AllowToRegisterUser: Admin only
+        var adminRole = await roleManager.FindByIdAsync(KnownRoles.Admin.Id.ToString());
+        if (adminRole != null)
+        {
+            var adminClaims = await roleManager.GetClaimsAsync(adminRole);
+            if (!adminClaims.Any(c => c.Type == ClaimConstants.AllowToRegisterUser))
+            {
+                await roleManager.AddClaimAsync(adminRole, new Claim(ClaimConstants.AllowToRegisterUser, "true"));
+            }
+        }
     }
 
     private static async Task SeedInitialContents(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<EmberDbContext>();
+        var dbContext = services.GetRequiredService<IEmberDbContext>();
         if (await dbContext.Contents.AnyAsync())
         {
             return;
@@ -96,7 +138,7 @@ public static class IdentitySeeder
 
     private static async Task SeedContentVisibilities(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<EmberDbContext>();
+        var dbContext = services.GetRequiredService<IEmberDbContext>();
         if (await dbContext.ContentVisibilities.AnyAsync())
         {
             return;
@@ -113,7 +155,7 @@ public static class IdentitySeeder
 
     private static async Task SeedContentFormats(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<EmberDbContext>();
+        var dbContext = services.GetRequiredService<IEmberDbContext>();
         if (await dbContext.ContentFormats.AnyAsync())
         {
             return;
@@ -130,7 +172,7 @@ public static class IdentitySeeder
 
     private static async Task SeedContentTypes(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<EmberDbContext>();
+        var dbContext = services.GetRequiredService<IEmberDbContext>();
         if (await dbContext.ContentTypes.AnyAsync())
         {
             return;
@@ -147,7 +189,7 @@ public static class IdentitySeeder
 
     private static async Task SeedPlatformSections(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<EmberDbContext>();
+        var dbContext = services.GetRequiredService<IEmberDbContext>();
         if (await dbContext.PlatformSections.AnyAsync())
         {
             return;
@@ -158,7 +200,7 @@ public static class IdentitySeeder
 
     private static async Task SeedFinancialModels(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<EmberDbContext>();
+        var dbContext = services.GetRequiredService<IEmberDbContext>();
         if (await dbContext.FinancialModels.AnyAsync())
         {
             return;
@@ -169,7 +211,7 @@ public static class IdentitySeeder
 
     private static async Task SeedDataOwnershipTypes(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<EmberDbContext>();
+        var dbContext = services.GetRequiredService<IEmberDbContext>();
         if (await dbContext.DataOwnerships.AnyAsync())
         {
             return;

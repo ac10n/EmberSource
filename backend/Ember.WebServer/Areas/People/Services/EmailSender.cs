@@ -1,5 +1,6 @@
 using MailKit.Net.Smtp;
 using MimeKit;
+using Ember.Service;
 
 namespace Ember.WebServer.Areas.People.Services;
 

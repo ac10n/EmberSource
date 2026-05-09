@@ -17,7 +17,7 @@ namespace Ember.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.2")
+                .HasAnnotation("ProductVersion", "10.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -62,7 +62,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ActionLogs");
+                    b.ToTable("ActionLogs", "LOG");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.BadgeDefinition", b =>
@@ -92,7 +92,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BadgeDefinitions");
+                    b.ToTable("BadgeDefinitions", "USR");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.DataOwnership", b =>
@@ -106,7 +106,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DataOwnerships");
+                    b.ToTable("DataOwnerships", "DOC");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.EmberRole", b =>
@@ -133,7 +133,7 @@ namespace Ember.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("AspNetRoles", "SSO");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.EmberRoleClaim", b =>
@@ -157,7 +157,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("AspNetRoleClaims", "SSO");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.EmberUser", b =>
@@ -233,7 +233,7 @@ namespace Ember.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("AspNetUsers", "SSO");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.EmberUserLogin", b =>
@@ -254,7 +254,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("AspNetUserLogins", "SSO");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.EmberUserRole", b =>
@@ -277,7 +277,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("AspNetUserRoles", "SSO");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.EmberUserToken", b =>
@@ -296,7 +296,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("AspNetUserTokens", "SSO");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.FinancialModel", b =>
@@ -317,7 +317,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FinancialModels");
+                    b.ToTable("FinancialModels", "DOC");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.InteractionLog", b =>
@@ -353,7 +353,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("InteractionLogs");
+                    b.ToTable("InteractionLogs", "LOG");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.Invitation", b =>
@@ -407,7 +407,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("InvitedByUserId");
 
-                    b.ToTable("Invitations");
+                    b.ToTable("Invitations", "USR");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.PlatformSection", b =>
@@ -433,9 +433,6 @@ namespace Ember.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("ParentPlatformSectionId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid?>("ParentSectionId")
                         .HasColumnType("uuid");
 
@@ -449,9 +446,9 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("FinancialModelId");
 
-                    b.HasIndex("ParentPlatformSectionId");
+                    b.HasIndex("ParentSectionId");
 
-                    b.ToTable("PlatformSections");
+                    b.ToTable("PlatformSections", "DOC");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.ProcessLog", b =>
@@ -483,7 +480,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("RequestId");
 
-                    b.ToTable("ProcessLogs");
+                    b.ToTable("ProcessLogs", "LOG");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.RefreshToken", b =>
@@ -519,12 +516,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TokenHash")
-                        .IsUnique();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", "SSO");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.RequestLog", b =>
@@ -564,7 +556,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RequestLogs");
+                    b.ToTable("RequestLogs", "LOG");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.ResponseLog", b =>
@@ -592,7 +584,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("RequestLogId");
 
-                    b.ToTable("ResponseLogs");
+                    b.ToTable("ResponseLogs", "LOG");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.Testimonial", b =>
@@ -633,7 +625,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("ForEmberUserId");
 
-                    b.ToTable("Testimonials");
+                    b.ToTable("Testimonials", "DOC");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.UserBadgeValue", b =>
@@ -666,7 +658,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("EmberUserId");
 
-                    b.ToTable("UserBadgeValues");
+                    b.ToTable("UserBadgeValues", "USR");
                 });
 
             modelBuilder.Entity("Ember.Domain.EmberEntities.Content", b =>
@@ -730,7 +722,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("ParentContentId");
 
-                    b.ToTable("Contents");
+                    b.ToTable("Contents", "DOC");
                 });
 
             modelBuilder.Entity("Ember.Domain.EmberEntities.ContentCollection", b =>
@@ -755,7 +747,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("EmberUserId");
 
-                    b.ToTable("Collections");
+                    b.ToTable("Collections", "DOC");
                 });
 
             modelBuilder.Entity("Ember.Domain.EmberEntities.ContentCollectionItem", b =>
@@ -782,7 +774,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("ContentId");
 
-                    b.ToTable("CollectionItems");
+                    b.ToTable("CollectionItems", "DOC");
                 });
 
             modelBuilder.Entity("Ember.Domain.EmberEntities.ContentFormat", b =>
@@ -796,7 +788,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ContentFormats");
+                    b.ToTable("ContentFormats", "DOC");
                 });
 
             modelBuilder.Entity("Ember.Domain.EmberEntities.ContentInteraction", b =>
@@ -838,7 +830,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ContentInteractions");
+                    b.ToTable("ContentInteractions", "DOC");
                 });
 
             modelBuilder.Entity("Ember.Domain.EmberEntities.ContentType", b =>
@@ -852,7 +844,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ContentTypes");
+                    b.ToTable("ContentTypes", "DOC");
                 });
 
             modelBuilder.Entity("Ember.Domain.EmberEntities.ContentVisibility", b =>
@@ -865,7 +857,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ContentVisibilities");
+                    b.ToTable("ContentVisibilities", "DOC");
                 });
 
             modelBuilder.Entity("Ember.Domain.EmberEntities.RelatedContent", b =>
@@ -891,7 +883,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("RelatedContentTypeId");
 
-                    b.ToTable("RelatedContents");
+                    b.ToTable("RelatedContents", "DOC");
                 });
 
             modelBuilder.Entity("Ember.Domain.EmberEntities.RelatedContentType", b =>
@@ -904,7 +896,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RelatedContentTypes");
+                    b.ToTable("RelatedContentTypes", "DOC");
                 });
 
             modelBuilder.Entity("Ember.Domain.EmberEntities.Tag", b =>
@@ -929,7 +921,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("EmberUserId");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", "DOC");
                 });
 
             modelBuilder.Entity("Ember.Domain.EmberEntities.TagItem", b =>
@@ -966,7 +958,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("ContentTags");
+                    b.ToTable("ContentTags", "DOC");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -990,7 +982,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("AspNetUserClaims", "SSO");
                 });
 
             modelBuilder.Entity("Ember.Domain.Data.ActionLog", b =>
@@ -1102,7 +1094,7 @@ namespace Ember.Infrastructure.Migrations
 
                     b.HasOne("Ember.Domain.Data.PlatformSection", "ParentPlatformSection")
                         .WithMany()
-                        .HasForeignKey("ParentPlatformSectionId");
+                        .HasForeignKey("ParentSectionId");
 
                     b.Navigation("CreatorUser");
 

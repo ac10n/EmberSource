@@ -7,7 +7,7 @@
 ################################################################################
 # .NET / ASP.NET Core (Backend)
 ################################################################################
-# Podcast App - Root .gitignore
+# Ember App - Root .gitignore
 
 
 # =========================
@@ -237,3 +237,4 @@ ehthumbs.db
 Thumbs.db
 desktop.ini
 
+/backend/Ember.WebServer/appsettings.json

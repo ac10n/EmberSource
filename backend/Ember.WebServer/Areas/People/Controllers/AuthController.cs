@@ -1,4 +1,5 @@
 using Ember.WebServer.Areas.People.Services;
+using Ember.WebServer.Helpers;
 using Ember.Domain.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Options;
 using System.Text.Encodings.Web;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Ember.Domain.EmberEntities;
 
 namespace Ember.WebServer.Areas.People.Controllers;
 
@@ -119,7 +121,10 @@ public sealed class AuthController(
         }
 
         // Add default role
-        await userManager.AddToRoleAsync(user, "Member"); // assume "Member" role exists
+        await userManager.AddToRoleAsync(user, KnownRoles.RegularMember.Name!);
+
+        // Grant AllowToInviteUser claim — all members can invite
+        await userManager.AddClaimAsync(user, new Claim(ClaimConstants.AllowToInviteUser, "true"));
 
         // Update invitation
         invitation.AcceptedAt = DateTimeOffset.UtcNow;
@@ -141,6 +146,39 @@ public sealed class AuthController(
 
         return Ok(new { message = "Registration successful. Please confirm your email." });
     }
+
+    [HttpPost]
+    [Authorize(Policy = PolicyConstants.AllowToRegisterUser)]
+    public async Task<IActionResult> RegisterDirect(RegisterDirectDto dto)
+    {
+        var existing = await userManager.FindByEmailAsync(dto.Email);
+        if (existing != null)
+        {
+            return BadRequest(new { error = "Email already in use" });
+        }
+
+        var user = new EmberUser
+        {
+            UserName = dto.UserName,
+            Email = dto.Email,
+            FullName = dto.FullName,
+            Jurisdiction = dto.Jurisdiction,
+            BirthYear = dto.BirthYear
+        };
+
+        var result = await userManager.CreateAsync(user, dto.Password);
+        if (!result.Succeeded)
+        {
+            return BadRequest(result.Errors);
+        }
+
+        var roleName = dto.Role ?? KnownRoles.RegularMember.Name!;
+        await userManager.AddToRoleAsync(user, roleName);
+        await userManager.AddClaimAsync(user, new Claim(ClaimConstants.AllowToInviteUser, "true"));
+
+        return Ok(new { userId = user.Id, message = "User registered successfully." });
+    }
+
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> ConfirmEmail([FromQuery] Guid userId, [FromQuery] string token)

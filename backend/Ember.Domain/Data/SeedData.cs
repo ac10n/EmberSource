@@ -66,6 +66,24 @@ public static class KnownRoles
         Name = "User",
         NormalizedName = "USER",
     };
+    public static EmberRole RegularMember = new()
+    {
+        Id = Guid.Parse("c1e2f3a4-b5c6-47d8-e9f0-a1b2c3d4e5f6"),
+        Name = "RegularMember",
+        NormalizedName = "REGULARMEMBER",
+    };
+    public static EmberRole Admin = new()
+    {
+        Id = Guid.Parse("d2e3f4a5-c6d7-48e9-f0a1-b2c3d4e5f6a7"),
+        Name = "Admin",
+        NormalizedName = "ADMIN",
+    };
+    public static EmberRole PremiumMember = new()
+    {
+        Id = Guid.Parse("e3f4a5b6-d7e8-49f0-a1b2-c3d4e5f6a7b8"),
+        Name = "PremiumMember",
+        NormalizedName = "PREMIUMMEMBER",
+    };
 
     public static IEnumerable<EmberRole> AllKnownRoles()
     {
@@ -74,6 +92,9 @@ public static class KnownRoles
         yield return Administrator;
         yield return Creator;
         yield return User;
+        yield return RegularMember;
+        yield return Admin;
+        yield return PremiumMember;
     }
 }
 
