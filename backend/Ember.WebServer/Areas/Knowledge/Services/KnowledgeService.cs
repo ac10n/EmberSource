@@ -39,6 +39,17 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
     {
         await using var processLog = LogHelper.Value.BeginLogScope<ProcessLog, ProcessLogArgs>(new ProcessLogArgs($"{nameof(KnowledgeService)}.{nameof(GetKnowledgeItems)}", request));
         var query = DbContext.Value.Contents.AsQueryable();
+        var userId = RequestLogContext.Value.UserId;
+
+        if (userId is null)
+        {
+            return new KnowledgeResponseModel
+            {
+                Contents = Array.Empty<ContentModel>(),
+            };
+        }
+
+        query = query.Where(c => c.EmberUserId == userId.Value);
 
         if (request.ContentIds is not null && request.ContentIds.Any())
         {
@@ -130,8 +141,10 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
 
     public async Task<ContentModel?> GetContent(Guid contentId)
     {
+        var userId = RequestLogContext.Value.UserId;
+
         return await DbContext.Value.Contents
-            .Where(c => c.Identifier == contentId && c.IsActive)
+            .Where(c => c.Identifier == contentId && c.IsActive && c.EmberUserId == userId)
             .OrderByDescending(c => c.Version)
             .ThenByDescending(c => c.CreatedAt)
             .Select(c => new ContentModel
@@ -454,7 +467,7 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
     {
         var userId = RequestLogContext.Value.UserId;
         var tags = await DbContext.Value.Tags
-            .Where(t => !t.IsPrivate || t.EmberUserId == userId)
+            .Where(t => t.EmberUserId == userId)
             .Select(t => new TagModel
             {
                 Id = t.Id,
@@ -471,7 +484,7 @@ public class KnowledgeService(IServiceProvider serviceProvider): IKnowledgeServi
     {
         var userId = RequestLogContext.Value.UserId;
         var tag = await DbContext.Value.Tags
-            .FirstOrDefaultAsync(t => t.Id == tagId && (!t.IsPrivate || t.EmberUserId == userId));
+            .FirstOrDefaultAsync(t => t.Id == tagId && t.EmberUserId == userId);
 
         if (tag == null) return null;
 
