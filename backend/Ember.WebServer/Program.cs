@@ -1,5 +1,6 @@
 using Ember.Domain.Data;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using Ember.WebServer;
 using Ember.WebServer.Areas.People.Config;
 using System.Text.Json.Serialization;
@@ -35,7 +36,8 @@ builder.Services.AddIdentity<EmberUser, EmberRole>(options =>
             options.SignIn.RequireConfirmedAccount = false;
             options.Password.RequireNonAlphanumeric = false;
         })
-    .AddEntityFrameworkStores<EmberDbContext>();
+    .AddEntityFrameworkStores<EmberDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.ConfigureAuth();
 
