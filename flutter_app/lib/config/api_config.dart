@@ -28,8 +28,8 @@ class ApiConfig {
   }
 
   // Timeout duration
-  static const Duration connectTimeout = Duration(seconds: 8);
-  static const Duration receiveTimeout = Duration(seconds: 20);
+  static const Duration connectTimeout = Duration(seconds: 30);
+  static const Duration receiveTimeout = Duration(seconds: 30);
 
   // API Endpoints
   static const String login = '/auth/login';
