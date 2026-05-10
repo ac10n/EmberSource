@@ -11,6 +11,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _inviteCodeController = TextEditingController();
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -21,6 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void dispose() {
+    _inviteCodeController.dispose();
     _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
@@ -42,6 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     try {
       final authService = context.read<AuthService>();
       await authService.register(
+        inviteCode: _inviteCodeController.text.trim(),
         username: _usernameController.text.trim(),
         email: _emailController.text.trim(),
         password: _passwordController.text,
@@ -91,6 +94,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
             key: _formKey,
             child: ListView(
               children: [
+                TextFormField(
+                  controller: _inviteCodeController,
+                  decoration: const InputDecoration(
+                    labelText: 'Invitation code',
+                    helperText:
+                        'Use the code from your email, SMS, or from a friend.',
+                  ),
+                  textCapitalization: TextCapitalization.characters,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Invitation code is required';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 12),
                 TextFormField(
                   controller: _usernameController,
                   decoration: const InputDecoration(labelText: 'Username'),

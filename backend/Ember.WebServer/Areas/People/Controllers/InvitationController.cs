@@ -1,6 +1,7 @@
 using Ember.Domain.Data;
 using Ember.Service;
 using Ember.WebServer.Helpers;
+using Ember.WebServer.Areas.People.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,8 @@ namespace Ember.WebServer.Areas.People.Controllers;
 [Route("api/v01/[controller]/[action]")]
 [Authorize]
 public sealed class InvitationController(
-    IEmberDbContext dbContext) : ControllerBase
+    IEmberDbContext dbContext,
+    IInvitationNotificationService invitationNotificationService) : ControllerBase
 {
     [HttpPost]
     [Authorize(Policy = PolicyConstants.AllowToInviteUser)]
@@ -36,6 +38,12 @@ public sealed class InvitationController(
 
         dbContext.Invitations.Add(invitation);
         await dbContext.SaveChangesAsync();
+
+        await invitationNotificationService.SendInvitationAsync(
+            invitation.RealName,
+            invitation.InviteCode,
+            invitation.Email,
+            invitation.Phone);
 
         return Ok(new InvitationDto(invitation));
     }

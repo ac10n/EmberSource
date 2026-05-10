@@ -29,6 +29,8 @@ public static class ServiceExtensions
         builder.Services.AddScoped<ILogHelper, LogHelper>();
         builder.Services.AddSingleton<AuthSettings>(sp => sp.GetRequiredService<IOptions<AuthSettings>>().Value);
         builder.Services.AddScoped<PeopleServices.IEmailSender, PeopleServices.EmailSender>();
+        builder.Services.AddScoped<PeopleServices.ISmsSender, PeopleServices.TwilioSmsSender>();
+        builder.Services.AddScoped<PeopleServices.IInvitationNotificationService, PeopleServices.InvitationNotificationService>();
         builder.Services.AddScoped<IEmberDbContext>(sp => sp.GetRequiredService<EmberDbContext>());
 
         return builder;

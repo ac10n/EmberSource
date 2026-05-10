@@ -16,6 +16,11 @@
     "JwtAudience": "https://ember.ngo",
     "AccessTokenMinutes": 15,
     "RefreshTokenDays": 30,
+    "Twilio": {
+      "AccountSid": "missing",
+      "AuthToken": "missing",
+      "FromNumber": "missing"
+    },
     "Smtp": {
       "Host": "missing",
       "Port": 587,

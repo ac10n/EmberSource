@@ -9,6 +9,7 @@ public class AuthSettings
     public int RefreshTokenDays { get; set; } = 30;
 
     public SmtpSettings Smtp { get; set; } = new SmtpSettings { Host = "", Username = "", Password = "" };
+    public TwilioSettings Twilio { get; set; } = new TwilioSettings { AccountSid = "", AuthToken = "", FromNumber = "" };
     public FacebookSettings Facebook { get; set; } = new FacebookSettings { AppId = "", AppSecret = "" };
     public GoogleSettings Google { get; set; } = new GoogleSettings { ClientId = "", ClientSecret = "" };
 
@@ -19,6 +20,13 @@ public class AuthSettings
         public string Username { get; set; } = "";
         public string Password { get; set; } = "";
         public bool EnableSsl { get; set; } = true;
+    }
+
+    public class TwilioSettings
+    {
+        public string AccountSid { get; set; } = "";
+        public string AuthToken { get; set; } = "";
+        public string FromNumber { get; set; } = "";
     }
 
     public class FacebookSettings

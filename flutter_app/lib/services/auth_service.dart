@@ -35,6 +35,7 @@ class AuthService {
   }
 
   Future<void> register({
+    required String inviteCode,
     required String username,
     required String email,
     required String password,
@@ -43,6 +44,7 @@ class AuthService {
     await _apiService.post(
       ApiConfig.register,
       data: {
+        'inviteCode': inviteCode,
         'username': username,
         'email': email,
         'password': password,
