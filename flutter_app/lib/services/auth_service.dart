@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+
 import '../config/api_config.dart';
 import '../models/profile.dart';
 import '../utils/jwt_utils.dart';
@@ -14,24 +18,36 @@ class AuthService {
       {required String userName,
       required String password,
       bool rememberMe = true}) async {
-    final response = await _apiService.post(
-      ApiConfig.login,
-      data: {
-        'userName': userName,
-        'password': password,
-        'rememberMe': rememberMe,
-      },
-    );
+    try {
+      final response = await _apiService.post(
+        ApiConfig.login,
+        data: {
+          'userName': userName,
+          'password': password,
+          'rememberMe': rememberMe,
+        },
+      );
 
-    final accessToken = response.data['accessToken'] as String? ??
-        response.data['token'] as String?;
-    final refreshToken = response.data['refreshToken'] as String?;
+      final accessToken = response.data['accessToken'] as String? ??
+          response.data['token'] as String?;
+      final refreshToken = response.data['refreshToken'] as String?;
 
-    if (accessToken == null || accessToken.isEmpty) {
-      throw Exception('Login failed: missing access token');
+      if (accessToken == null || accessToken.isEmpty) {
+        throw Exception('Login failed: missing access token');
+      }
+
+      await _tokenStore.saveTokens(accessToken, refreshToken);
+    } on DioException catch (error) {
+      if (error.type == DioExceptionType.connectionTimeout ||
+          error.type == DioExceptionType.connectionError ||
+          error.type == DioExceptionType.sendTimeout ||
+          error.type == DioExceptionType.receiveTimeout ||
+          error.error is SocketException) {
+        throw Exception('Unable to connect to the server. Please try again.');
+      }
+
+      rethrow;
     }
-
-    await _tokenStore.saveTokens(accessToken, refreshToken);
   }
 
   Future<void> register({
@@ -92,18 +108,22 @@ class AuthService {
   }
 
   Future<bool> hasValidToken() async {
-    final token = await _tokenStore.readToken();
-    if (token == null || token.isEmpty) {
+    final accessToken = await _tokenStore.readAccessToken();
+    if (accessToken == null || accessToken.isEmpty) {
       return false;
     }
 
-    final expired = JwtUtils.isExpired(token);
-    if (expired) {
-      await _tokenStore.clearToken();
-      return false;
+    if (!JwtUtils.isExpired(accessToken)) {
+      return true;
     }
 
-    return true;
+    final refreshed = await _apiService.refreshTokens();
+    if (refreshed) {
+      return true;
+    }
+
+    await _tokenStore.clearToken();
+    return false;
   }
 
   Future<void> logout() async {
