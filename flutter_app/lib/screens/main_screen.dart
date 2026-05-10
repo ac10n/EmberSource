@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'collections_screen.dart';
 import 'content_list_screen.dart';
-import 'invitations_screen.dart';
-import 'tags_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -12,45 +9,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
-
-  final List<Widget> _screens = const [
-    ContentListScreen(),
-    TagsScreen(),
-    CollectionsScreen(),
-    InvitationsScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _screens[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.article_outlined),
-            label: 'Content',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.label_outline),
-            label: 'Tags',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.collections_bookmark_outlined),
-            label: 'Collections',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_add_outlined),
-            label: 'Invitations',
-          ),
-        ],
-      ),
-    );
+    return const ContentListScreen();
   }
 }

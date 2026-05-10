@@ -1,4 +1,5 @@
 import '../config/api_config.dart';
+import '../models/profile.dart';
 import '../utils/jwt_utils.dart';
 import 'api_service.dart';
 import 'auth_token_store.dart';
@@ -47,6 +48,43 @@ class AuthService {
         'password': password,
         if (profileImageUrl != null && profileImageUrl.isNotEmpty)
           'profileImageUrl': profileImageUrl,
+      },
+    );
+  }
+
+  Future<ProfileInfo> getProfile() async {
+    final response = await _apiService.post(
+      ApiConfig.profileGet,
+      data: const {},
+    );
+    return ProfileInfo.fromJson(
+        Map<String, dynamic>.from(response.data as Map));
+  }
+
+  Future<void> updateProfile({
+    required String fullName,
+    required int birthYear,
+    required String jurisdiction,
+  }) async {
+    await _apiService.post(
+      ApiConfig.profileUpdate,
+      data: {
+        'fullName': fullName,
+        'birthYear': birthYear,
+        'jurisdiction': jurisdiction,
+      },
+    );
+  }
+
+  Future<void> changePassword({
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    await _apiService.post(
+      ApiConfig.profileChangePassword,
+      data: {
+        'oldPassword': oldPassword,
+        'newPassword': newPassword,
       },
     );
   }

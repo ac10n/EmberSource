@@ -100,7 +100,7 @@ public static class IdentitySeeder
     private static async Task SeedRoleClaims(RoleManager<EmberRole> roleManager)
     {
         // AllowToInviteUser: RegularMember, PremiumMember, Admin
-        var inviteRoles = new[] { KnownRoles.RegularMember, KnownRoles.PremiumMember, KnownRoles.Admin };
+        var inviteRoles = new[] { KnownRoles.RegularMember, KnownRoles.PremiumMember, KnownRoles.Admin, KnownRoles.Steward };
         foreach (var knownRole in inviteRoles)
         {
             var role = await roleManager.FindByIdAsync(knownRole.Id.ToString());

@@ -17,13 +17,13 @@ public sealed class InvitationController(
     [Authorize(Policy = PolicyConstants.AllowToInviteUser)]
     public async Task<IActionResult> CreateInvitation(CreateInvitationDto dto)
     {
-        var userIdStr = User.FindFirst("sub")?.Value;
-        if (userIdStr is null) return Unauthorized();
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
 
         var invitation = new Invitation
         {
             Id = Guid.NewGuid(),
-            InvitedByUserId = Guid.Parse(userIdStr),
+            InvitedByUserId = userId.Value,
             RealName = dto.RealName,
             IsInLegalAge = dto.IsInLegalAge,
             Jurisdiction = dto.Jurisdiction,
@@ -43,12 +43,11 @@ public sealed class InvitationController(
     [HttpGet]
     public async Task<ActionResult<List<InvitationDto>>> GetMyInvitations()
     {
-        var userIdStr = User.FindFirst("sub")?.Value;
-        if (userIdStr is null) return Unauthorized();
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
 
-        var userId = Guid.Parse(userIdStr);
         var invitations = await dbContext.Invitations
-            .Where(i => i.InvitedByUserId == userId)
+            .Where(i => i.InvitedByUserId == userId.Value)
             .OrderByDescending(i => i.CreatedAt)
             .Select(i => new InvitationDto(i))
             .ToListAsync();

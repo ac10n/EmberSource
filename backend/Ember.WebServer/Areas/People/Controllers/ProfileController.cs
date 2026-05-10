@@ -17,12 +17,13 @@ public sealed class ProfileController(
     [HttpPost]
     public async Task<ActionResult<ProfileResponse>> GetProfile(ProfileRequest request)
     {
-        var userId = User.GetUserId()?.ToString();
+        var userId = User.GetUserId();
         if (userId is null)
         {
             return Unauthorized(); // TODO: If a profile's visibility allows anonymous access, we should change this
         }
-        var user = await userManager.FindByIdAsync(request.ProfileId ?? userId);
+        var lookupId = request.ProfileId ?? userId.Value.ToString();
+        var user = await userManager.FindByIdAsync(lookupId);
         if (user is null)
         {
             return Unauthorized();
@@ -30,10 +31,10 @@ public sealed class ProfileController(
 
         var profile = new ProfileResponse
         {
-            Username = user.UserName,
-            FullName = user.FullName,
+            Username = user.UserName ?? string.Empty,
+            FullName = user.FullName ?? string.Empty,
             BirthYear = user.BirthYear,
-            Jurisdiction = user.Jurisdiction
+            Jurisdiction = user.Jurisdiction ?? string.Empty
         };
 
         return profile;
@@ -48,7 +49,7 @@ public sealed class ProfileController(
             return Unauthorized();
         }
 
-        var user = await userManager.FindByIdAsync(userId.ToString());
+        var user = await userManager.FindByIdAsync(userId.Value.ToString());
         if (user is null)
         {
             return Unauthorized();
@@ -70,21 +71,40 @@ public sealed class ProfileController(
         };
     }
 
-    private async Task<(bool flowControl, ActionResult<UpdateResult<ProfileResponse>> value)> NewMethod(ChangePasswordRequest request, EmberUser user)
+    [HttpPost]
+    public async Task<ActionResult<UpdateResult<ProfileResponse>>> ChangePassword(ChangePasswordRequest request)
     {
-        if (!string.IsNullOrEmpty(request.NewPassword))
+        var userId = User.GetUserId();
+        if (userId is null)
         {
-            if (string.IsNullOrEmpty(request.OldPassword))
-            {
-                return (flowControl: false, value: BadRequest("Current password is required to set a new password."));
-            }
-            var passwordResult = await userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
-            if (!passwordResult.Succeeded)
-            {
-                return (flowControl: false, value: BadRequest(passwordResult.Errors));
-            }
+            return Unauthorized();
         }
 
-        return (flowControl: true, value: null);
+        var user = await userManager.FindByIdAsync(userId.Value.ToString());
+        if (user is null)
+        {
+            return Unauthorized();
+        }
+
+        if (string.IsNullOrEmpty(request.NewPassword))
+        {
+            return BadRequest("New password is required.");
+        }
+
+        if (string.IsNullOrEmpty(request.OldPassword))
+        {
+            return BadRequest("Current password is required to set a new password.");
+        }
+
+        var passwordResult = await userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
+        if (!passwordResult.Succeeded)
+        {
+            return BadRequest(passwordResult.Errors);
+        }
+
+        return new UpdateResult<ProfileResponse>
+        {
+            Result = UpdateResultKind.Success,
+        };
     }
 }

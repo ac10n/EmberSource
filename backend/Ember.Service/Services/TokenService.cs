@@ -15,6 +15,7 @@ namespace Ember.WebServer.Areas.People.Services;
 public sealed class TokenService(
         IEmberDbContext dbContext,
         UserManager<EmberUser> userManager,
+    RoleManager<EmberRole> roleManager,
         AuthSettings authSettings)
 {
     public async Task<TokenResponse> IssueTokensAsync(EmberUser user, string? deviceId = null, string? ip = null)
@@ -103,6 +104,20 @@ public sealed class TokenService(
         // Add roles as "role" claims (works with [Authorize(Roles="...")])
         var roles = await userManager.GetRolesAsync(user);
         claims.AddRange(roles.Select(r => new Claim("role", r)));
+        claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
+
+        // Add any claims attached to the user's roles so policies can evaluate them from the token.
+        foreach (var roleName in roles)
+        {
+            var role = await roleManager.FindByNameAsync(roleName);
+            if (role is null)
+            {
+                continue;
+            }
+
+            var roleClaims = await roleManager.GetClaimsAsync(role);
+            claims.AddRange(roleClaims);
+        }
 
         // (Optional) add extra claims from Identity
         var extraClaims = await userManager.GetClaimsAsync(user);

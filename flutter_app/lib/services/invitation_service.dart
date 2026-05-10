@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:dio/dio.dart';
 import '../config/api_config.dart';
 import '../models/invitation.dart';
 import 'api_service.dart';
@@ -18,6 +19,13 @@ class InvitationService {
           .whereType<Map<String, dynamic>>()
           .map(Invitation.fromJson)
           .toList();
+    } on DioException catch (e) {
+      final statusCode = e.response?.statusCode;
+      if (statusCode == 401) {
+        throw Exception('Unauthorized');
+      }
+      debugPrint('Error fetching invitations: $e');
+      rethrow;
     } catch (e) {
       debugPrint('Error fetching invitations: $e');
       rethrow;
@@ -47,6 +55,13 @@ class InvitationService {
         data: payload,
       );
       return Invitation.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      final statusCode = e.response?.statusCode;
+      if (statusCode == 401) {
+        throw Exception('Unauthorized');
+      }
+      debugPrint('Error creating invitation: $e');
+      rethrow;
     } catch (e) {
       debugPrint('Error creating invitation: $e');
       rethrow;

@@ -53,12 +53,17 @@ class ApiService {
           return handler.next(options);
         },
         onError: (error, handler) {
+          if (error.response?.statusCode == 401) {
+            _tokenStore.clearToken();
+            return handler.next(error);
+          }
+
           debugPrint('Request error: ${error.type} - ${error.message}');
-          debugPrint('Request: ${error.requestOptions.method} ${error.requestOptions.uri}');
+          debugPrint(
+              'Request: ${error.requestOptions.method} ${error.requestOptions.uri}');
           debugPrint('Status: ${error.response?.statusCode}');
           debugPrint('Response: ${error.response?.data}');
           debugPrint('Error details: ${error.error}');
-          // Handle errors globally
           _handleError(error);
           return handler.next(error);
         },
@@ -119,6 +124,9 @@ class ApiService {
       case DioExceptionType.receiveTimeout:
         throw Exception('Connection timeout');
       case DioExceptionType.badResponse:
+        if (error.response?.statusCode == 401) {
+          throw Exception('Unauthorized');
+        }
         throw Exception('Server error: ${error.response?.statusCode}');
       case DioExceptionType.cancel:
         throw Exception('Request cancelled');

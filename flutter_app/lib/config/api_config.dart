@@ -36,6 +36,9 @@ class ApiConfig {
   static const String register = '/auth/register';
   static const String users = '/users';
   static const String deviceTokens = '/notifications/register-token';
+  static const String profileGet = '/Profile/GetProfile';
+  static const String profileUpdate = '/Profile/UpdateMyProfile';
+  static const String profileChangePassword = '/Profile/ChangePassword';
 
   // Knowledge endpoints
   static const String knowledgeBase = '/Knowledge';
