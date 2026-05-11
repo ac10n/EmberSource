@@ -44,8 +44,11 @@ class _ContentListScreenState extends State<ContentListScreen> {
   }
 
   Future<void> _checkAdminPermission() async {
-    final token = await AuthTokenStore().readToken();
-    if (token != null && !JwtUtils.isExpired(token)) {
+    final valid = await context.read<AuthService>().hasValidToken();
+    if (!valid) return;
+
+    final token = await AuthTokenStore().readAccessToken();
+    if (token != null) {
       final can = JwtUtils.hasClaim(token, 'AllowToRegisterUser');
       if (mounted) setState(() => _canRegisterUser = can);
     }
@@ -59,8 +62,8 @@ class _ContentListScreenState extends State<ContentListScreen> {
       _error = null;
     });
 
-    final token = await AuthTokenStore().readToken();
-    if (token == null || JwtUtils.isExpired(token)) {
+    final valid = await context.read<AuthService>().hasValidToken();
+    if (!valid) {
       await _handleSessionExpired();
       return;
     }

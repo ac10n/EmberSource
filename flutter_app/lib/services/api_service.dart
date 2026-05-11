@@ -62,10 +62,22 @@ class ApiService {
           final alreadyRetried =
               error.requestOptions.extra['retriedAfterRefresh'] == true;
 
-          if (error.response?.statusCode == 401 &&
+          debugPrint('Interceptor onError fired');
+          debugPrint(
+              'Request: ${error.requestOptions.method} ${error.requestOptions.uri}');
+          debugPrint('Extras: ${error.requestOptions.extra}');
+          debugPrint('Status code: ${error.response?.statusCode}');
+          debugPrint('Error type: ${error.type}');
+
+          // Attempt refresh on common auth failure codes (401) and optionally 403
+          final status = error.response?.statusCode;
+          if ((status == 401 || status == 403) &&
               !shouldSkipRefresh &&
               !alreadyRetried) {
+            debugPrint('Attempting to refresh access token (interceptor)');
             final refreshedToken = await _refreshAccessToken();
+            debugPrint(
+                'Refreshed token: ${refreshedToken != null ? 'present' : 'null'}');
             if (refreshedToken != null && refreshedToken.isNotEmpty) {
               final requestOptions = error.requestOptions;
               requestOptions.extra['retriedAfterRefresh'] = true;
@@ -74,9 +86,13 @@ class ApiService {
 
               try {
                 final response = await _dio.fetch(requestOptions);
+                debugPrint('Retry after refresh succeeded');
                 return handler.resolve(response);
               } on DioException catch (retryError) {
-                if (retryError.response?.statusCode == 401) {
+                debugPrint(
+                    'Retry after refresh failed, status: ${retryError.response?.statusCode}');
+                if (retryError.response?.statusCode == 401 ||
+                    retryError.response?.statusCode == 403) {
                   await _tokenStore.clearToken();
                 }
 
@@ -84,19 +100,18 @@ class ApiService {
               }
             }
 
+            debugPrint('Refresh did not yield a token or failed');
             return handler.next(error);
           }
 
-          if (error.response?.statusCode == 401 && !shouldSkipRefresh) {
+          if (status == 401 && !shouldSkipRefresh) {
+            debugPrint(
+                '401 received and not skipping refresh -> clearing tokens');
             await _tokenStore.clearToken();
             return handler.next(error);
           }
 
           debugPrint('Request error: ${error.type} - ${error.message}');
-          debugPrint(
-            'Request: ${error.requestOptions.method} ${error.requestOptions.uri}',
-          );
-          debugPrint('Status: ${error.response?.statusCode}');
           debugPrint('Response: ${error.response?.data}');
           debugPrint('Error details: ${error.error}');
           return handler.next(error);
@@ -123,39 +138,64 @@ class ApiService {
     if (refreshToken == null || refreshToken.isEmpty) {
       return null;
     }
+    // Try several common payload formats to be tolerant of backend expectations
+    final payloadCandidates = [
+      {'refreshToken': refreshToken},
+      {'refresh_token': refreshToken},
+      {'token': refreshToken},
+      {'refresh': refreshToken},
+    ];
 
-    try {
-      final response = await _dio.post(
-        ApiConfig.refresh,
-        data: {'refreshToken': refreshToken},
-        options: Options(
-          extra: {
-            'skipAuth': true,
-            'skipRefresh': true,
-          },
-        ),
-      );
+    for (final payload in payloadCandidates) {
+      try {
+        debugPrint(
+            'Attempting token refresh with payload keys: ${payload.keys}');
+        final response = await _dio.post(
+          ApiConfig.refresh,
+          data: payload,
+          options: Options(
+            extra: {
+              'skipAuth': true,
+              'skipRefresh': true,
+            },
+          ),
+        );
 
-      final responseData = Map<String, dynamic>.from(response.data as Map);
-      final accessToken = responseData['accessToken'] as String? ??
-          responseData['token'] as String?;
-      final newRefreshToken =
-          responseData['refreshToken'] as String? ?? refreshToken;
+        debugPrint('Refresh response status: ${response.statusCode}');
+        debugPrint('Refresh response data: ${response.data}');
 
-      if (accessToken == null || accessToken.isEmpty) {
-        return null;
+        final responseData = Map<String, dynamic>.from(response.data as Map);
+        final accessToken = responseData['accessToken'] as String? ??
+            responseData['token'] as String?;
+        final newRefreshToken = responseData['refreshToken'] as String? ??
+            responseData['refresh_token'] as String? ??
+            refreshToken;
+
+        if (accessToken == null || accessToken.isEmpty) {
+          // try next payload
+          continue;
+        }
+
+        await _tokenStore.saveTokens(accessToken, newRefreshToken);
+        return accessToken;
+      } on DioException catch (error) {
+        debugPrint(
+            'Token refresh attempt failed with payload keys: ${payload.keys}');
+        debugPrint('Error status: ${error.response?.statusCode}');
+        debugPrint('Error data: ${error.response?.data}');
+
+        if (error.response?.statusCode == 401 ||
+            error.response?.statusCode == 403) {
+          await _tokenStore.clearToken();
+          return null;
+        }
+
+        // otherwise try the next payload candidate
+        continue;
       }
-
-      await _tokenStore.saveTokens(accessToken, newRefreshToken);
-      return accessToken;
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 401 ||
-          error.response?.statusCode == 403) {
-        await _tokenStore.clearToken();
-      }
-
-      return null;
     }
+
+    return null;
   }
 
   Future<Response> get(String endpoint,

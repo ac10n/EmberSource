@@ -5,8 +5,26 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZjY3M2FkO
 
 
 #####
-POST https://api.ember.ngo/api/v01/Invitation/CreateInvitation
+POST http://localhost:5216/api/v01/Invitation/CreateInvitation
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZjY3M2FkOS02OTEzLTQ2ZDAtOWI0NC1kNTE3YzU2MTFjOGMiLCJqdGkiOiIzZDk3YTYzYTJjY2M0MThjYWM0YTkwNWUzY2ZkNTkxNSIsIm5hbWUiOiJhbGkiLCJyb2xlIjoiU3Rld2FyZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlN0ZXdhcmQiLCJBbGxvd1RvSW52aXRlVXNlciI6InRydWUiLCJuYmYiOjE3Nzg0Nzc2ODUsImV4cCI6MTc3ODQ3ODU4NSwiaXNzIjoiaHR0cHM6Ly9lbWJlci5uZ28iLCJhdWQiOiJodHRwczovL2VtYmVyLm5nbyJ9.go_ZZi7IoIJ9dymELzGOmFONH0NxH8P2FPOxKdYiiME
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZjY3M2FkOS02OTEzLTQ2ZDAtOWI0NC1kNTE3YzU2MTFjOGMiLCJqdGkiOiJiMjIzYjRhY2M3Yzg0YTQ4Yjc1ZjNiNWYwMjUwNTJmNSIsIm5hbWUiOiJhbGkiLCJyb2xlIjoiU3Rld2FyZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlN0ZXdhcmQiLCJBbGxvd1RvSW52aXRlVXNlciI6InRydWUiLCJuYmYiOjE3Nzg0ODUzMDksImV4cCI6MTc3ODQ4NjIwOSwiaXNzIjoiaHR0cHM6Ly9lbWJlci5uZ28iLCJhdWQiOiJodHRwczovL2VtYmVyLm5nbyJ9.SxWSYGBRh34_lVKyY_0lrpTfq4FqeR1uDn9Zn6qrylI
 
 {"realName":"Mehdi Haghshenas","isInLegalAge":true,"jurisdiction":"Canada","email":"mhaghshenas@gmail.com","expiresAt":"2026-06-10T07:00:00.000Z"}
+
+
+####
+POST http://localhost:5216/api/v01/Auth/Login
+Content-Type: application/json
+
+{
+    "UserName":"Ali","password":"Aa123456!"
+}
+
+
+####
+POST http://localhost:5216/api/v01/auth/refresh
+Content-Type: application/json
+
+{
+    "refreshToken":"rKjzVLxLuBEwonurEujKXyh59G8HWwptRkq6rTMJb18"
+}
