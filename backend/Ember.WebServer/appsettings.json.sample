@@ -10,6 +10,10 @@
     }
   },
   "AllowedHosts": "*",
+  "Basic": {
+    "user": "missing",
+    "Pass": "missing"
+  },
   "AuthSettings": {
     "JwtKey": "missing",
     "JwtIssuer": "https://ember.ngo",

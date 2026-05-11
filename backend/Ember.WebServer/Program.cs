@@ -6,6 +6,7 @@ using Ember.WebServer.Areas.People.Config;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using Ember.Infrastructure;
+using Ember.WebServer.Middleware;
 using Scalar.AspNetCore;
 
 if (args.Length > 0 && args[0] == "generate-ts-models")
@@ -76,6 +77,16 @@ app.UseMiddleware<RequestLoggingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+else
+{
+    app.UseWhen(
+        context => context.Request.Path.StartsWithSegments("/scalar")
+            || context.Request.Path.StartsWithSegments("/openapi"),
+        branch => branch.UseMiddleware<BasicAuthMiddleware>());
+
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
