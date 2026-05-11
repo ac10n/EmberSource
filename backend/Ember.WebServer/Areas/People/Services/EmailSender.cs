@@ -1,4 +1,5 @@
 using MailKit.Net.Smtp;
+using MailKit.Security;
 using MimeKit;
 using Ember.Service;
 using System.Diagnostics;
@@ -26,7 +27,15 @@ public class EmailSender(AuthSettings authSettings, ILogger<EmailSender> logger)
         using var client = new SmtpClient();
         try
         {
-            await client.ConnectAsync(authSettings.Smtp.Host, authSettings.Smtp.Port, authSettings.Smtp.EnableSsl);
+            client.Timeout = 30_000;
+
+            var socketOptions = authSettings.Smtp.EnableSsl
+                ? authSettings.Smtp.Port == 465
+                    ? SecureSocketOptions.SslOnConnect
+                    : SecureSocketOptions.StartTls
+                : SecureSocketOptions.None;
+
+            await client.ConnectAsync(authSettings.Smtp.Host, authSettings.Smtp.Port, socketOptions);
             await client.AuthenticateAsync(authSettings.Smtp.Username, authSettings.Smtp.Password);
             await client.SendAsync(message);
 
