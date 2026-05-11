@@ -6,7 +6,7 @@ import 'register_screen.dart';
 class AuthLandingScreen extends StatelessWidget {
   const AuthLandingScreen({super.key});
 
-  static final Uri _websiteUri = Uri.parse('https://mehdiember.ca');
+  static final Uri _websiteUri = Uri.parse('https://ember.ngo');
 
   void _openLogin(BuildContext context) {
     Navigator.of(context).push(
@@ -84,7 +84,7 @@ class AuthLandingScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       TextButton(
                         onPressed: _openWebsite,
-                        child: const Text('Visit mehdiember.ca'),
+                        child: const Text('Visit ember.ngo'),
                       ),
                       const SizedBox(height: 8),
                       const Text(
