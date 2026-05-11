@@ -29,6 +29,7 @@
       "Host": "missing",
       "Port": 587,
       "Username": "missing",
+      "From": "missing",
       "Password": "missing",
       "EnableSsl": true
     },

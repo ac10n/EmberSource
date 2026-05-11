@@ -28,6 +28,7 @@ public class TestFixture : WebApplicationFactory<Program>
                 options.RefreshTokenDays = 30;
                 options.Smtp.Host = "localhost";
                 options.Smtp.Username = "test";
+                options.Smtp.From = "test@example.com";
                 options.Smtp.Password = "test";
                 options.Facebook.AppId = "test";
                 options.Facebook.AppSecret = "test";
@@ -60,6 +61,7 @@ public class TestFixture : WebApplicationFactory<Program>
                 ["Secrets:FounderPassword"] = "ValidPassword123!",
                 ["AuthSettings:Smtp:Host"] = "localhost",
                 ["AuthSettings:Smtp:Username"] = "test",
+                ["AuthSettings:Smtp:From"] = "test@example.com",
                 ["AuthSettings:Smtp:Password"] = "test",
                 ["AuthSettings:Facebook:AppId"] = "test",
                 ["AuthSettings:Facebook:AppSecret"] = "test",

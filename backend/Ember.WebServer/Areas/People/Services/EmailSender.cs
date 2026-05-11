@@ -9,7 +9,10 @@ public class EmailSender(AuthSettings authSettings) : IEmailSender
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
         var message = new MimeMessage();
-        message.From.Add(new MailboxAddress("Ember", authSettings.Smtp.Username));
+        var fromAddress = string.IsNullOrWhiteSpace(authSettings.Smtp.From)
+            ? authSettings.Smtp.Username
+            : authSettings.Smtp.From;
+        message.From.Add(new MailboxAddress("Ember", fromAddress));
         message.To.Add(new MailboxAddress("", email));
         message.Subject = subject;
 
