@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Diagnostics;
 using Ember.Domain.EmberEntities;
 using Ember.Infrastructure;
 using Ember.Service;
@@ -48,14 +49,50 @@ public sealed class InvitationControllerTests
             null,
             DateTimeOffset.UtcNow.AddDays(7)));
 
+        await Task.Delay(100);
+        Assert.False(actionTask.IsCompleted);
+
+        notificationService.Completion.TrySetResult(true);
+
         var result = await actionTask.WaitAsync(TimeSpan.FromSeconds(1));
         Assert.IsType<OkObjectResult>(result);
         Assert.True(notificationService.WasCalled);
         Assert.Equal("test@example.com", notificationService.Email);
         Assert.Null(notificationService.Phone);
-        Assert.False(notificationService.Completion.Task.IsCompleted);
+        Assert.True(notificationService.Completion.Task.IsCompleted);
+    }
 
-        notificationService.Completion.TrySetResult(true);
+    [Fact]
+    public async Task CreateInvitation_ShouldReturnAfterTimeout_WhenNotificationDoesNotFinish()
+    {
+        var originalDelay = InvitationController.NotificationFailureDelay;
+        InvitationController.NotificationFailureDelay = TimeSpan.FromMilliseconds(50);
+
+        try
+        {
+            using var db = CreateDbContext();
+            var notificationService = new RecordingInvitationNotificationService();
+            var controller = CreateController(db, notificationService);
+
+            var startedAt = Stopwatch.StartNew();
+            var result = await controller.CreateInvitation(new CreateInvitationDto(
+                "Test User",
+                true,
+                "Canada",
+                "test@example.com",
+                null,
+                DateTimeOffset.UtcNow.AddDays(7)));
+            startedAt.Stop();
+
+            var objectResult = Assert.IsType<OkObjectResult>(result);
+            Assert.IsType<InvitationDto>(objectResult.Value);
+            Assert.True(startedAt.Elapsed >= TimeSpan.FromMilliseconds(40));
+            Assert.True(notificationService.WasCalled);
+        }
+        finally
+        {
+            InvitationController.NotificationFailureDelay = originalDelay;
+        }
     }
 
     private static InvitationController CreateController(EmberDbContext db, IInvitationNotificationService notificationService)
@@ -102,4 +139,5 @@ public sealed class InvitationControllerTests
             return Completion.Task;
         }
     }
+
 }

@@ -15,6 +15,8 @@ public sealed class InvitationController(
     IEmberDbContext dbContext,
     IInvitationNotificationService invitationNotificationService) : ControllerBase
 {
+    public static TimeSpan NotificationFailureDelay { get; set; } = TimeSpan.FromSeconds(20);
+
     [HttpPost]
     [Authorize(Policy = PolicyConstants.AllowToInviteUser)]
     public async Task<IActionResult> CreateInvitation(CreateInvitationDto dto)
@@ -46,11 +48,30 @@ public sealed class InvitationController(
         dbContext.Invitations.Add(invitation);
         await dbContext.SaveChangesAsync();
 
-        _ = invitationNotificationService.SendInvitationAsync(
+        var notificationTask = invitationNotificationService.SendInvitationAsync(
             invitation.RealName,
             invitation.InviteCode,
             invitation.Email,
             invitation.Phone);
+
+        var completedTask = await Task.WhenAny(notificationTask, Task.Delay(NotificationFailureDelay));
+        if (completedTask == notificationTask)
+        {
+            try
+            {
+                await notificationTask;
+            }
+            catch
+            {
+                // Notification already finished, but failed. Keep the invitation response moving.
+            }
+        }
+        else
+        {
+            _ = notificationTask.ContinueWith(
+                task => _ = task.Exception,
+                TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously);
+        }
 
         return Ok(new InvitationDto(invitation));
     }

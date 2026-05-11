@@ -1,13 +1,17 @@
 using MailKit.Net.Smtp;
 using MimeKit;
 using Ember.Service;
+using System.Diagnostics;
 
 namespace Ember.WebServer.Areas.People.Services;
 
-public class EmailSender(AuthSettings authSettings) : IEmailSender
+public class EmailSender(AuthSettings authSettings, ILogger<EmailSender> logger) : IEmailSender
 {
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
+        var startedAt = Stopwatch.GetTimestamp();
+        logger.LogInformation("Email send started. To={Email}, Subject={Subject}", email, subject);
+
         var message = new MimeMessage();
         var fromAddress = string.IsNullOrWhiteSpace(authSettings.Smtp.From)
             ? authSettings.Smtp.Username
@@ -25,10 +29,39 @@ public class EmailSender(AuthSettings authSettings) : IEmailSender
             await client.ConnectAsync(authSettings.Smtp.Host, authSettings.Smtp.Port, authSettings.Smtp.EnableSsl);
             await client.AuthenticateAsync(authSettings.Smtp.Username, authSettings.Smtp.Password);
             await client.SendAsync(message);
+
+            logger.LogInformation(
+                "Email send succeeded. To={Email}, Subject={Subject}, ElapsedMs={ElapsedMs}",
+                email,
+                subject,
+                Stopwatch.GetElapsedTime(startedAt).TotalMilliseconds);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(
+                ex,
+                "Email send failed. To={Email}, Subject={Subject}, ElapsedMs={ElapsedMs}",
+                email,
+                subject,
+                Stopwatch.GetElapsedTime(startedAt).TotalMilliseconds);
+            throw;
         }
         finally
         {
-            await client.DisconnectAsync(true);
+            logger.LogInformation(
+                "Email send ended. To={Email}, Subject={Subject}, ElapsedMs={ElapsedMs}",
+                email,
+                subject,
+                Stopwatch.GetElapsedTime(startedAt).TotalMilliseconds);
+
+            try
+            {
+                await client.DisconnectAsync(true);
+            }
+            catch (Exception ex)
+            {
+                logger.LogWarning(ex, "Email client disconnect failed. To={Email}, Subject={Subject}", email, subject);
+            }
         }
     }
 }
