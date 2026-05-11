@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ember.Infrastructure.Migrations
 {
     [DbContext(typeof(EmberDbContext))]
-    [Migration("20260503171209_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20260511031129_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
