@@ -1,4 +1,4 @@
 export const environment = {
-  production: false,
-  apiBaseUrl: 'https://ember.ngo/api',
+  production: true,
+  apiBaseUrl: 'https://api.ember.ngo/api',
 };

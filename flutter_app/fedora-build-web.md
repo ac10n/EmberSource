@@ -21,8 +21,17 @@ sudo dnf install -y git unzip xz zip curl
 If Flutter is not already installed, clone the SDK somewhere on your machine and add it to your shell profile:
 
 ```bash
-git clone https://github.com/flutter/flutter.git -b stable ~/flutter
-echo 'export PATH="$HOME/flutter/bin:$PATH"' >> ~/.bashrc
+git clone https://github.com/flutter/flutter.git -b stable ~/flutter_sdk
+echo 'export PATH="$HOME/flutter_sdk/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+If you use a new terminal window and `flutter` is missing again, open `~/.bashrc` and make sure the Flutter path line is still present. On Fedora with Bash, `~/.bash_profile` sources `~/.bashrc`, so this change should persist in future terminals after you reopen them.
+
+If Flutter was already cloned elsewhere, add that SDK's `bin` directory to `PATH` instead, for example:
+
+```bash
+echo 'export PATH="/home/EmberSource/flutter_sdk/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
