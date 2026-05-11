@@ -37,6 +37,7 @@ public class TestFixture : WebApplicationFactory<Program>
 
             // Register dummy email sender for tests
             services.AddScoped<Ember.WebServer.Areas.People.Services.IEmailSender, DummyEmailSender>();
+            services.AddScoped<Ember.WebServer.Areas.People.Services.ISmsSender, DummySmsSender>();
 
             // Ensure the context is created
             var sp = services.BuildServiceProvider();

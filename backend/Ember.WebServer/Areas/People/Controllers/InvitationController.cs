@@ -22,6 +22,13 @@ public sealed class InvitationController(
         var userId = User.GetUserId();
         if (userId is null) return Unauthorized();
 
+        var hasEmail = !string.IsNullOrWhiteSpace(dto.Email);
+        var hasPhone = !string.IsNullOrWhiteSpace(dto.Phone);
+        if (!hasEmail && !hasPhone)
+        {
+            return BadRequest(new { error = "Either email or phone must be provided." });
+        }
+
         var invitation = new Invitation
         {
             Id = Guid.NewGuid(),
@@ -39,7 +46,7 @@ public sealed class InvitationController(
         dbContext.Invitations.Add(invitation);
         await dbContext.SaveChangesAsync();
 
-        await invitationNotificationService.SendInvitationAsync(
+        _ = invitationNotificationService.SendInvitationAsync(
             invitation.RealName,
             invitation.InviteCode,
             invitation.Email,
