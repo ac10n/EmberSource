@@ -238,3 +238,4 @@ Thumbs.db
 desktop.ini
 
 /backend/Ember.WebServer/appsettings.json
+/backend/Ember.WebServer/appsettings.production.json

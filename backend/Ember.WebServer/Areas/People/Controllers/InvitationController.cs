@@ -1,6 +1,7 @@
 using Ember.Domain.Data;
 using Ember.Service;
 using Ember.WebServer.Helpers;
+using Ember.WebServer.Areas.People.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,19 +12,29 @@ namespace Ember.WebServer.Areas.People.Controllers;
 [Route("api/v01/[controller]/[action]")]
 [Authorize]
 public sealed class InvitationController(
-    IEmberDbContext dbContext) : ControllerBase
+    IEmberDbContext dbContext,
+    IInvitationNotificationService invitationNotificationService) : ControllerBase
 {
+    public static TimeSpan NotificationFailureDelay { get; set; } = TimeSpan.FromSeconds(20);
+
     [HttpPost]
     [Authorize(Policy = PolicyConstants.AllowToInviteUser)]
     public async Task<IActionResult> CreateInvitation(CreateInvitationDto dto)
     {
-        var userIdStr = User.FindFirst("sub")?.Value;
-        if (userIdStr is null) return Unauthorized();
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
+
+        var hasEmail = !string.IsNullOrWhiteSpace(dto.Email);
+        var hasPhone = !string.IsNullOrWhiteSpace(dto.Phone);
+        if (!hasEmail && !hasPhone)
+        {
+            return BadRequest(new { error = "Either email or phone must be provided." });
+        }
 
         var invitation = new Invitation
         {
             Id = Guid.NewGuid(),
-            InvitedByUserId = Guid.Parse(userIdStr),
+            InvitedByUserId = userId.Value,
             RealName = dto.RealName,
             IsInLegalAge = dto.IsInLegalAge,
             Jurisdiction = dto.Jurisdiction,
@@ -37,18 +48,42 @@ public sealed class InvitationController(
         dbContext.Invitations.Add(invitation);
         await dbContext.SaveChangesAsync();
 
+        var notificationTask = invitationNotificationService.SendInvitationAsync(
+            invitation.RealName,
+            invitation.InviteCode,
+            invitation.Email,
+            invitation.Phone);
+
+        var completedTask = await Task.WhenAny(notificationTask, Task.Delay(NotificationFailureDelay));
+        if (completedTask == notificationTask)
+        {
+            try
+            {
+                await notificationTask;
+            }
+            catch
+            {
+                // Notification already finished, but failed. Keep the invitation response moving.
+            }
+        }
+        else
+        {
+            _ = notificationTask.ContinueWith(
+                task => _ = task.Exception,
+                TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously);
+        }
+
         return Ok(new InvitationDto(invitation));
     }
 
     [HttpGet]
     public async Task<ActionResult<List<InvitationDto>>> GetMyInvitations()
     {
-        var userIdStr = User.FindFirst("sub")?.Value;
-        if (userIdStr is null) return Unauthorized();
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
 
-        var userId = Guid.Parse(userIdStr);
         var invitations = await dbContext.Invitations
-            .Where(i => i.InvitedByUserId == userId)
+            .Where(i => i.InvitedByUserId == userId.Value)
             .OrderByDescending(i => i.CreatedAt)
             .Select(i => new InvitationDto(i))
             .ToListAsync();

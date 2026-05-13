@@ -123,9 +123,6 @@ public sealed class AuthController(
         // Add default role
         await userManager.AddToRoleAsync(user, KnownRoles.RegularMember.Name!);
 
-        // Grant AllowToInviteUser claim — all members can invite
-        await userManager.AddClaimAsync(user, new Claim(ClaimConstants.AllowToInviteUser, "true"));
-
         // Update invitation
         invitation.AcceptedAt = DateTimeOffset.UtcNow;
         invitation.AcceptedByUserId = user.Id;

@@ -40,6 +40,43 @@ extension ContentTypeX on ContentType {
     }
   }
 
+  static ContentType fromJson(dynamic value) {
+    if (value is num) {
+      return fromId(value.toInt());
+    }
+
+    final text = value?.toString().trim().toLowerCase();
+    switch (text) {
+      case 'paragraph':
+        return ContentType.paragraph;
+      case 'section':
+        return ContentType.section;
+      case 'article':
+        return ContentType.article;
+      case 'image':
+        return ContentType.image;
+      case 'video':
+        return ContentType.video;
+      case 'audio':
+        return ContentType.audio;
+      case 'link':
+        return ContentType.link;
+      case 'interactiveelement':
+      case 'interactive_element':
+        return ContentType.interactiveElement;
+      case 'codesnippet':
+      case 'code_snippet':
+        return ContentType.codeSnippet;
+      case 'explorabledataset':
+      case 'explorable_dataset':
+        return ContentType.explorableDataset;
+      case 'comment':
+        return ContentType.comment;
+      default:
+        return ContentType.article;
+    }
+  }
+
   static ContentType fromId(int id) {
     switch (id) {
       case 1:
@@ -91,6 +128,28 @@ extension ContentFormatX on ContentFormat {
     }
   }
 
+  static ContentFormat fromJson(dynamic value) {
+    if (value is num) {
+      return fromId(value.toInt());
+    }
+
+    final text = value?.toString().trim().toLowerCase();
+    switch (text) {
+      case 'markdown':
+        return ContentFormat.markdown;
+      case 'richtext':
+      case 'rich_text':
+        return ContentFormat.richText;
+      case 'plaintext':
+      case 'plain_text':
+        return ContentFormat.plainText;
+      case 'html':
+        return ContentFormat.html;
+      default:
+        return ContentFormat.richText;
+    }
+  }
+
   static ContentFormat fromId(int id) {
     switch (id) {
       case 1:
@@ -128,6 +187,31 @@ extension ContentVisibilityX on ContentVisibility {
         return 4;
       case ContentVisibility.scheduledRollout:
         return 5;
+    }
+  }
+
+  static ContentVisibility fromJson(dynamic value) {
+    if (value is num) {
+      return fromId(value.toInt());
+    }
+
+    final text = value?.toString().trim().toLowerCase();
+    switch (text) {
+      case 'public':
+        return ContentVisibility.public;
+      case 'private':
+        return ContentVisibility.private;
+      case 'visibletospecificpeople':
+      case 'visible_to_specific_people':
+        return ContentVisibility.visibleToSpecificPeople;
+      case 'visiblebycriteria':
+      case 'visible_by_criteria':
+        return ContentVisibility.visibleByCriteria;
+      case 'scheduledrollout':
+      case 'scheduled_rollout':
+        return ContentVisibility.scheduledRollout;
+      default:
+        return ContentVisibility.private;
     }
   }
 

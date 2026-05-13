@@ -1,10 +1,12 @@
 using Ember.Domain.Data;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using Ember.WebServer;
 using Ember.WebServer.Areas.People.Config;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using Ember.Infrastructure;
+using Ember.WebServer.Middleware;
 using Scalar.AspNetCore;
 
 if (args.Length > 0 && args[0] == "generate-ts-models")
@@ -35,7 +37,8 @@ builder.Services.AddIdentity<EmberUser, EmberRole>(options =>
             options.SignIn.RequireConfirmedAccount = false;
             options.Password.RequireNonAlphanumeric = false;
         })
-    .AddEntityFrameworkStores<EmberDbContext>();
+    .AddEntityFrameworkStores<EmberDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.ConfigureAuth();
 
@@ -74,6 +77,16 @@ app.UseMiddleware<RequestLoggingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+else
+{
+    app.UseWhen(
+        context => context.Request.Path.StartsWithSegments("/scalar")
+            || context.Request.Path.StartsWithSegments("/openapi"),
+        branch => branch.UseMiddleware<BasicAuthMiddleware>());
+
     app.MapOpenApi();
     app.MapScalarApiReference();
 }

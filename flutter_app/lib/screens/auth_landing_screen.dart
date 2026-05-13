@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'login_screen.dart';
+import 'register_screen.dart';
 
 class AuthLandingScreen extends StatelessWidget {
   const AuthLandingScreen({super.key});
 
-  static final Uri _websiteUri = Uri.parse('https://mehdiember.ca');
+  static final Uri _websiteUri = Uri.parse('https://ember.ngo');
 
   void _openLogin(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const LoginScreen()),
+    );
+  }
+
+  void _openRegister(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const RegisterScreen()),
     );
   }
 
@@ -70,9 +77,14 @@ class AuthLandingScreen extends StatelessWidget {
                         child: const Text('Login'),
                       ),
                       const SizedBox(height: 16),
+                      OutlinedButton(
+                        onPressed: () => _openRegister(context),
+                        child: const Text('Register'),
+                      ),
+                      const SizedBox(height: 16),
                       TextButton(
                         onPressed: _openWebsite,
-                        child: const Text('Visit mehdiember.ca'),
+                        child: const Text('Visit ember.ngo'),
                       ),
                       const SizedBox(height: 8),
                       const Text(

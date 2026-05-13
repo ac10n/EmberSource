@@ -8,19 +8,23 @@ class ApiConfig {
 
     // For web, use localhost
     if (kIsWeb) {
-      url = 'http://localhost:5216/api/v01';
+      // url = 'http://localhost:5216/api/v01';
+      url = 'https://api.ember.ngo/api/v01';
     }
     // For Android emulator, use 10.0.2.2 to access host machine
     else if (Platform.isAndroid) {
-      url = 'http://10.0.2.2:5216/api/v01';
+      // url = 'http://10.0.2.2:5216/api/v01';
+      url = 'https://api.ember.ngo/api/v01';
     }
     // For iOS simulator, localhost works
     else if (Platform.isIOS) {
-      url = 'http://localhost:5216/api/v01';
+      // url = 'http://localhost:5216/api/v01';
+      url = 'https://api.ember.ngo/api/v01';
     }
     // Default fallback
     else {
-      url = 'http://localhost:5216/api/v01';
+      // url = 'http://localhost:5216/api/v01';
+      url = 'https://api.ember.ngo/api/v01';
     }
 
     debugPrint('🌐 API Base URL: $url');
@@ -33,9 +37,13 @@ class ApiConfig {
 
   // API Endpoints
   static const String login = '/auth/login';
+  static const String refresh = '/auth/refresh';
   static const String register = '/auth/register';
   static const String users = '/users';
   static const String deviceTokens = '/notifications/register-token';
+  static const String profileGet = '/Profile/GetProfile';
+  static const String profileUpdate = '/Profile/UpdateMyProfile';
+  static const String profileChangePassword = '/Profile/ChangePassword';
 
   // Knowledge endpoints
   static const String knowledgeBase = '/Knowledge';

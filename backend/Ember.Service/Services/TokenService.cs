@@ -15,6 +15,7 @@ namespace Ember.WebServer.Areas.People.Services;
 public sealed class TokenService(
         IEmberDbContext dbContext,
         UserManager<EmberUser> userManager,
+    RoleManager<EmberRole> roleManager,
         AuthSettings authSettings)
 {
     public async Task<TokenResponse> IssueTokensAsync(EmberUser user, string? deviceId = null, string? ip = null)
@@ -100,13 +101,46 @@ public sealed class TokenService(
             new("name", user.UserName ?? user.Email ?? user.Id.ToString())
         };
 
+        var seenClaims = new HashSet<(string Type, string Value)>(claims.Select(claim => (claim.Type, claim.Value ?? string.Empty)));
+
+        void AddDistinctClaim(Claim claim)
+        {
+            var key = (claim.Type, claim.Value ?? string.Empty);
+            if (seenClaims.Add(key))
+            {
+                claims.Add(claim);
+            }
+        }
+
+        void AddDistinctClaims(IEnumerable<Claim> sourceClaims)
+        {
+            foreach (var claim in sourceClaims)
+            {
+                AddDistinctClaim(claim);
+            }
+        }
+
         // Add roles as "role" claims (works with [Authorize(Roles="...")])
         var roles = await userManager.GetRolesAsync(user);
-        claims.AddRange(roles.Select(r => new Claim("role", r)));
+        AddDistinctClaims(roles.Select(r => new Claim("role", r)));
+        AddDistinctClaims(roles.Select(r => new Claim(ClaimTypes.Role, r)));
+
+        // Add any claims attached to the user's roles so policies can evaluate them from the token.
+        foreach (var roleName in roles)
+        {
+            var role = await roleManager.FindByNameAsync(roleName);
+            if (role is null)
+            {
+                continue;
+            }
+
+            var roleClaims = await roleManager.GetClaimsAsync(role);
+            AddDistinctClaims(roleClaims);
+        }
 
         // (Optional) add extra claims from Identity
         var extraClaims = await userManager.GetClaimsAsync(user);
-        claims.AddRange(extraClaims);
+        AddDistinctClaims(extraClaims);
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.JwtKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

@@ -28,6 +28,7 @@ public class TestFixture : WebApplicationFactory<Program>
                 options.RefreshTokenDays = 30;
                 options.Smtp.Host = "localhost";
                 options.Smtp.Username = "test";
+                options.Smtp.From = "test@example.com";
                 options.Smtp.Password = "test";
                 options.Facebook.AppId = "test";
                 options.Facebook.AppSecret = "test";
@@ -37,6 +38,7 @@ public class TestFixture : WebApplicationFactory<Program>
 
             // Register dummy email sender for tests
             services.AddScoped<Ember.WebServer.Areas.People.Services.IEmailSender, DummyEmailSender>();
+            services.AddScoped<Ember.WebServer.Areas.People.Services.ISmsSender, DummySmsSender>();
 
             // Ensure the context is created
             var sp = services.BuildServiceProvider();
@@ -59,6 +61,7 @@ public class TestFixture : WebApplicationFactory<Program>
                 ["Secrets:FounderPassword"] = "ValidPassword123!",
                 ["AuthSettings:Smtp:Host"] = "localhost",
                 ["AuthSettings:Smtp:Username"] = "test",
+                ["AuthSettings:Smtp:From"] = "test@example.com",
                 ["AuthSettings:Smtp:Password"] = "test",
                 ["AuthSettings:Facebook:AppId"] = "test",
                 ["AuthSettings:Facebook:AppSecret"] = "test",

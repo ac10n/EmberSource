@@ -4,11 +4,21 @@ import 'package:provider/provider.dart';
 import '../models/invitation.dart';
 import '../services/api_service.dart';
 import '../services/auth_token_store.dart';
+import '../services/auth_service.dart';
 import '../services/invitation_service.dart';
 import '../utils/jwt_utils.dart';
+import '../widgets/app_drawer.dart';
+import 'auth_landing_screen.dart';
+import 'content_list_screen.dart';
+import 'profile_screen.dart';
 
 class InvitationsScreen extends StatefulWidget {
-  const InvitationsScreen({super.key});
+  final bool openCreateDialogOnStart;
+
+  const InvitationsScreen({
+    super.key,
+    this.openCreateDialogOnStart = false,
+  });
 
   @override
   State<InvitationsScreen> createState() => _InvitationsScreenState();
@@ -28,12 +38,22 @@ class _InvitationsScreenState extends State<InvitationsScreen> {
       _service = InvitationService(context.read<ApiService>());
       _checkPermission();
       _load();
+      if (widget.openCreateDialogOnStart) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            _openCreateDialog();
+          }
+        });
+      }
     }
   }
 
   Future<void> _checkPermission() async {
-    final token = await AuthTokenStore().readToken();
-    if (token != null && !JwtUtils.isExpired(token)) {
+    final valid = await context.read<AuthService>().hasValidToken();
+    if (!valid) return;
+
+    final token = await AuthTokenStore().readAccessToken();
+    if (token != null) {
       final canInvite = JwtUtils.hasClaim(token, 'AllowToInviteUser');
       if (mounted) setState(() => _canInvite = canInvite);
     }
@@ -44,6 +64,13 @@ class _InvitationsScreenState extends State<InvitationsScreen> {
       _isLoading = true;
       _error = null;
     });
+
+    final valid = await context.read<AuthService>().hasValidToken();
+    if (!valid) {
+      await _handleSessionExpired();
+      return;
+    }
+
     try {
       final invitations = await _service!.getMyInvitations();
       setState(() {
@@ -51,11 +78,42 @@ class _InvitationsScreenState extends State<InvitationsScreen> {
         _isLoading = false;
       });
     } catch (e) {
+      final errorText = e.toString();
+      if (errorText.contains('401') || errorText.contains('Unauthorized')) {
+        await _handleSessionExpired();
+        return;
+      }
+
       setState(() {
-        _error = e.toString();
+        _error = errorText;
         _isLoading = false;
       });
     }
+  }
+
+  Future<void> _handleSessionExpired() async {
+    if (!mounted) return;
+
+    await context.read<AuthService>().logout();
+    if (!mounted) return;
+
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const AuthLandingScreen()),
+      (route) => false,
+    );
+  }
+
+  Future<void> _logout() async {
+    if (!mounted) return;
+
+    Navigator.of(context).pop();
+    await context.read<AuthService>().logout();
+    if (!mounted) return;
+
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const AuthLandingScreen()),
+      (route) => false,
+    );
   }
 
   Future<void> _openCreateDialog() async {
@@ -270,11 +328,39 @@ class _InvitationsScreenState extends State<InvitationsScreen> {
     );
   }
 
+  void _openSection(AppSection section) {
+    Widget? destination;
+    switch (section) {
+      case AppSection.explore:
+      case AppSection.contents:
+        destination = const ContentListScreen();
+        break;
+      case AppSection.invite:
+        destination = const InvitationsScreen(openCreateDialogOnStart: true);
+        break;
+      case AppSection.invitationList:
+        destination = const InvitationsScreen();
+        break;
+      case AppSection.profile:
+        destination = const ProfileScreen();
+        break;
+    }
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => destination!),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: AppDrawer(
+        selectedSection: AppSection.invitationList,
+        onSectionSelected: _openSection,
+        onLogout: _logout,
+      ),
       appBar: AppBar(
-        title: const Text('Invitations'),
+        title: const Text('Invite & Invitations'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),

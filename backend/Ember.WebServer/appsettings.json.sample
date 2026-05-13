@@ -10,16 +10,26 @@
     }
   },
   "AllowedHosts": "*",
+  "Basic": {
+    "user": "missing",
+    "Pass": "missing"
+  },
   "AuthSettings": {
     "JwtKey": "missing",
     "JwtIssuer": "https://ember.ngo",
     "JwtAudience": "https://ember.ngo",
     "AccessTokenMinutes": 15,
     "RefreshTokenDays": 30,
+    "Twilio": {
+      "AccountSid": "missing",
+      "AuthToken": "missing",
+      "FromNumber": "missing"
+    },
     "Smtp": {
       "Host": "missing",
       "Port": 587,
       "Username": "missing",
+      "From": "missing",
       "Password": "missing",
       "EnableSsl": true
     },

@@ -1,9 +1,11 @@
 using Ember.Domain.Data;
 using Ember.Infrastructure;
+using System.Security.Claims;
 
 public interface IRequestLogContext
 {
     Guid? RequestLogId { get; }
+    Guid? UserId { get; }
     RequestLog? Entity { get; }        // optional, you can keep only the Id
     void Set(RequestLog entity);
 }
@@ -49,7 +51,9 @@ public sealed class RequestLoggingMiddleware(RequestDelegate next)
         {
             return null;
         }
-        var userIdStr = http.User.FindFirst("sub")?.Value ?? http.User.Identity?.Name;
+        var userIdStr = http.User.FindFirstValue("sub")
+            ?? http.User.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? http.User.Identity?.Name;
         if (Guid.TryParse(userIdStr, out var userId))
         {
             return userId;

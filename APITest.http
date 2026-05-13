@@ -1,0 +1,30 @@
+####
+GET http://localhost:5216/api/v01/Invitation/GetMyInvitations
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZjY3M2FkOS02OTEzLTQ2ZDAtOWI0NC1kNTE3YzU2MTFjOGMiLCJqdGkiOiI1NjdiOWRlN2Y2MGI0ZmUzOWUxNzI0NmI5NWUxZTIzNSIsIm5hbWUiOiJhbGkiLCJyb2xlIjoiU3Rld2FyZCIsIm5iZiI6MTc3ODQyOTAyMywiZXhwIjoxNzc4NDI5OTIzLCJpc3MiOiJodHRwczovL2VtYmVyLm5nbyIsImF1ZCI6Imh0dHBzOi8vZW1iZXIubmdvIn0.H7CYolhaaYgQb7PfblN_FZsLrrXDE6Iat51bKkAos9E
+
+
+#####
+POST http://localhost:5216/api/v01/Invitation/CreateInvitation
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZjY3M2FkOS02OTEzLTQ2ZDAtOWI0NC1kNTE3YzU2MTFjOGMiLCJqdGkiOiJiMjIzYjRhY2M3Yzg0YTQ4Yjc1ZjNiNWYwMjUwNTJmNSIsIm5hbWUiOiJhbGkiLCJyb2xlIjoiU3Rld2FyZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlN0ZXdhcmQiLCJBbGxvd1RvSW52aXRlVXNlciI6InRydWUiLCJuYmYiOjE3Nzg0ODUzMDksImV4cCI6MTc3ODQ4NjIwOSwiaXNzIjoiaHR0cHM6Ly9lbWJlci5uZ28iLCJhdWQiOiJodHRwczovL2VtYmVyLm5nbyJ9.SxWSYGBRh34_lVKyY_0lrpTfq4FqeR1uDn9Zn6qrylI
+
+{"realName":"Mehdi Haghshenas","isInLegalAge":true,"jurisdiction":"Canada","email":"mhaghshenas@gmail.com","expiresAt":"2026-06-10T07:00:00.000Z"}
+
+
+####
+POST http://localhost:5216/api/v01/Auth/Login
+Content-Type: application/json
+
+{
+    "UserName":"Ali","password":"Aa123456!"
+}
+
+
+####
+POST http://localhost:5216/api/v01/auth/refresh
+Content-Type: application/json
+
+{
+    "refreshToken":"rKjzVLxLuBEwonurEujKXyh59G8HWwptRkq6rTMJb18"
+}

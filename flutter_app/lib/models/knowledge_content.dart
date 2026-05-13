@@ -2,6 +2,7 @@ import 'knowledge_enums.dart';
 
 class KnowledgeContent {
   final String id;
+  final String identifier;
   final String? parentContentId;
   final ContentType contentType;
   final ContentFormat contentFormat;
@@ -14,6 +15,7 @@ class KnowledgeContent {
 
   KnowledgeContent({
     required this.id,
+    required this.identifier,
     required this.parentContentId,
     required this.contentType,
     required this.contentFormat,
@@ -28,16 +30,13 @@ class KnowledgeContent {
   factory KnowledgeContent.fromJson(Map<String, dynamic> json) {
     return KnowledgeContent(
       id: json['id']?.toString() ?? '',
+      identifier:
+          json['identifier']?.toString() ?? json['id']?.toString() ?? '',
       parentContentId: json['parentContentId']?.toString(),
-      contentType: ContentTypeX.fromId(
-        (json['contentTypeId'] as num?)?.toInt() ?? 3,
-      ),
-      contentFormat: ContentFormatX.fromId(
-        (json['contentFormatId'] as num?)?.toInt() ?? 2,
-      ),
-      contentVisibility: ContentVisibilityX.fromId(
-        (json['contentVisibilityId'] as num?)?.toInt() ?? 2,
-      ),
+      contentType: ContentTypeX.fromJson(json['contentTypeId']),
+      contentFormat: ContentFormatX.fromJson(json['contentFormatId']),
+      contentVisibility:
+          ContentVisibilityX.fromJson(json['contentVisibilityId']),
       visibilityCriteria: json['visibilityCriteria']?.toString(),
       title: json['title']?.toString(),
       data: json['data']?.toString(),
