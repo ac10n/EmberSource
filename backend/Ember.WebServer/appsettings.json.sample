@@ -16,8 +16,8 @@
   },
   "AuthSettings": {
     "JwtKey": "missing",
-    "JwtIssuer": "https://ember.ngo",
-    "JwtAudience": "https://ember.ngo",
+    "JwtIssuer": "https://weunite.world",
+    "JwtAudience": "https://weunite.world",
     "AccessTokenMinutes": 15,
     "RefreshTokenDays": 30,
     "Twilio": {
