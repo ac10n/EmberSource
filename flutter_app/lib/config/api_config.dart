@@ -8,23 +8,23 @@ class ApiConfig {
 
     // For web, use localhost
     if (kIsWeb) {
-      url = 'http://localhost:5216/api/v01';
-      // url = 'https://api.weunite.world/api/v01';
+      //url = 'http://localhost:5216/api/v01';
+      url = 'https://api.weunite.world/api/v01';
     }
     // For Android emulator, use 10.0.2.2 to access host machine
     else if (Platform.isAndroid) {
-      url = 'http://10.0.2.2:5216/api/v01';
-      // url = 'https://api.weunite.world/api/v01';
+      //url = 'http://10.0.2.2:5216/api/v01';
+      url = 'https://api.weunite.world/api/v01';
     }
     // For iOS simulator, localhost works
     else if (Platform.isIOS) {
-      url = 'http://localhost:5216/api/v01';
-      // url = 'https://api.weunite.world/api/v01';
+      //url = 'http://localhost:5216/api/v01';
+      url = 'https://api.weunite.world/api/v01';
     }
     // Default fallback
     else {
-      url = 'http://localhost:5216/api/v01';
-      // url = 'https://api.weunite.world/api/v01';
+      //url = 'http://localhost:5216/api/v01';
+      url = 'https://api.weunite.world/api/v01';
     }
 
     debugPrint('🌐 API Base URL: $url');
