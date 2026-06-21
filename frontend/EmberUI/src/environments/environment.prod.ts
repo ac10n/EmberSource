@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://api.ember.ngo/api',
+  apiBaseUrl: 'https://api.weunite.world/api',
 };
