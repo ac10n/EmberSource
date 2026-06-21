@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://api.ember.ngo",
+    "target": "https://api.weunite.world",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
