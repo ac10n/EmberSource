@@ -33,9 +33,14 @@ flutter pub get
 flutter pub run build_runner build --delete-conflicting-outputs
 ```
 
-3. Configure Firebase (see SETUP.md in root directory)
+3. Build the web app with cache busting:
+```bash
+bash tool/build_web.sh
+```
 
-4. Run the app:
+4. Configure Firebase (see SETUP.md in root directory)
+
+5. Run the app:
 ```bash
 # Mobile
 flutter run

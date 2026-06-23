@@ -62,13 +62,13 @@ flutter pub run build_runner build --delete-conflicting-outputs
 
 ## Build the web app
 
-From the Flutter app directory, run the release build:
+From the Flutter app directory, run the cache-busting build script:
 
 ```bash
-flutter build web --release
+bash tool/build_web.sh
 ```
 
-The compiled web output is written to `build/web`.
+The compiled web output is written to `build/web`, with the generated bootstrap and entry script URLs stamped with a unique build id.
 
 ## Confirm The Build
 
@@ -108,7 +108,7 @@ cd /home/EmberSource/flutter_app
 flutter clean
 flutter pub get
 flutter pub run build_runner build --delete-conflicting-outputs
-flutter build web --release
+bash tool/build_web.sh
 ```
 
 ## Notes
